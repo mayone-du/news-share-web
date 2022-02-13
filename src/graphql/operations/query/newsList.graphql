@@ -1,0 +1,5 @@
+query NewsList($input: NewsListInput!) {
+  newsList(input: $input) {
+    ...NewsFragment
+  }
+}

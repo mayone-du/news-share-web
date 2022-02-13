@@ -1,7 +1,7 @@
 import "tailwindcss/tailwind.css";
 import "nprogress/nprogress.css";
 
-import { ApolloProvider, useReactiveVar } from "@apollo/client";
+import { ApolloProvider } from "@apollo/client";
 import type { CustomAppProps } from "next/app";
 import Router from "next/router";
 // import type { AppProps } from "next/app";
@@ -11,7 +11,6 @@ import { ThemeProvider } from "next-themes";
 import NProgress from "nprogress";
 import { memo } from "react";
 import { Toaster } from "react-hot-toast";
-import { idTokenVar } from "src/graphql/apollo/cache";
 import { initializeApollo } from "src/graphql/apollo/client";
 
 NProgress.configure({ showSpinner: false, speed: 400, minimum: 0.25 });
@@ -26,9 +25,7 @@ Router.events.on("routeChangeError", () => {
 });
 
 const App = memo((props: CustomAppProps) => {
-  // MainLayoutでセットされた値を取得し、ApolloClientへ渡す
-  const idToken = useReactiveVar(idTokenVar);
-  const apolloClient = initializeApollo(null, idToken);
+  const apolloClient = initializeApollo();
 
   const getLayout =
     props.Component.getLayout ||

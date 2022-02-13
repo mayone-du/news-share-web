@@ -1,8 +1,5 @@
 import { makeVar } from "@apollo/client";
 
-// ApolloClientにGoogleから渡されるidTokenを渡すためのステート
-export const idTokenVar = makeVar("");
-
 // ユーザー情報のローディング・ログイン・IDの状態をグローバル管理するためのステート
 const InitialUserInfo = {
   isAuthenticated: false,

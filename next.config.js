@@ -21,9 +21,6 @@
 // TODO: ServiceWorkerのエラー解決できるまでPWAは無効化
 /** @type {import('next').NextConfig} */
 module.exports = {
-  rewrites: async () => {
-    return [{ source: "/", destination: "/root" }];
-  },
   env: {
     GRAPHQL_API_URL: process.env.GRAPHQL_API_URL,
     // CLOUDINARY_URL: process.env.CLOUDINARY_URL,

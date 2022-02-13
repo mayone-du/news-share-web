@@ -1,3 +1,0 @@
-subscription CountSeconds($seconds: Int!) {
-  countSeconds(upTo: $seconds)
-}

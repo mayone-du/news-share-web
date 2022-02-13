@@ -1,4 +1,6 @@
-# Template Repository
+# ニュースシェアアプリのWebフロント
+
+https://api.slack.com/legacy/oauth
 
 ## Packages
 

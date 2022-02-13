@@ -1,0 +1,11 @@
+fragment NewsFragment on News {
+  id
+  nodeId
+  title
+  description
+  url
+  imageUrl
+  nickname
+  createdAt
+  sharedAt
+}

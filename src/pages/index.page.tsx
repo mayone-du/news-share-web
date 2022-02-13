@@ -1,21 +1,18 @@
 import { useReactiveVar } from "@apollo/client";
+import dayjs from "dayjs";
 import type { CustomNextPage } from "next";
 import { BreadcrumbJsonLd, NextSeo } from "next-seo";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import toast from "react-hot-toast";
+import { NewsList } from "src/components/NewsList";
 import { NotAuth } from "src/components/NotAuth";
 import { UserLoading } from "src/components/UserLoading";
 import { TITLES } from "src/constants/titles";
-import { userInfoVar } from "src/graphql/apollo/cache";
+import { userInfoVar } from "src/global/state";
+import { useNewsListQuery } from "src/graphql/schemas/generated/schema";
 import { Layout } from "src/layouts";
 
 const IndexPage: CustomNextPage = () => {
-  const userInfo = useReactiveVar(userInfoVar);
-
-  const handleClick = useCallback(() => {
-    toast.success("ボタンがクリックされました。");
-  }, []);
-
   return (
     <>
       <NextSeo title={TITLES.HOME} />
@@ -28,20 +25,7 @@ const IndexPage: CustomNextPage = () => {
           },
         ]}
       />
-      {userInfo.isLoading ? (
-        // ユーザー情報のローディング
-        <UserLoading />
-      ) : !userInfo.isLoading && !userInfo.isAuthenticated ? (
-        // 非ログイン時
-        <NotAuth />
-      ) : (
-        // 通常時
-        <div>
-          <button className="block p-4 mx-auto rounded-md border" onClick={handleClick}>
-            ボタン
-          </button>
-        </div>
-      )}
+      <NewsList />
     </>
   );
 };

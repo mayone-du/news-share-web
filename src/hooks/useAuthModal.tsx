@@ -5,7 +5,7 @@ import type { VFC } from "react";
 import { useCallback } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { STATIC_ROUTES } from "src/constants/routes";
-import { isOpenAuthModalVar } from "src/graphql/apollo/cache";
+import { isOpenAuthModalVar } from "src/global/state";
 import { handleSignIn } from "src/utils/handleSignIn";
 
 export const useAuthModal = () => {
@@ -14,17 +14,14 @@ export const useAuthModal = () => {
   // 認証モーダルの開閉
   const handleToggleModal = useCallback(() => {
     isOpenAuthModalVar(!isOpenAuthModal);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isOpenAuthModal]);
 
   // モーダルの中身のボタンをクリックした時
   const handleClick = useCallback(async () => {
     await handleSignIn();
     handleToggleModal();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // コンポーネントを返す関数
   const AuthModal: VFC = () => {
     return (
       <Transition appear show={isOpenAuthModal} as="div">
@@ -106,7 +103,6 @@ export const useAuthModal = () => {
 
   return {
     handleToggleModal,
-    // eslint-disable-next-line @typescript-eslint/naming-convention
     AuthModal,
   };
 };

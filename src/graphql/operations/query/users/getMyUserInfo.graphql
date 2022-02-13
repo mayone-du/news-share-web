@@ -1,7 +1,0 @@
-query GetMyUserInfo {
-  myUserInfo {
-    id
-    email
-    username
-  }
-}
