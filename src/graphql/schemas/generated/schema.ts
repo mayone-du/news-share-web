@@ -14,11 +14,11 @@ export type Scalars = {
   Int: number;
   Float: number;
   /** The `BigInt` scalar type represents non-fractional signed whole numeric values. */
-  BigInt: any;
+  BigInt: bigint;
   /** A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar. */
-  DateTime: any;
+  DateTime: string;
   /** A field whose value conforms to the standard internet email address format as specified in RFC822: https://www.w3.org/Protocols/rfc822/. */
-  EmailAddress: any;
+  EmailAddress: string;
 };
 
 export type CreateNewsInput = {
@@ -217,14 +217,14 @@ export type User = {
   username: Scalars['String'];
 };
 
-export type NewsFragmentFragment = { __typename?: 'News', id: any, nodeId?: string | null, title: string, description: string, url: string, imageUrl: string, nickname: string, createdAt: any, sharedAt: any };
+export type NewsFragmentFragment = { __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl: string, nickname: string, createdAt: string, sharedAt: string };
 
 export type NewsListQueryVariables = Exact<{
   input: NewsListInput;
 }>;
 
 
-export type NewsListQuery = { __typename?: 'Query', newsList: Array<{ __typename?: 'News', id: any, nodeId?: string | null, title: string, description: string, url: string, imageUrl: string, nickname: string, createdAt: any, sharedAt: any }> };
+export type NewsListQuery = { __typename?: 'Query', newsList: Array<{ __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl: string, nickname: string, createdAt: string, sharedAt: string }> };
 
 export const NewsFragmentFragmentDoc = gql`
     fragment NewsFragment on News {

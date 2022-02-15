@@ -5,5 +5,12 @@
     "src/graphql/schemas/generated/schema.ts": {
       "plugins": ["typescript", "typescript-operations", "typescript-react-apollo"]
     }
+  },
+  "config": {
+    "scalars": {
+      "BigInt": "bigint",
+      "DateTime": "string",
+      "EmailAddress": "string"
+    }
   }
 }
