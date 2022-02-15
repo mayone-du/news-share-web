@@ -29,7 +29,7 @@ export const Header: React.VFC = memo(() => {
   ];
 
   return (
-    <header className="py-2 md:px-60 lg:px-72 border-b">
+    <header className="py-2 border-b md:px-60 lg:px-72">
       <nav className="flex justify-between items-center">
         <div>
           <Link href={STATIC_ROUTES.HOME}>
@@ -71,14 +71,14 @@ export const Header: React.VFC = memo(() => {
                             alt=""
                           />
                         </Popover.Button>
-                        <Popover.Panel className="absolute right-0 z-10 mt-4 w-72 bg-white dark:bg-black rounded border shadow-md transform">
+                        <Popover.Panel className="absolute right-0 z-10 mt-4 w-72 bg-white rounded border shadow-md transform dark:bg-black">
                           <ul>
                             {/* プロフィールのリンク */}
                             <li>
                               {/* ↓押した時にメニューを閉じたいためボタンにする */}
                               <Popover.Button className="block w-full text-left">
                                 <Link href={`/users/${userInfo.userId}`}>
-                                  <a className="block py-2 px-4 hover:bg-gray-200 transition-colors duration-300">
+                                  <a className="block py-2 px-4 transition-colors duration-300 hover:bg-gray-200">
                                     <span className="block">sample username</span>
                                     <span className="block text-xs text-gray-400">
                                       @{userInfo.userId}
@@ -93,7 +93,7 @@ export const Header: React.VFC = memo(() => {
                                 <li key={item.href}>
                                   <Popover.Button className="block w-full text-left">
                                     <Link href={item.href}>
-                                      <a className="block py-2 px-4 hover:bg-gray-200 border-t transition-colors duration-300">
+                                      <a className="block py-2 px-4 border-t transition-colors duration-300 hover:bg-gray-200">
                                         {item.label}
                                       </a>
                                     </Link>
@@ -105,7 +105,7 @@ export const Header: React.VFC = memo(() => {
                             <li>
                               <button
                                 onClick={handleSignOut}
-                                className="block py-2 px-4 w-full text-left hover:bg-gray-200 border-t transition-colors duration-300"
+                                className="block py-2 px-4 w-full text-left border-t transition-colors duration-300 hover:bg-gray-200"
                               >
                                 サインアウト
                               </button>
@@ -125,7 +125,7 @@ export const Header: React.VFC = memo(() => {
               <div>
                 <button
                   onClick={handleToggleModal}
-                  className="block py-2 px-4 hover:bg-gray-50 rounded border shadow-sm hover:shadow transition-all"
+                  className="block py-2 px-4 rounded border shadow-sm transition-all hover:bg-gray-50 hover:shadow"
                 >
                   SignIn
                 </button>

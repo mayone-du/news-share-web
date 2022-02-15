@@ -16,7 +16,10 @@ module.exports = {
   ],
   rules: {
     "no-console": ["error", { allow: ["warn", "info", "error"] }],
-    "no-restricted-syntax": ["error", { selector: "TSEnumDeclaration", message: "Don't declare enums" }],
+    "no-restricted-syntax": [
+      "error",
+      { selector: "TSEnumDeclaration", message: "Don't declare enums" },
+    ],
     "prefer-arrow-callback": "error",
     "prefer-const": "error",
     "func-style": ["error", "expression"],

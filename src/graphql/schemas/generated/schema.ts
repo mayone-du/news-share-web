@@ -22,25 +22,25 @@ export type Scalars = {
 };
 
 export type CreateNewsInput = {
-  url: Scalars['String'];
   nickname: Scalars['String'];
+  url: Scalars['String'];
 };
 
 export type CreateUserInput = {
-  username: Scalars['String'];
-  nickname: Scalars['String'];
   email: Scalars['String'];
+  nickname: Scalars['String'];
   role: Role;
   status: Status;
+  username: Scalars['String'];
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
   createNews?: Maybe<News>;
-  updateNews?: Maybe<News>;
-  postponeNewsList?: Maybe<Array<Maybe<News>>>;
-  deleteNews?: Maybe<News>;
   createUser?: Maybe<User>;
+  deleteNews?: Maybe<News>;
+  postponeNewsList?: Maybe<Array<Maybe<News>>>;
+  updateNews?: Maybe<News>;
   updateUser?: Maybe<User>;
 };
 
@@ -50,13 +50,8 @@ export type MutationCreateNewsArgs = {
 };
 
 
-export type MutationUpdateNewsArgs = {
-  input: UpdateNewsInput;
-};
-
-
-export type MutationPostponeNewsListArgs = {
-  input: PostponeNewsListInput;
+export type MutationCreateUserArgs = {
+  input: CreateUserInput;
 };
 
 
@@ -65,8 +60,13 @@ export type MutationDeleteNewsArgs = {
 };
 
 
-export type MutationCreateUserArgs = {
-  input: CreateUserInput;
+export type MutationPostponeNewsListArgs = {
+  input: PostponeNewsListInput;
+};
+
+
+export type MutationUpdateNewsArgs = {
+  input: UpdateNewsInput;
 };
 
 
@@ -76,16 +76,16 @@ export type MutationUpdateUserArgs = {
 
 export type News = {
   __typename?: 'News';
-  id: Scalars['BigInt'];
-  title: Scalars['String'];
-  description: Scalars['String'];
-  imageUrl: Scalars['String'];
-  url: Scalars['String'];
-  nickname: Scalars['String'];
   createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
-  sharedAt: Scalars['DateTime'];
+  description: Scalars['String'];
+  id: Scalars['BigInt'];
+  imageUrl: Scalars['String'];
+  nickname: Scalars['String'];
   nodeId?: Maybe<Scalars['ID']>;
+  sharedAt: Scalars['DateTime'];
+  title: Scalars['String'];
+  updatedAt: Scalars['DateTime'];
+  url: Scalars['String'];
 };
 
 export type NewsConnection = {
@@ -106,20 +106,20 @@ export type NewsEdge = {
 };
 
 export type NewsListInput = {
-  sharedAt: Scalars['DateTime'];
+  sharedAt: Scalars['String'];
 };
 
 /** PageInfo cursor, as defined in https://facebook.github.io/relay/graphql/connections.htm#sec-undefined.PageInfo */
 export type PageInfo = {
   __typename?: 'PageInfo';
+  /** The cursor corresponding to the last nodes in edges. Null if the connection is empty. */
+  endCursor?: Maybe<Scalars['String']>;
   /** Used to indicate whether more edges exist following the set defined by the clients arguments. */
   hasNextPage: Scalars['Boolean'];
   /** Used to indicate whether more edges exist prior to the set defined by the clients arguments. */
   hasPreviousPage: Scalars['Boolean'];
   /** The cursor corresponding to the first nodes in edges. Null if the connection is empty. */
   startCursor?: Maybe<Scalars['String']>;
-  /** The cursor corresponding to the last nodes in edges. Null if the connection is empty. */
-  endCursor?: Maybe<Scalars['String']>;
 };
 
 export type PostponeNewsListInput = {
@@ -129,11 +129,20 @@ export type PostponeNewsListInput = {
 
 export type Query = {
   __typename?: 'Query';
+  allNews?: Maybe<NewsConnection>;
   news?: Maybe<News>;
   newsList: Array<News>;
   searchNewsList: Array<News>;
-  allNews?: Maybe<NewsConnection>;
+  test?: Maybe<Scalars['String']>;
   user?: Maybe<User>;
+};
+
+
+export type QueryAllNewsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
 };
 
 
@@ -148,16 +157,14 @@ export type QueryNewsListArgs = {
 
 
 export type QuerySearchNewsListArgs = {
-  title?: InputMaybe<Scalars['String']>;
   description?: InputMaybe<Scalars['String']>;
+  title?: InputMaybe<Scalars['String']>;
+  url?: InputMaybe<Scalars['String']>;
 };
 
 
-export type QueryAllNewsArgs = {
-  first?: InputMaybe<Scalars['Int']>;
-  after?: InputMaybe<Scalars['String']>;
-  last?: InputMaybe<Scalars['Int']>;
-  before?: InputMaybe<Scalars['String']>;
+export type QueryTestArgs = {
+  customArg?: InputMaybe<Scalars['EmailAddress']>;
 };
 
 
@@ -172,42 +179,42 @@ export enum Role {
 
 export type SlackNotification = {
   __typename?: 'SlackNotification';
+  createdAt: Scalars['DateTime'];
   id: Scalars['BigInt'];
   isSent: Scalars['Boolean'];
-  createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
 };
 
 export enum Status {
   Active = 'ACTIVE',
-  Inactive = 'INACTIVE',
-  Deleted = 'DELETED'
+  Deleted = 'DELETED',
+  Inactive = 'INACTIVE'
 }
 
 export type UpdateNewsInput = {
-  nodeId: Scalars['ID'];
-  url?: InputMaybe<Scalars['String']>;
-  title?: InputMaybe<Scalars['String']>;
   description?: InputMaybe<Scalars['String']>;
   nickname?: InputMaybe<Scalars['String']>;
+  nodeId: Scalars['ID'];
   sharedAt?: InputMaybe<Scalars['DateTime']>;
+  title?: InputMaybe<Scalars['String']>;
+  url?: InputMaybe<Scalars['String']>;
 };
 
 export type UpdateUserInput = {
-  id: Scalars['BigInt'];
   email: Scalars['String'];
+  id: Scalars['BigInt'];
 };
 
 export type User = {
   __typename?: 'User';
-  id: Scalars['BigInt'];
-  username: Scalars['String'];
-  nickname: Scalars['String'];
+  createdAt: Scalars['DateTime'];
   email: Scalars['String'];
+  id: Scalars['BigInt'];
+  nickname: Scalars['String'];
   role?: Maybe<Role>;
   status?: Maybe<Status>;
-  createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
+  username: Scalars['String'];
 };
 
 export type NewsFragmentFragment = { __typename?: 'News', id: any, nodeId?: string | null, title: string, description: string, url: string, imageUrl: string, nickname: string, createdAt: any, sharedAt: any };

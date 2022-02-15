@@ -12,7 +12,7 @@ import { LayoutErrorBoundary } from "src/layouts/LayoutErrorBoundary";
 // pagesのgetLayoutで指定されたページで呼ばれる。ページのリロード時に呼ばれ、ページ遷移時には呼ばれない。
 export const Layout = (page: NextPage) => {
   const userInfo = useReactiveVar(userInfoVar);
-  // const { AuthModal } = useAuthModal();
+  const { AuthModal } = useAuthModal();
 
   // 初回マウント時にユーザー情報を取得し、ReactiveVariablesでグローバル管理して、_appで値を参照する
   useEffect(() => {
@@ -50,9 +50,9 @@ export const Layout = (page: NextPage) => {
 
   return (
     <div>
-      {/* <AuthModal /> */}
+      <AuthModal />
       <Header />
-      <main className="px-4 md:px-60 lg:px-72 mx-auto">
+      <main className="px-4 mx-auto md:px-60 lg:px-72">
         <LayoutErrorBoundary>{page}</LayoutErrorBoundary>
       </main>
       <Footer />
