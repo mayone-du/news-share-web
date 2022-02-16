@@ -22,7 +22,6 @@ export type Scalars = {
 };
 
 export type CreateNewsInput = {
-  nickname: Scalars['String'];
   url: Scalars['String'];
 };
 
@@ -30,6 +29,7 @@ export type CreateUserInput = {
   email: Scalars['String'];
   nickname: Scalars['String'];
   role: Role;
+  selfIntroduction: Scalars['String'];
   status: Status;
   username: Scalars['String'];
 };
@@ -79,13 +79,13 @@ export type News = {
   createdAt: Scalars['DateTime'];
   description: Scalars['String'];
   id: Scalars['BigInt'];
-  imageUrl: Scalars['String'];
-  nickname: Scalars['String'];
+  imageUrl?: Maybe<Scalars['String']>;
   nodeId?: Maybe<Scalars['ID']>;
   sharedAt: Scalars['DateTime'];
   title: Scalars['String'];
   updatedAt: Scalars['DateTime'];
   url: Scalars['String'];
+  user: User;
 };
 
 export type NewsConnection = {
@@ -174,6 +174,7 @@ export type QueryUserArgs = {
 
 export enum Role {
   Admin = 'ADMIN',
+  Developer = 'DEVELOPER',
   User = 'USER'
 }
 
@@ -193,7 +194,6 @@ export enum Status {
 
 export type UpdateNewsInput = {
   description?: InputMaybe<Scalars['String']>;
-  nickname?: InputMaybe<Scalars['String']>;
   nodeId: Scalars['ID'];
   sharedAt?: InputMaybe<Scalars['DateTime']>;
   title?: InputMaybe<Scalars['String']>;
@@ -217,14 +217,14 @@ export type User = {
   username: Scalars['String'];
 };
 
-export type NewsFragmentFragment = { __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl: string, nickname: string, createdAt: string, sharedAt: string };
+export type NewsFragmentFragment = { __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl?: string | null, createdAt: string, sharedAt: string, user: { __typename?: 'User', id: bigint, username: string, nickname: string } };
 
 export type NewsListQueryVariables = Exact<{
   input: NewsListInput;
 }>;
 
 
-export type NewsListQuery = { __typename?: 'Query', newsList: Array<{ __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl: string, nickname: string, createdAt: string, sharedAt: string }> };
+export type NewsListQuery = { __typename?: 'Query', newsList: Array<{ __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl?: string | null, createdAt: string, sharedAt: string, user: { __typename?: 'User', id: bigint, username: string, nickname: string } }> };
 
 export const NewsFragmentFragmentDoc = gql`
     fragment NewsFragment on News {
@@ -234,9 +234,13 @@ export const NewsFragmentFragmentDoc = gql`
   description
   url
   imageUrl
-  nickname
   createdAt
   sharedAt
+  user {
+    id
+    username
+    nickname
+  }
 }
     `;
 export const NewsListDocument = gql`

@@ -7,6 +7,9 @@
     }
   },
   "config": {
+    "namingConvention": {
+      "transformUnderscore": true
+    },
     "scalars": {
       "BigInt": "bigint",
       "DateTime": "string",

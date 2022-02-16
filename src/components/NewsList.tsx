@@ -21,7 +21,7 @@ export const NewsList: VFC = () => {
               <h3 className="text-lg font-bold">{news.title}</h3>
               <p className="text-sm text-gray-400">{news.description}</p>
               <div className="flex items-center">
-                <span className="text-xs text-gray-600">{news.nickname}</span>
+                <span className="text-xs text-gray-600">{news.user.nickname}</span>
                 <span className="text-xs text-gray-600">
                   {/* TODO: 何分前とか表示 */}
                   {dayjs(news.sharedAt).format("YYYY-MM-DD")}

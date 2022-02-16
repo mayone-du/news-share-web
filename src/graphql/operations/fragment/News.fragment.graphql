@@ -5,7 +5,11 @@ fragment NewsFragment on News {
   description
   url
   imageUrl
-  nickname
   createdAt
   sharedAt
+  user {
+    id
+    username
+    nickname
+  }
 }
