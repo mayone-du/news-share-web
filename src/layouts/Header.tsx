@@ -7,8 +7,9 @@ import { HEADER_MENUS } from "src/constants/menus/header";
 import { STATIC_ROUTES } from "src/constants/routes";
 import { userInfoVar } from "src/global/state";
 import { useAuthModal } from "src/hooks/useAuthModal";
+import type { VFC } from "react";
 
-export const Header: React.VFC = memo(() => {
+export const Header: VFC = () => {
   const { data } = useSession();
   const userInfo = useReactiveVar(userInfoVar);
   const { handleToggleModal } = useAuthModal();
@@ -32,7 +33,7 @@ export const Header: React.VFC = memo(() => {
     <header className="py-2 border-b md:px-60 lg:px-72">
       <nav className="flex justify-between items-center">
         <div>
-          <Link href={STATIC_ROUTES.HOME}>
+          <Link href={STATIC_ROUTES.INDEX}>
             <a className="block text-lg font-bold">LOGO</a>
           </Link>
         </div>
@@ -136,6 +137,4 @@ export const Header: React.VFC = memo(() => {
       </nav>
     </header>
   );
-});
-
-Header.displayName = "Header";
+};

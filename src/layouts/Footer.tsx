@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { memo } from "react";
+import type { VFC } from "react";
 import { FOOTER_MENUS } from "src/constants";
 
-export const Footer: React.VFC = memo(() => {
+export const Footer: VFC = memo(() => {
   return (
     <footer>
       <nav className="bg-gray-400">

@@ -1,7 +1,8 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 export const STATIC_ROUTES = {
-  HOME: "/",
+  INDEX: "/",
   CONTACT: "/contact",
+  ABOUT: "/about",
+  ARCHIVE: "/archive",
   TERM: "/term",
   PRIVACY_POLICY: "/privacy-policy",
   SAMPLE: {

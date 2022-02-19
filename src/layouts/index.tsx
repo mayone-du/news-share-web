@@ -8,6 +8,7 @@ import { useAuthModal } from "src/hooks/useAuthModal";
 import { Footer } from "src/layouts/Footer";
 import { Header } from "src/layouts/Header";
 import { LayoutErrorBoundary } from "src/layouts/LayoutErrorBoundary";
+import { SidebarLeft } from "src/layouts/SidebarLeft";
 
 // pagesのgetLayoutで指定されたページで呼ばれる。ページのリロード時に呼ばれ、ページ遷移時には呼ばれない。
 export const Layout = (page: NextPage) => {
@@ -16,7 +17,6 @@ export const Layout = (page: NextPage) => {
 
   // 初回マウント時にユーザー情報を取得し、ReactiveVariablesでグローバル管理して、_appで値を参照する
   useEffect(() => {
-    console.log("Layout.useEffect");
     if (!userInfo.isLoading) return;
     (async () => {
       const session = await getSession();
@@ -43,9 +43,15 @@ export const Layout = (page: NextPage) => {
     <div>
       <AuthModal />
       <Header />
-      <main className="px-4 mx-auto md:px-60 lg:px-72">
-        <LayoutErrorBoundary>{page}</LayoutErrorBoundary>
-      </main>
+      <div className="grid grid-cols-5 gap-8 px-12 pt-8 mx-auto max-w-[1680px]">
+        <div className="col-span-1">
+          <SidebarLeft />
+        </div>
+        <main className="col-span-3">
+          <LayoutErrorBoundary>{page}</LayoutErrorBoundary>
+        </main>
+        <div className="col-span-1 bg-lime-100">hoge{/* <SidebarRight /> */}</div>
+      </div>
       <Footer />
     </div>
   );
