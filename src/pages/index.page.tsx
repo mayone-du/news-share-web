@@ -8,8 +8,6 @@ import { NewsList } from "src/components/NewsList";
 import { NotAuth } from "src/components/NotAuth";
 import { UserLoading } from "src/components/UserLoading";
 import { TITLES } from "src/constants/titles";
-import { userInfoVar } from "src/global/state";
-import { useNewsListQuery } from "src/graphql/schemas/generated/schema";
 import { Layout } from "src/layouts";
 
 const IndexPage: CustomNextPage = () => {

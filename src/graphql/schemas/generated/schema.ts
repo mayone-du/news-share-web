@@ -164,7 +164,7 @@ export type QuerySearchNewsListArgs = {
 
 
 export type QueryTestArgs = {
-  customArg?: InputMaybe<Scalars['EmailAddress']>;
+  customArg?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -226,6 +226,13 @@ export type NewsListQueryVariables = Exact<{
 
 export type NewsListQuery = { __typename?: 'Query', newsList: Array<{ __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl?: string | null, createdAt: string, sharedAt: string, user: { __typename?: 'User', id: bigint, username: string, nickname: string } }> };
 
+export type TestQueryVariables = Exact<{
+  customArg: Scalars['String'];
+}>;
+
+
+export type TestQuery = { __typename?: 'Query', test?: string | null };
+
 export const NewsFragmentFragmentDoc = gql`
     fragment NewsFragment on News {
   id
@@ -278,3 +285,36 @@ export function useNewsListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<N
 export type NewsListQueryHookResult = ReturnType<typeof useNewsListQuery>;
 export type NewsListLazyQueryHookResult = ReturnType<typeof useNewsListLazyQuery>;
 export type NewsListQueryResult = Apollo.QueryResult<NewsListQuery, NewsListQueryVariables>;
+export const TestDocument = gql`
+    query Test($customArg: String!) {
+  test(customArg: $customArg)
+}
+    `;
+
+/**
+ * __useTestQuery__
+ *
+ * To run a query within a React component, call `useTestQuery` and pass it any options that fit your needs.
+ * When your component renders, `useTestQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useTestQuery({
+ *   variables: {
+ *      customArg: // value for 'customArg'
+ *   },
+ * });
+ */
+export function useTestQuery(baseOptions: Apollo.QueryHookOptions<TestQuery, TestQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<TestQuery, TestQueryVariables>(TestDocument, options);
+      }
+export function useTestLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TestQuery, TestQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<TestQuery, TestQueryVariables>(TestDocument, options);
+        }
+export type TestQueryHookResult = ReturnType<typeof useTestQuery>;
+export type TestLazyQueryHookResult = ReturnType<typeof useTestLazyQuery>;
+export type TestQueryResult = Apollo.QueryResult<TestQuery, TestQueryVariables>;

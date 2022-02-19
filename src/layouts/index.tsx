@@ -16,35 +16,26 @@ export const Layout = (page: NextPage) => {
 
   // 初回マウント時にユーザー情報を取得し、ReactiveVariablesでグローバル管理して、_appで値を参照する
   useEffect(() => {
-    // if (!userInfo.isLoading) return;
-    console.log("useEffect");
-
+    console.log("Layout.useEffect");
+    if (!userInfo.isLoading) return;
     (async () => {
       const session = await getSession();
+      if (!session) return userInfoVar({ ...userInfo, isLoading: false });
+      userInfoVar({
+        isLoading: false,
+        isAuthenticated: true,
+        userId: "1",
+      });
 
       // session情報があればユーザー情報を取得し、Reactive Variablesでグローバル管理
-      if (session) {
-        console.log("session", session);
-        // const apolloClient = initializeApollo();
-        // const { data } = await apolloClient.query<
-        //   GetMyUserInfoQuery,
-        //   GetMyUserInfoQueryVariables
-        // >({
-        //   query: GetMyUserInfoDocument,
-        // });
-
-        userInfoVar({
-          isLoading: false,
-          isAuthenticated: true,
-          userId: "1",
-        });
-      } else {
-        // グローバル管理しているユーザー情報を更新
-        userInfoVar({
-          ...userInfoVar(),
-          isLoading: false,
-        });
-      }
+      console.log("session", session);
+      // const apolloClient = initializeApollo();
+      // const { data } = await apolloClient.query<
+      //   GetMyUserInfoQuery,
+      //   GetMyUserInfoQueryVariables
+      // >({
+      //   query: GetMyUserInfoDocument,
+      // });
     })();
   }, []);
 

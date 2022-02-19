@@ -3,8 +3,6 @@ import SlackProvider from "next-auth/providers/slack";
 import { SLACK_ENV_VARS } from "src/constants";
 import { initializeApollo } from "src/graphql/apollo/client";
 
-// TODO: 各引数で受け取る値の型の修正
-
 export default NextAuth({
   providers: [
     SlackProvider({
@@ -15,7 +13,8 @@ export default NextAuth({
   callbacks: {
     // サインイン時の処理
     signIn: async (params) => {
-      console.log(params);
+      console.log("access_token", params.account.access_token);
+      // accessTokenVar(params.account.access_token);
       // 初回サインイン時にDBにユーザーを登録し、二回目以降はユーザーが存在すればOKにする
       const apolloClient = initializeApollo();
 
@@ -37,38 +36,17 @@ export default NextAuth({
     },
 
     jwt: async (params) => {
-      // console.log("jwt", params);
+      // console.log("jwt callbacks", params);
+      // if (typeof params.token.access_token === "string") {
+      //   console.log("access_token", params.token.access_token);
+      //   accessTokenVar(params.token.access_token);
+      // }
       return params.token;
     },
 
-    // TODO: 要チェック
-    // jwt: async (params) => {
-    //   // eslint-disable-next-line no-console
-    //   // console.log("NextAuth jwt fn", token, user, account, _profile, _isNewUser);
-
-    //   // ユーザー情報がすでにある場合？
-    //   if (params.account && params.user) {
-    //     return {
-    //       token: params.token,
-    //       user: params.user,
-    //       account: params.account,
-    //       profile: params.profile,
-    //       isNewUser: params.isNewUser,
-    //     };
-    //     return {
-    //       // idToken: params.account.id_token,
-    //       // accessToken: params.account.accessToken,
-    //       // accessTokenExpires: Date.now() + params.account.expires_at * 1000,
-    //       // accessTokenExpires: Date.now() + (params.account.expires_at ?? 0) * 1000,
-    //       // refreshToken: params.account.refresh_token,
-    //       // user: params.user,
-    //     };
-    //   }
-    // },
-
     session: async (params) => {
-      // console.log("NextAuth session fn", params);
-      return params.session;
+      // useSession時にsession.access_tokenでaccess_tokenを取得できるようにする
+      return { ...params.session, access_token: params.token.access_token };
     },
   },
 });

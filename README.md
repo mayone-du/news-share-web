@@ -1,4 +1,4 @@
-# ニュースシェアアプリのWebフロント
+# ニュースシェアアプリの Web フロント
 
 https://api.slack.com/legacy/oauth
 
@@ -34,3 +34,12 @@ https://api.slack.com/legacy/oauth
 subscription が必要な場合は以下パッケージをインストールして apollo client の初期化部分のコメントを解除
 
 - "subscriptions-transport-ws": "^0.9.19"
+
+ngrok を使用する。
+
+```terminal
+cd Desktop
+./ngrok http 3000
+```
+
+起動した https のアドレスを、.env.local と slack の redirect_uri に設定する。

@@ -1,6 +1,7 @@
 import "tailwindcss/tailwind.css";
 import "nprogress/nprogress.css";
 
+import { getSession } from "next-auth/react";
 import { ApolloProvider } from "@apollo/client";
 import type { CustomAppProps } from "next/app";
 import Router from "next/router";
@@ -25,6 +26,7 @@ Router.events.on("routeChangeError", () => {
 });
 
 const App = memo((props: CustomAppProps) => {
+  console.log("App.render");
   const apolloClient = initializeApollo();
 
   const getLayout =

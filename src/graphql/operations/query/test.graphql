@@ -1,0 +1,3 @@
+query Test($customArg: String!) {
+  test(customArg: $customArg)
+}
