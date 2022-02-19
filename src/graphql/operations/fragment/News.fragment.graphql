@@ -10,6 +10,6 @@ fragment NewsFragment on News {
   user {
     id
     username
-    nickname
+    displayName
   }
 }

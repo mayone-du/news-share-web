@@ -25,19 +25,10 @@ export type CreateNewsInput = {
   url: Scalars['String'];
 };
 
-export type CreateUserInput = {
-  email: Scalars['String'];
-  nickname: Scalars['String'];
-  role: Role;
-  selfIntroduction: Scalars['String'];
-  status: Status;
-  username: Scalars['String'];
-};
-
 export type Mutation = {
   __typename?: 'Mutation';
+  authUser?: Maybe<User>;
   createNews?: Maybe<News>;
-  createUser?: Maybe<User>;
   deleteNews?: Maybe<News>;
   postponeNewsList?: Maybe<Array<Maybe<News>>>;
   updateNews?: Maybe<News>;
@@ -47,11 +38,6 @@ export type Mutation = {
 
 export type MutationCreateNewsArgs = {
   input: CreateNewsInput;
-};
-
-
-export type MutationCreateUserArgs = {
-  input: CreateUserInput;
 };
 
 
@@ -201,30 +187,35 @@ export type UpdateNewsInput = {
 };
 
 export type UpdateUserInput = {
-  email: Scalars['String'];
+  displayName: Scalars['String'];
   id: Scalars['BigInt'];
+  selfIntroduction: Scalars['String'];
 };
 
 export type User = {
   __typename?: 'User';
   createdAt: Scalars['DateTime'];
-  email: Scalars['String'];
+  displayName: Scalars['String'];
   id: Scalars['BigInt'];
-  nickname: Scalars['String'];
+  newsList: Array<News>;
+  oauthUserId: Scalars['String'];
   role?: Maybe<Role>;
+  selfIntroduction: Scalars['String'];
   status?: Maybe<Status>;
   updatedAt: Scalars['DateTime'];
   username: Scalars['String'];
 };
 
-export type NewsFragmentFragment = { __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl?: string | null, createdAt: string, sharedAt: string, user: { __typename?: 'User', id: bigint, username: string, nickname: string } };
+export type NewsFragmentFragment = { __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl?: string | null, createdAt: string, sharedAt: string, user: { __typename?: 'User', id: bigint, username: string, displayName: string } };
+
+export type UserFragmentFragment = { __typename?: 'User', id: bigint, displayName: string, selfIntroduction: string, role?: Role | null, status?: Status | null };
 
 export type NewsListQueryVariables = Exact<{
   input: NewsListInput;
 }>;
 
 
-export type NewsListQuery = { __typename?: 'Query', newsList: Array<{ __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl?: string | null, createdAt: string, sharedAt: string, user: { __typename?: 'User', id: bigint, username: string, nickname: string } }> };
+export type NewsListQuery = { __typename?: 'Query', newsList: Array<{ __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl?: string | null, createdAt: string, sharedAt: string, user: { __typename?: 'User', id: bigint, username: string, displayName: string } }> };
 
 export type TestQueryVariables = Exact<{
   customArg: Scalars['String'];
@@ -232,6 +223,11 @@ export type TestQueryVariables = Exact<{
 
 
 export type TestQuery = { __typename?: 'Query', test?: string | null };
+
+export type AuthUserMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AuthUserMutation = { __typename?: 'Mutation', authUser?: { __typename?: 'User', id: bigint, displayName: string, selfIntroduction: string, role?: Role | null, status?: Status | null } | null };
 
 export const NewsFragmentFragmentDoc = gql`
     fragment NewsFragment on News {
@@ -246,8 +242,17 @@ export const NewsFragmentFragmentDoc = gql`
   user {
     id
     username
-    nickname
+    displayName
   }
+}
+    `;
+export const UserFragmentFragmentDoc = gql`
+    fragment UserFragment on User {
+  id
+  displayName
+  selfIntroduction
+  role
+  status
 }
     `;
 export const NewsListDocument = gql`
@@ -318,3 +323,35 @@ export function useTestLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TestQ
 export type TestQueryHookResult = ReturnType<typeof useTestQuery>;
 export type TestLazyQueryHookResult = ReturnType<typeof useTestLazyQuery>;
 export type TestQueryResult = Apollo.QueryResult<TestQuery, TestQueryVariables>;
+export const AuthUserDocument = gql`
+    mutation AuthUser {
+  authUser {
+    ...UserFragment
+  }
+}
+    ${UserFragmentFragmentDoc}`;
+export type AuthUserMutationFn = Apollo.MutationFunction<AuthUserMutation, AuthUserMutationVariables>;
+
+/**
+ * __useAuthUserMutation__
+ *
+ * To run a mutation, you first call `useAuthUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAuthUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [authUserMutation, { data, loading, error }] = useAuthUserMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useAuthUserMutation(baseOptions?: Apollo.MutationHookOptions<AuthUserMutation, AuthUserMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AuthUserMutation, AuthUserMutationVariables>(AuthUserDocument, options);
+      }
+export type AuthUserMutationHookResult = ReturnType<typeof useAuthUserMutation>;
+export type AuthUserMutationResult = Apollo.MutationResult<AuthUserMutation>;
+export type AuthUserMutationOptions = Apollo.BaseMutationOptions<AuthUserMutation, AuthUserMutationVariables>;

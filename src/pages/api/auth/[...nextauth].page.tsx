@@ -2,6 +2,11 @@ import NextAuth from "next-auth";
 import SlackProvider from "next-auth/providers/slack";
 import { SLACK_ENV_VARS } from "src/constants";
 import { initializeApollo } from "src/graphql/apollo/client";
+import {
+  AuthUserDocument,
+  AuthUserMutation,
+  AuthUserMutationVariables,
+} from "src/graphql/schemas/generated/schema";
 
 export default NextAuth({
   providers: [
@@ -13,20 +18,15 @@ export default NextAuth({
   callbacks: {
     // サインイン時の処理
     signIn: async (params) => {
-      console.log("access_token", params.account.access_token);
-      // accessTokenVar(params.account.access_token);
       // 初回サインイン時にDBにユーザーを登録し、二回目以降はユーザーが存在すればOKにする
-      const apolloClient = initializeApollo();
-
-      // TODO: ここは絶対かわる
-      // const { errors } = await apolloClient.mutate<SocialAuthMutation, SocialAuthMutationVariables>(
-      //   {
-      //     mutation: SocialAuthDocument,
-      //     variables: {
-      //       accessToken: params.account.access_token ?? "",
-      //     },
-      //   },
-      // );
+      const apolloClient = initializeApollo(params.account.access_token);
+      const { errors } = await apolloClient.mutate<AuthUserMutation, AuthUserMutationVariables>({
+        mutation: AuthUserDocument,
+      });
+      if (errors) {
+        console.error(errors);
+        return false;
+      }
       return true;
     },
 
@@ -36,11 +36,9 @@ export default NextAuth({
     },
 
     jwt: async (params) => {
-      // console.log("jwt callbacks", params);
-      // if (typeof params.token.access_token === "string") {
-      //   console.log("access_token", params.token.access_token);
-      //   accessTokenVar(params.token.access_token);
-      // }
+      if (params.account) {
+        params.token.access_token = params.account.access_token;
+      }
       return params.token;
     },
 

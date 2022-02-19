@@ -1,0 +1,5 @@
+mutation AuthUser {
+  authUser {
+    ...UserFragment
+  }
+}

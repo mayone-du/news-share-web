@@ -12,20 +12,20 @@ let apolloClient: ApolloClient<NormalizedCacheObject> | undefined;
 const authLink = setContext(async (request, previousContext) => {
   const session = await getSession();
   const token = session?.access_token;
-  console.log("getSession");
-  return {
-    headers: {
-      ...previousContext.headers,
-      authorization: token ? `Bearer ${token}` : "",
-    },
-  };
+  console.log("token", token);
+  if (token) return { headers: { authorization: `Bearer ${token}` } };
+  return { headers: previousContext.headers };
 });
 
 // ApolloClientの作成
-const createApolloClient = () => {
+const createApolloClient = (token?: string) => {
+  console.log("createApolloClient", token);
   // 画像をアップロードするためにcreateUploadLinkを使う
   const newHttpLink = createUploadLink({
     uri: GRAPHQL_API_ENDPOINT,
+    headers: {
+      authorization: token ? `Bearer ${token}` : "",
+    },
   });
   return new ApolloClient({
     ssrMode: typeof window === "undefined",
@@ -35,8 +35,8 @@ const createApolloClient = () => {
 };
 
 // ApolloClientの初期化
-export const initializeApollo = () => {
-  const _apolloClient = apolloClient ?? createApolloClient();
+export const initializeApollo = (token?: string) => {
+  const _apolloClient = apolloClient ?? createApolloClient(token);
   // SSR時は新しいclientを作成
   if (typeof window === "undefined") return _apolloClient;
   // CSR時は同じクライアントを使い回す
