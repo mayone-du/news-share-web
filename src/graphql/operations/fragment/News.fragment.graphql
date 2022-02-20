@@ -7,9 +7,4 @@ fragment NewsFragment on News {
   imageUrl
   createdAt
   sharedAt
-  user {
-    id
-    username
-    displayName
-  }
 }

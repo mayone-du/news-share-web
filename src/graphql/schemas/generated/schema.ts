@@ -25,6 +25,10 @@ export type CreateNewsInput = {
   url: Scalars['String'];
 };
 
+export type DeleteNewsInput = {
+  nodeId: Scalars['ID'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   authUser?: Maybe<User>;
@@ -42,7 +46,7 @@ export type MutationCreateNewsArgs = {
 
 
 export type MutationDeleteNewsArgs = {
-  id: Scalars['BigInt'];
+  input: DeleteNewsInput;
 };
 
 
@@ -206,16 +210,23 @@ export type User = {
   username: Scalars['String'];
 };
 
-export type NewsFragmentFragment = { __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl?: string | null, createdAt: string, sharedAt: string, user: { __typename?: 'User', id: bigint, username: string, displayName: string } };
+export type NewsFragmentFragment = { __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl?: string | null, createdAt: string, sharedAt: string };
 
 export type UserFragmentFragment = { __typename?: 'User', id: bigint, displayName: string, selfIntroduction: string, role?: Role | null, status?: Status | null };
+
+export type CreateNewsMutationVariables = Exact<{
+  input: CreateNewsInput;
+}>;
+
+
+export type CreateNewsMutation = { __typename?: 'Mutation', createNews?: { __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl?: string | null, createdAt: string, sharedAt: string, user: { __typename?: 'User', id: bigint, displayName: string, selfIntroduction: string, role?: Role | null, status?: Status | null } } | null };
 
 export type NewsListQueryVariables = Exact<{
   input: NewsListInput;
 }>;
 
 
-export type NewsListQuery = { __typename?: 'Query', newsList: Array<{ __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl?: string | null, createdAt: string, sharedAt: string, user: { __typename?: 'User', id: bigint, username: string, displayName: string } }> };
+export type NewsListQuery = { __typename?: 'Query', newsList: Array<{ __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl?: string | null, createdAt: string, sharedAt: string, user: { __typename?: 'User', id: bigint, displayName: string, selfIntroduction: string, role?: Role | null, status?: Status | null } }> };
 
 export type TestQueryVariables = Exact<{
   customArg: Scalars['String'];
@@ -239,11 +250,6 @@ export const NewsFragmentFragmentDoc = gql`
   imageUrl
   createdAt
   sharedAt
-  user {
-    id
-    username
-    displayName
-  }
 }
     `;
 export const UserFragmentFragmentDoc = gql`
@@ -255,13 +261,54 @@ export const UserFragmentFragmentDoc = gql`
   status
 }
     `;
+export const CreateNewsDocument = gql`
+    mutation CreateNews($input: CreateNewsInput!) {
+  createNews(input: $input) {
+    ...NewsFragment
+    user {
+      ...UserFragment
+    }
+  }
+}
+    ${NewsFragmentFragmentDoc}
+${UserFragmentFragmentDoc}`;
+export type CreateNewsMutationFn = Apollo.MutationFunction<CreateNewsMutation, CreateNewsMutationVariables>;
+
+/**
+ * __useCreateNewsMutation__
+ *
+ * To run a mutation, you first call `useCreateNewsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateNewsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createNewsMutation, { data, loading, error }] = useCreateNewsMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateNewsMutation(baseOptions?: Apollo.MutationHookOptions<CreateNewsMutation, CreateNewsMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateNewsMutation, CreateNewsMutationVariables>(CreateNewsDocument, options);
+      }
+export type CreateNewsMutationHookResult = ReturnType<typeof useCreateNewsMutation>;
+export type CreateNewsMutationResult = Apollo.MutationResult<CreateNewsMutation>;
+export type CreateNewsMutationOptions = Apollo.BaseMutationOptions<CreateNewsMutation, CreateNewsMutationVariables>;
 export const NewsListDocument = gql`
     query NewsList($input: NewsListInput!) {
   newsList(input: $input) {
     ...NewsFragment
+    user {
+      ...UserFragment
+    }
   }
 }
-    ${NewsFragmentFragmentDoc}`;
+    ${NewsFragmentFragmentDoc}
+${UserFragmentFragmentDoc}`;
 
 /**
  * __useNewsListQuery__

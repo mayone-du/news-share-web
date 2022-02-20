@@ -26,7 +26,6 @@ Router.events.on("routeChangeError", () => {
 });
 
 const App = memo((props: CustomAppProps) => {
-  console.log("App.render");
   const apolloClient = initializeApollo();
 
   const getLayout =
