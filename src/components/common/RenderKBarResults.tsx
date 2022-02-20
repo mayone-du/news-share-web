@@ -49,7 +49,7 @@ const ResultItem = forwardRef<HTMLDivElement, ResultItemProps>(
               {ancestors.length > 0 &&
                 ancestors.map((ancestor) => (
                   <div key={ancestor.id}>
-                    <span className="opacity-50 mr-2">{ancestor.name}</span>
+                    <span className="mr-2 opacity-50">{ancestor.name}</span>
                     <span className="mr-2">&rsaquo;</span>
                   </div>
                 ))}
@@ -59,9 +59,9 @@ const ResultItem = forwardRef<HTMLDivElement, ResultItemProps>(
           </div>
         </div>
         {action.shortcut?.length ? (
-          <div aria-hidden className="grid gap-1 grid-flow-col">
+          <div aria-hidden className="grid grid-flow-col gap-1">
             {action.shortcut.map((sc) => (
-              <kbd key={sc} className="text-sm py-1 px-2 bg-gray-400 rounded">
+              <kbd key={sc} className="py-1 px-2 text-sm bg-gray-400 rounded">
                 {sc}
               </kbd>
             ))}

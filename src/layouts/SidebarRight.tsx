@@ -9,14 +9,14 @@ export const SidebarRight: VFC = () => {
   });
 
   return (
-    <aside className="border rounded p-4">
+    <aside className="p-4 rounded border">
       <h3 className="text-lg">
         {error && "エラーが発生しました"}
         {loading ? (
           "読み込み中..."
         ) : data?.newsList.length ? (
           <div>
-            今日のニュース<span className="font-bold mx-2 text-xl">{data.newsList.length}</span>件
+            今日のニュース<span className="mx-2 text-xl font-bold">{data.newsList.length}</span>件
           </div>
         ) : (
           "ニュースはまだありません"

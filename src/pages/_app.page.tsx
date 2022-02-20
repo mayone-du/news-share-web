@@ -42,7 +42,7 @@ const App = memo((props: CustomAppProps) => {
       <KBarPortal>
         <KBarPositioner>
           <KBarAnimator className="shadow-2xl">
-            <KBarSearch className="rounded-t-md w-96 shadow-2xl shadow-black py-3 px-4 outline-none" />
+            <KBarSearch className="py-3 px-4 w-96 rounded-t-md shadow-2xl outline-none shadow-black" />
             <RenderKBarResults />
           </KBarAnimator>
         </KBarPositioner>

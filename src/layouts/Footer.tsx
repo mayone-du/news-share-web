@@ -19,7 +19,7 @@ export const Footer: VFC = memo(() => {
           })}
         </ul>
       </nav>
-      <p className="py-6 text-center bg-gray-800 text-white">copyright&copy;</p>
+      <p className="py-6 text-center text-white bg-gray-800">copyright&copy;</p>
     </footer>
   );
 });

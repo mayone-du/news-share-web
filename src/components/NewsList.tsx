@@ -69,24 +69,24 @@ export const NewsList: VFC = () => {
                         >
                           <BiChevronDown className="w-6 h-6 text-gray-600" />
                         </Popover.Button>
-                        <Popover.Panel className="absolute -right-4 z-10 top-10 mt-4 w-72 bg-white rounded border shadow-md transform dark:bg-black">
+                        <Popover.Panel className="absolute -right-4 top-10 z-10 mt-4 w-72 bg-white rounded border shadow-md transform dark:bg-black">
                           <ul>
                             <li>
                               <button
-                                className="flex items-start p-2 text-gray-600 hover:bg-gray-100 w-full"
+                                className="flex items-start p-2 w-full text-gray-600 hover:bg-gray-100"
                                 onClick={() => alert("developing...")}
                               >
-                                <HiOutlinePencil className="w-5 h-5 mr-4 text-gray-600" />
+                                <HiOutlinePencil className="mr-4 w-5 h-5 text-gray-600" />
                                 編集する
                               </button>
                             </li>
                             <li>
                               <button
-                                className="flex items-start p-2 text-red-500 hover:bg-gray-100 w-full disabled:bg-gray-200"
+                                className="flex items-start p-2 w-full text-red-500 hover:bg-gray-100 disabled:bg-gray-200"
                                 onClick={handleDeleteNews(news.nodeId ?? "")}
                                 disabled={isDeleteNewsLoading}
                               >
-                                <RiDeleteBinLine className="w-5 h-5 mr-4 text-red-500" />
+                                <RiDeleteBinLine className="mr-4 w-5 h-5 text-red-500" />
                                 削除する
                               </button>
                             </li>
@@ -124,15 +124,15 @@ export const NewsList: VFC = () => {
                     <img
                       src={news.user.photoUrl}
                       alt={news.user.displayName}
-                      className="w-6 h-6 mr-1 rounded-full border border-gray-100"
+                      className="mr-1 w-6 h-6 rounded-full border border-gray-100"
                       loading="lazy"
                     />
                   ) : null}
-                  <span className="text-sm text-gray-600 font-bold mr-4">
+                  <span className="mr-4 text-sm font-bold text-gray-600">
                     {news.user.displayName}
                   </span>
-                  <span className="text-xs text-gray-400 flex items-center">
-                    <AiOutlineClockCircle className="w-4 h-4 mr-1" />
+                  <span className="flex items-center text-xs text-gray-400">
+                    <AiOutlineClockCircle className="mr-1 w-4 h-4" />
                     {calcFromNow(news.createdAt)}
                   </span>
                 </div>
