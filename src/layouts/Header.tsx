@@ -62,7 +62,7 @@ export const Header: VFC = () => {
                     return (
                       <div>
                         <Popover.Button
-                          className={`ring-blue-300 overflow-hidden rounded-full h-10 w-10 block active:ring hover:shadow-lg ${
+                          className={`ring-blue-300 overflow-hidden rounded-full h-10 w-10 block active:ring hover:shadow-lg border border-gray-300 ${
                             isOpen && "ring"
                           }`}
                         >

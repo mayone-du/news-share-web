@@ -1,3 +1,2 @@
-import dayjs from "dayjs";
-
-export const date = dayjs();
+// TODO: constantsでもいいな
+export const hyphenFormat = "YYYY-MM-DD";

@@ -3,9 +3,11 @@ import { Dialog, Transition } from "@headlessui/react";
 import type { VFC } from "react";
 import { isOpenCreateNewsModalVar } from "src/global/state";
 import { useForm } from "react-hook-form";
-import { useCreateNewsMutation } from "src/graphql/schemas/generated/schema";
+import { NewsListDocument, useCreateNewsMutation } from "src/graphql/schemas/generated/schema";
 import toast from "react-hot-toast";
 import { useCreateNewsModal } from "src/hooks/useCreateNewsModal";
+import dayjs from "dayjs";
+import { hyphenFormat } from "src/utils";
 
 type FieldValues = {
   url: string;
@@ -26,8 +28,12 @@ export const CreateNewsModal: VFC = () => {
     try {
       await createNews({
         variables: { input: { url: data.url } },
+        refetchQueries: [
+          { query: NewsListDocument, variables: { sharedAt: dayjs().format(hyphenFormat) } },
+        ],
       });
       toast.success("投稿しました", { id: toastId });
+      handleCloseCreateNewsModal();
     } catch (e) {
       console.error(e);
       toast.error("投稿に失敗しました", { id: toastId });
