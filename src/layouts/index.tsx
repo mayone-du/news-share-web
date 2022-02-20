@@ -2,10 +2,10 @@ import { useReactiveVar } from "@apollo/client";
 import type { NextPage } from "next";
 import { getSession } from "next-auth/react";
 import { useEffect } from "react";
+import { CreateNewsModal } from "src/components/common";
 import { userInfoVar } from "src/global/state";
 import { initializeApollo } from "src/graphql/apollo/client";
 import { useAuthModal } from "src/hooks/useAuthModal";
-import { useCreateNewsModal } from "src/hooks/useCreateNewsModal";
 import { Footer } from "src/layouts/Footer";
 import { Header } from "src/layouts/Header";
 import { LayoutErrorBoundary } from "src/layouts/LayoutErrorBoundary";
@@ -15,7 +15,6 @@ import { SidebarLeft } from "src/layouts/SidebarLeft";
 export const Layout = (page: NextPage) => {
   const userInfo = useReactiveVar(userInfoVar);
   const { AuthModal } = useAuthModal();
-  const { CreateNewsModal } = useCreateNewsModal();
 
   // 初回マウント時にユーザー情報を取得し、ReactiveVariablesでグローバル管理して、_appで値を参照する
   useEffect(() => {

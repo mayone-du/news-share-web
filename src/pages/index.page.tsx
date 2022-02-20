@@ -1,12 +1,6 @@
-import { useReactiveVar } from "@apollo/client";
-import dayjs from "dayjs";
 import type { CustomNextPage } from "next";
 import { BreadcrumbJsonLd, NextSeo } from "next-seo";
-import { useCallback, useState } from "react";
-import toast from "react-hot-toast";
 import { NewsList } from "src/components/NewsList";
-import { NotAuth } from "src/components/NotAuth";
-import { UserLoading } from "src/components/UserLoading";
 import { TITLES } from "src/constants/titles";
 import { Layout } from "src/layouts";
 
