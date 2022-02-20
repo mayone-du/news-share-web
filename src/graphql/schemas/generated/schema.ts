@@ -223,6 +223,13 @@ export type CreateNewsMutationVariables = Exact<{
 
 export type CreateNewsMutation = { __typename?: 'Mutation', createNews?: { __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl?: string | null, createdAt: string, sharedAt: string, user: { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, photoUrl: string, role?: Role | null, status?: Status | null } } | null };
 
+export type DeleteNewsMutationVariables = Exact<{
+  input: DeleteNewsInput;
+}>;
+
+
+export type DeleteNewsMutation = { __typename?: 'Mutation', deleteNews?: { __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl?: string | null, createdAt: string, sharedAt: string } | null };
+
 export type NewsListQueryVariables = Exact<{
   input: NewsListInput;
 }>;
@@ -307,6 +314,39 @@ export function useCreateNewsMutation(baseOptions?: Apollo.MutationHookOptions<C
 export type CreateNewsMutationHookResult = ReturnType<typeof useCreateNewsMutation>;
 export type CreateNewsMutationResult = Apollo.MutationResult<CreateNewsMutation>;
 export type CreateNewsMutationOptions = Apollo.BaseMutationOptions<CreateNewsMutation, CreateNewsMutationVariables>;
+export const DeleteNewsDocument = gql`
+    mutation DeleteNews($input: DeleteNewsInput!) {
+  deleteNews(input: $input) {
+    ...NewsFragment
+  }
+}
+    ${NewsFragmentFragmentDoc}`;
+export type DeleteNewsMutationFn = Apollo.MutationFunction<DeleteNewsMutation, DeleteNewsMutationVariables>;
+
+/**
+ * __useDeleteNewsMutation__
+ *
+ * To run a mutation, you first call `useDeleteNewsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteNewsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteNewsMutation, { data, loading, error }] = useDeleteNewsMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useDeleteNewsMutation(baseOptions?: Apollo.MutationHookOptions<DeleteNewsMutation, DeleteNewsMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteNewsMutation, DeleteNewsMutationVariables>(DeleteNewsDocument, options);
+      }
+export type DeleteNewsMutationHookResult = ReturnType<typeof useDeleteNewsMutation>;
+export type DeleteNewsMutationResult = Apollo.MutationResult<DeleteNewsMutation>;
+export type DeleteNewsMutationOptions = Apollo.BaseMutationOptions<DeleteNewsMutation, DeleteNewsMutationVariables>;
 export const NewsListDocument = gql`
     query NewsList($input: NewsListInput!) {
   newsList(input: $input) {

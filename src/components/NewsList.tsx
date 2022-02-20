@@ -1,17 +1,18 @@
 import dayjs from "dayjs";
 import { VFC } from "react";
-import { Role, useMyUserInfoQuery, useNewsListQuery } from "src/graphql/schemas/generated/schema";
+import {
+  Role,
+  useDeleteNewsMutation,
+  useMyUserInfoQuery,
+  useNewsListQuery,
+} from "src/graphql/schemas/generated/schema";
 import { calcFromNow, hyphenFormat } from "src/utils";
 import { BiChevronDown } from "react-icons/bi";
-import { AiOutlineClockCircle, AiOutlineEdit } from "react-icons/ai";
+import { AiOutlineClockCircle } from "react-icons/ai";
 import { Popover } from "@headlessui/react";
-import type { IconType } from "react-icons";
 import { HiOutlinePencil } from "react-icons/hi";
 import { RiDeleteBinLine } from "react-icons/ri";
-
-const NEWS_OPERATION_MENU_LIST: { label: string; Icon: IconType }[] = [
-  { label: "編集する", Icon: AiOutlineEdit },
-];
+import toast from "react-hot-toast";
 
 export const NewsList: VFC = () => {
   const today = dayjs().format(hyphenFormat);
@@ -19,12 +20,27 @@ export const NewsList: VFC = () => {
     data: NewsListData,
     loading,
     error,
+    refetch,
   } = useNewsListQuery({
     variables: { input: { sharedAt: today } },
-    pollInterval: 1000 * 10, // mill secondなのでこの場合は10秒ごとにポーリング
+    // pollInterval: 1000 * 5, // mill secondなのでこの場合は5秒ごとにポーリング
   });
 
   const { data: myUserInfoData } = useMyUserInfoQuery({ fetchPolicy: "cache-only" });
+  const [deleteNews, { loading: isDeleteNewsLoading }] = useDeleteNewsMutation();
+  const handleDeleteNews = (nodeId: string) => {
+    return async () => {
+      const toastId = toast.loading("ニュースを削除しています...");
+      try {
+        await deleteNews({ variables: { input: { nodeId } } });
+        await refetch();
+        toast.success("ニュースを削除しました", { id: toastId });
+      } catch (e) {
+        console.error(e);
+        toast.error("ニュースの削除に失敗しました", { id: toastId });
+      }
+    };
+  };
 
   if (loading) return <div>Loading</div>;
   if (error) return <div>Error</div>;
@@ -55,13 +71,24 @@ export const NewsList: VFC = () => {
                         </Popover.Button>
                         <Popover.Panel className="absolute -right-4 z-10 top-10 mt-4 w-72 bg-white rounded border shadow-md transform dark:bg-black">
                           <ul>
-                            <li className="p-2 flex items-center text-gray-600">
-                              <HiOutlinePencil className="w-5 h-5 mr-4 text-gray-600" />
-                              編集する
+                            <li>
+                              <button
+                                className="flex items-start p-2 text-gray-600 hover:bg-gray-100 w-full"
+                                onClick={() => alert("developing...")}
+                              >
+                                <HiOutlinePencil className="w-5 h-5 mr-4 text-gray-600" />
+                                編集する
+                              </button>
                             </li>
-                            <li className="p-2 flex items-center text-red-500 border-gray-100">
-                              <RiDeleteBinLine className="w-5 h-5 mr-4 text-red-500" />
-                              削除する
+                            <li>
+                              <button
+                                className="flex items-start p-2 text-red-500 hover:bg-gray-100 w-full disabled:bg-gray-200"
+                                onClick={handleDeleteNews(news.nodeId ?? "")}
+                                disabled={isDeleteNewsLoading}
+                              >
+                                <RiDeleteBinLine className="w-5 h-5 mr-4 text-red-500" />
+                                削除する
+                              </button>
                             </li>
                           </ul>
                         </Popover.Panel>

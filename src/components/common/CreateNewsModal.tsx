@@ -3,7 +3,11 @@ import { Dialog, Transition } from "@headlessui/react";
 import type { VFC } from "react";
 import { isOpenCreateNewsModalVar } from "src/global/state";
 import { useForm } from "react-hook-form";
-import { NewsListDocument, useCreateNewsMutation } from "src/graphql/schemas/generated/schema";
+import {
+  NewsListDocument,
+  useCreateNewsMutation,
+  useNewsListLazyQuery,
+} from "src/graphql/schemas/generated/schema";
 import toast from "react-hot-toast";
 import { useCreateNewsModal } from "src/hooks/useCreateNewsModal";
 import dayjs from "dayjs";
@@ -16,23 +20,24 @@ type FieldValues = {
 export const CreateNewsModal: VFC = () => {
   const isOpenCreateNewsModal = useReactiveVar(isOpenCreateNewsModalVar);
   const { handleCloseCreateNewsModal } = useCreateNewsModal();
+  const [query] = useNewsListLazyQuery({
+    variables: { input: { sharedAt: dayjs().format(hyphenFormat) } },
+  });
   const [createNews, { data, loading, error }] = useCreateNewsMutation();
   const {
     handleSubmit,
     register,
     formState: { errors },
+    reset,
   } = useForm<FieldValues>();
 
   const handleCreateNews = async (data: FieldValues) => {
     const toastId = toast.loading("投稿中...");
     try {
-      await createNews({
-        variables: { input: { url: data.url } },
-        refetchQueries: [
-          { query: NewsListDocument, variables: { sharedAt: dayjs().format(hyphenFormat) } },
-        ],
-      });
+      await createNews({ variables: { input: { url: data.url } } });
+      await query();
       toast.success("投稿しました", { id: toastId });
+      reset();
       handleCloseCreateNewsModal();
     } catch (e) {
       console.error(e);
@@ -94,7 +99,7 @@ export const CreateNewsModal: VFC = () => {
                 </div>
                 <button
                   disabled={loading}
-                  className="block py-2 px-4 mx-auto rounded border shadow"
+                  className="block py-2 px-4 mx-auto rounded border shadow disabled:bg-gray-200"
                   type="submit"
                 >
                   投稿する
