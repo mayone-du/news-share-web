@@ -9,5 +9,8 @@ const InitialUserInfo = {
 
 export const userInfoVar = makeVar(InitialUserInfo);
 
-// 認証モーダルの開閉用ステート
+// 認証モーダルの開閉
 export const isOpenAuthModalVar = makeVar(false);
+
+// ニュース投稿用モーダルの開閉
+export const isOpenCreateNewsModalVar = makeVar(false);

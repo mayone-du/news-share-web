@@ -12,14 +12,14 @@ export const useAuthModal = () => {
   const isOpenAuthModal = useReactiveVar(isOpenAuthModalVar);
 
   // 認証モーダルの開閉
-  const handleToggleModal = useCallback(() => {
+  const handleToggleAuthModal = useCallback(() => {
     isOpenAuthModalVar(!isOpenAuthModal);
   }, [isOpenAuthModal]);
 
   // モーダルの中身のボタンをクリックした時
   const handleClick = useCallback(async () => {
     await handleSignIn();
-    handleToggleModal();
+    handleToggleAuthModal();
   }, []);
 
   const AuthModal: VFC = () => {
@@ -28,7 +28,7 @@ export const useAuthModal = () => {
         <Dialog
           as="div"
           className="overflow-y-auto fixed inset-0 z-10 bg-gray-400 bg-opacity-40"
-          onClose={handleToggleModal}
+          onClose={handleToggleAuthModal}
         >
           <div className="flex justify-center items-center px-4 min-h-screen">
             <Transition.Child
@@ -102,7 +102,7 @@ export const useAuthModal = () => {
   };
 
   return {
-    handleToggleModal,
+    handleToggleAuthModal,
     AuthModal,
   };
 };

@@ -2,9 +2,11 @@ import type { VFC } from "react";
 import Link from "next/link";
 import { SIDEBAR_LEFT_MENUS } from "src/constants/menus/sidebarLeft";
 import { useRouter } from "next/router";
+import { useCreateNewsModal } from "src/hooks/useCreateNewsModal";
 
 export const SidebarLeft: VFC = () => {
   const { asPath } = useRouter();
+  const { handleOpenCreateNewsModal } = useCreateNewsModal();
   return (
     <aside>
       <nav>
@@ -24,6 +26,12 @@ export const SidebarLeft: VFC = () => {
             );
           })}
         </ul>
+        <button
+          className="block py-2 px-4 rounded border shadow-sm transition-all hover:bg-gray-50 hover:shadow"
+          onClick={handleOpenCreateNewsModal}
+        >
+          ニュース・記事を投稿する
+        </button>
       </nav>
     </aside>
   );

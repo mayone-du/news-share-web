@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { userInfoVar } from "src/global/state";
 import { initializeApollo } from "src/graphql/apollo/client";
 import { useAuthModal } from "src/hooks/useAuthModal";
+import { useCreateNewsModal } from "src/hooks/useCreateNewsModal";
 import { Footer } from "src/layouts/Footer";
 import { Header } from "src/layouts/Header";
 import { LayoutErrorBoundary } from "src/layouts/LayoutErrorBoundary";
@@ -14,6 +15,7 @@ import { SidebarLeft } from "src/layouts/SidebarLeft";
 export const Layout = (page: NextPage) => {
   const userInfo = useReactiveVar(userInfoVar);
   const { AuthModal } = useAuthModal();
+  const { CreateNewsModal } = useCreateNewsModal();
 
   // 初回マウント時にユーザー情報を取得し、ReactiveVariablesでグローバル管理して、_appで値を参照する
   useEffect(() => {
@@ -42,6 +44,7 @@ export const Layout = (page: NextPage) => {
   return (
     <div>
       <AuthModal />
+      <CreateNewsModal />
       <Header />
       <div className="grid grid-cols-5 gap-8 px-12 pt-8 mx-auto max-w-[1680px]">
         <div className="col-span-1">

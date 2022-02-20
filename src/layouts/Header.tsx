@@ -12,7 +12,7 @@ import type { VFC } from "react";
 export const Header: VFC = () => {
   const { data } = useSession();
   const userInfo = useReactiveVar(userInfoVar);
-  const { handleToggleModal } = useAuthModal();
+  const { handleToggleAuthModal } = useAuthModal();
 
   const handleSignOut = useCallback(() => {
     signOut();
@@ -125,7 +125,7 @@ export const Header: VFC = () => {
             <li className="ml-2">
               <div>
                 <button
-                  onClick={handleToggleModal}
+                  onClick={handleToggleAuthModal}
                   className="block py-2 px-4 rounded border shadow-sm transition-all hover:bg-gray-50 hover:shadow"
                 >
                   SignIn

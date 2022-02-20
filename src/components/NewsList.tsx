@@ -19,12 +19,12 @@ export const NewsList: VFC = () => {
         return (
           <li
             key={news.nodeId}
-            className="overflow-hidden rounded border"
+            className="overflow-hidden rounded border mb-4"
             title={news.title || news.description || news.url}
           >
             <a href={news.url} className="block py-2 px-4">
-              <h3 className="text-lg font-bold">{news.title || news.url}</h3>
-              <p className="text-sm text-gray-400">{news.description}</p>
+              <h3 className="text-lg font-bold line-clamp-1">{news.title || news.url}</h3>
+              <p className="text-sm text-gray-400 line-clamp-2">{news.description}</p>
               <div className="flex items-center">
                 <span className="text-xs text-gray-600">{news.user.displayName}</span>
                 <span className="text-xs text-gray-600">
