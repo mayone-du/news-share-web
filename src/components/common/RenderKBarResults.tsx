@@ -1,7 +1,7 @@
 import { KBarResults, useMatches } from "kbar";
 import type { ActionImpl, ActionId } from "kbar";
 
-import { forwardRef, useMemo, Fragment } from "react";
+import { forwardRef, useMemo } from "react";
 import type { VFC } from "react";
 
 export const RenderKBarResults: VFC = () => {
@@ -38,8 +38,8 @@ const ResultItem = forwardRef<HTMLDivElement, ResultItemProps>(
     return (
       <div
         ref={ref}
-        className={`py-3 px-4 border flex items-center justify-between cursor-pointer shadow-xl ${
-          active ? "bg-gray-200" : "bg-white"
+        className={`py-3 px-4 flex items-center justify-between border-l-2 border-transparent cursor-pointer shadow-xl ${
+          active ? "border-l-2 border-black bg-gray-100" : "bg-white"
         }`}
       >
         <div className="flex gap-2 items-center text-sm">
