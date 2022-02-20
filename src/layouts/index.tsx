@@ -39,11 +39,11 @@ export const Layout = (page: NextPage) => {
       <AuthModal />
       <CreateNewsModal />
       <Header />
-      <div className="grid grid-cols-5 gap-8 px-44 pt-8 mx-auto max-w-[1680px]">
+      <div className="grid grid-cols-4 gap-8 px-44 pt-8 mx-auto max-w-[1680px]">
         <div className="col-span-1">
           <SidebarLeft />
         </div>
-        <main className="col-span-3">
+        <main className="col-span-2">
           <LayoutErrorBoundary>{page}</LayoutErrorBoundary>
         </main>
         <div className="col-span-1 bg-lime-100">hoge{/* <SidebarRight /> */}</div>

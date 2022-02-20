@@ -94,7 +94,7 @@ export const CreateNewsModal: VFC = () => {
                 </div>
                 <button
                   disabled={loading}
-                  className="block mx-auto py-2 px-4 rounded border shadow"
+                  className="block py-2 px-4 mx-auto rounded border shadow"
                   type="submit"
                 >
                   投稿する

@@ -19,11 +19,7 @@ export const Header: VFC = () => {
 
   const PROFILE_MENU_ITEMS = [
     {
-      label: "sample",
-      href: "##",
-    },
-    {
-      label: "Reports",
+      label: "いいねをしたニュース一覧",
       href: "##",
     },
   ];

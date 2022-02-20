@@ -12,16 +12,17 @@ export const SidebarLeft: VFC = () => {
       <nav>
         <ul>
           {SIDEBAR_LEFT_MENUS.map((menu) => {
+            console.log(menu);
             return (
               <li
                 key={menu.href}
-                className={`rounded overflow-hidden mb-2 hover:bg-gray-300 transition-all ${
-                  asPath === menu.href && "bg-orange-200"
+                className={`rounded overflow-hidden mb-2 hover:bg-gray-100 transition-all ${
+                  asPath === menu.href && "bg-gray-100"
                 }`}
               >
                 <Link href={menu.href}>
-                  <a className="flex items-center py-2 px-4 text-gray-700">
-                    <menu.Icon className="block w-6 h-6 mr-2" />
+                  <a className="flex items-center py-2 px-4 text-gray-900">
+                    <menu.Icon className="block mr-2 w-6 h-6 text-gray-500" />
                     {menu.label}
                   </a>
                 </Link>
