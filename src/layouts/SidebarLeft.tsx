@@ -12,7 +12,6 @@ export const SidebarLeft: VFC = () => {
       <nav>
         <ul>
           {SIDEBAR_LEFT_MENUS.map((menu) => {
-            console.log(menu);
             return (
               <li
                 key={menu.href}

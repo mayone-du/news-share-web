@@ -204,6 +204,7 @@ export type User = {
   id: Scalars['BigInt'];
   newsList: Array<News>;
   oauthUserId: Scalars['String'];
+  photoUrl: Scalars['String'];
   role?: Maybe<Role>;
   selfIntroduction: Scalars['String'];
   status?: Maybe<Status>;
@@ -213,21 +214,21 @@ export type User = {
 
 export type NewsFragmentFragment = { __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl?: string | null, createdAt: string, sharedAt: string };
 
-export type UserFragmentFragment = { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, role?: Role | null, status?: Status | null };
+export type UserFragmentFragment = { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, photoUrl: string, role?: Role | null, status?: Status | null };
 
 export type CreateNewsMutationVariables = Exact<{
   input: CreateNewsInput;
 }>;
 
 
-export type CreateNewsMutation = { __typename?: 'Mutation', createNews?: { __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl?: string | null, createdAt: string, sharedAt: string, user: { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, role?: Role | null, status?: Status | null } } | null };
+export type CreateNewsMutation = { __typename?: 'Mutation', createNews?: { __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl?: string | null, createdAt: string, sharedAt: string, user: { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, photoUrl: string, role?: Role | null, status?: Status | null } } | null };
 
 export type NewsListQueryVariables = Exact<{
   input: NewsListInput;
 }>;
 
 
-export type NewsListQuery = { __typename?: 'Query', newsList: Array<{ __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl?: string | null, createdAt: string, sharedAt: string, user: { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, role?: Role | null, status?: Status | null } }> };
+export type NewsListQuery = { __typename?: 'Query', newsList: Array<{ __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl?: string | null, createdAt: string, sharedAt: string, user: { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, photoUrl: string, role?: Role | null, status?: Status | null } }> };
 
 export type TestQueryVariables = Exact<{
   customArg: Scalars['String'];
@@ -239,12 +240,12 @@ export type TestQuery = { __typename?: 'Query', test?: string | null };
 export type AuthUserMutationVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AuthUserMutation = { __typename?: 'Mutation', authUser?: { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, role?: Role | null, status?: Status | null } | null };
+export type AuthUserMutation = { __typename?: 'Mutation', authUser?: { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, photoUrl: string, role?: Role | null, status?: Status | null } | null };
 
 export type MyUserInfoQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MyUserInfoQuery = { __typename?: 'Query', myUserInfo?: { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, role?: Role | null, status?: Status | null } | null };
+export type MyUserInfoQuery = { __typename?: 'Query', myUserInfo?: { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, photoUrl: string, role?: Role | null, status?: Status | null } | null };
 
 export const NewsFragmentFragmentDoc = gql`
     fragment NewsFragment on News {
@@ -264,6 +265,7 @@ export const UserFragmentFragmentDoc = gql`
   oauthUserId
   displayName
   selfIntroduction
+  photoUrl
   role
   status
 }

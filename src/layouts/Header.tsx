@@ -29,7 +29,7 @@ export const Header: VFC = () => {
       <nav className="flex justify-between items-center">
         <div>
           <Link href={STATIC_ROUTES.INDEX}>
-            <a className="block text-lg font-bold">LOGO</a>
+            <a className="block text-lg font-bold"></a>
           </Link>
         </div>
         <ul className="flex justify-between items-center">

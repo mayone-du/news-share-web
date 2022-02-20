@@ -1,9 +1,17 @@
 import dayjs from "dayjs";
 import { VFC } from "react";
 import { Role, useMyUserInfoQuery, useNewsListQuery } from "src/graphql/schemas/generated/schema";
-import { hyphenFormat } from "src/utils";
+import { calcFromNow, hyphenFormat } from "src/utils";
 import { BiChevronDown } from "react-icons/bi";
+import { AiOutlineClockCircle, AiOutlineEdit } from "react-icons/ai";
 import { Popover } from "@headlessui/react";
+import type { IconType } from "react-icons";
+import { HiOutlinePencil } from "react-icons/hi";
+import { RiDeleteBinLine } from "react-icons/ri";
+
+const NEWS_OPERATION_MENU_LIST: { label: string; Icon: IconType }[] = [
+  { label: "編集する", Icon: AiOutlineEdit },
+];
 
 export const NewsList: VFC = () => {
   const today = dayjs().format(hyphenFormat);
@@ -28,7 +36,7 @@ export const NewsList: VFC = () => {
         return (
           <li
             key={news.nodeId}
-            className="overflow-hidden relative mb-4 rounded border"
+            className="relative mb-4 rounded border"
             title={news.title || news.description || news.url}
           >
             {/* 管理者か自分の投稿したニュースであれば、ニュースに対してのメニュー表示 */}
@@ -39,15 +47,22 @@ export const NewsList: VFC = () => {
                     return (
                       <div>
                         <Popover.Button
-                          className={`items-center absolute top-2 right-2 justify-center p-1 overflow-hidden rounded-full flex hover:bg-gray-200 ${
+                          className={`items-center absolute top-2 right-2 justify-center p-1 rounded-full flex hover:bg-gray-200 ${
                             open && "bg-gray-200"
                           }`}
                         >
                           <BiChevronDown className="w-6 h-6 text-gray-600" />
                         </Popover.Button>
-                        <Popover.Panel className="absolute right-0 top-10 mt-4 w-72 bg-white rounded border shadow-md transform dark:bg-black">
+                        <Popover.Panel className="absolute -right-4 z-10 top-10 mt-4 w-72 bg-white rounded border shadow-md transform dark:bg-black">
                           <ul>
-                            <li>編集する</li>
+                            <li className="p-2 flex items-center text-gray-600">
+                              <HiOutlinePencil className="w-5 h-5 mr-4 text-gray-600" />
+                              編集する
+                            </li>
+                            <li className="p-2 flex items-center text-red-500 border-gray-100">
+                              <RiDeleteBinLine className="w-5 h-5 mr-4 text-red-500" />
+                              削除する
+                            </li>
                           </ul>
                         </Popover.Panel>
                       </div>
@@ -55,6 +70,8 @@ export const NewsList: VFC = () => {
                   }}
                 </Popover>
               ))}
+
+            {/* コンテンツ */}
             <a
               href={news.url}
               className="block py-3 px-8 hover:bg-gray-50"
@@ -76,10 +93,20 @@ export const NewsList: VFC = () => {
                   ) : null}
                 </div>
                 <div className="flex items-center">
-                  <span className="text-xs text-gray-600">{news.user.displayName}</span>
-                  <span className="text-xs text-gray-600">
-                    {/* TODO: 何分前とか表示 */}
-                    {dayjs(news.createdAt).format(hyphenFormat)}
+                  {news.user.photoUrl ? (
+                    <img
+                      src={news.user.photoUrl}
+                      alt={news.user.displayName}
+                      className="w-6 h-6 mr-1 rounded-full border border-gray-100"
+                      loading="lazy"
+                    />
+                  ) : null}
+                  <span className="text-sm text-gray-600 font-bold mr-4">
+                    {news.user.displayName}
+                  </span>
+                  <span className="text-xs text-gray-400 flex items-center">
+                    <AiOutlineClockCircle className="w-4 h-4 mr-1" />
+                    {calcFromNow(news.createdAt)}
                   </span>
                 </div>
               </div>

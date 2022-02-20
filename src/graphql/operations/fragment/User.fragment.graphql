@@ -3,6 +3,7 @@ fragment UserFragment on User {
   oauthUserId
   displayName
   selfIntroduction
+  photoUrl
   role
   status
 }
