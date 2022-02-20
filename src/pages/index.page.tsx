@@ -4,6 +4,7 @@ import { NewsList } from "src/components/NewsList";
 import { ROUTE_LABELS } from "src/constants/labels";
 import { Layout } from "src/layouts";
 
+// TODO: pagesディレクトリをトップレベルにして、src以下はコンポーネントのみのpagesを定義する
 const IndexPage: CustomNextPage = () => {
   return (
     <>

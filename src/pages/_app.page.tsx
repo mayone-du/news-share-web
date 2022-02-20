@@ -47,7 +47,6 @@ const App = memo((props: CustomAppProps) => {
           </KBarAnimator>
         </KBarPositioner>
       </KBarPortal>
-
       <SessionProvider session={props.pageProps.session}>
         <ApolloProvider client={apolloClient}>
           <ThemeProvider attribute="class" defaultTheme="light">

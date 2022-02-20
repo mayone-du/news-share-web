@@ -6,6 +6,7 @@ export const ROUTE_LABELS: Record<keyof typeof STATIC_ROUTES | 404, string> = {
   CONTACT: "お問い合わせ",
   ABOUT: "このアプリについて",
   ARCHIVE: "アーカイブ",
+  EVENT: "QinTV",
   TERM: "利用規約",
   PRIVACY_POLICY: "プライバシーポリシー",
   "404": "ページが見つかりません",

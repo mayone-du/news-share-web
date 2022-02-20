@@ -3,11 +3,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import type { VFC } from "react";
 import { isOpenCreateNewsModalVar } from "src/global/state";
 import { useForm } from "react-hook-form";
-import {
-  NewsListDocument,
-  useCreateNewsMutation,
-  useNewsListLazyQuery,
-} from "src/graphql/schemas/generated/schema";
+import { useCreateNewsMutation, useNewsListLazyQuery } from "src/graphql/schemas/generated/schema";
 import toast from "react-hot-toast";
 import { useCreateNewsModal } from "src/hooks/useCreateNewsModal";
 import dayjs from "dayjs";
@@ -35,10 +31,10 @@ export const CreateNewsModal: VFC = () => {
     const toastId = toast.loading("投稿中...");
     try {
       await createNews({ variables: { input: { url: data.url } } });
-      await query();
-      toast.success("投稿しました", { id: toastId });
-      reset();
       handleCloseCreateNewsModal();
+      reset();
+      await query(); // refetch
+      toast.success("投稿しました", { id: toastId });
     } catch (e) {
       console.error(e);
       toast.error("投稿に失敗しました", { id: toastId });

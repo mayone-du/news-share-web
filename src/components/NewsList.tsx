@@ -26,13 +26,14 @@ export const NewsList: VFC = () => {
     // pollInterval: 1000 * 5, // mill secondなのでこの場合は5秒ごとにポーリング
   });
 
-  const { data: myUserInfoData } = useMyUserInfoQuery({ fetchPolicy: "cache-only" });
+  const { data: myUserInfoData } = useMyUserInfoQuery({ fetchPolicy: "cache-only" }); // layoutで取得してるのでcache-onlyでネットワークリクエストを抑える
   const [deleteNews, { loading: isDeleteNewsLoading }] = useDeleteNewsMutation();
-  const handleDeleteNews = (nodeId: string) => {
+  const handleDeleteNews = (nodeId: string, onClose: VoidFunction) => {
     return async () => {
       const toastId = toast.loading("ニュースを削除しています...");
       try {
         await deleteNews({ variables: { input: { nodeId } } });
+        onClose();
         await refetch();
         toast.success("ニュースを削除しました", { id: toastId });
       } catch (e) {
@@ -59,11 +60,11 @@ export const NewsList: VFC = () => {
             {myUserInfoData?.myUserInfo?.role === Role.Admin ||
               (news.user.id === myUserInfoData?.myUserInfo?.id && (
                 <Popover>
-                  {({ open }) => {
+                  {({ open, close }) => {
                     return (
                       <div>
                         <Popover.Button
-                          className={`items-center absolute top-2 right-2 justify-center p-1 rounded-full flex hover:bg-gray-200 ${
+                          className={`items-center absolute top-2 right-2 justify-center p-1 rounded-full flex hover:bg-gray-200 border border-transparent hover:border-gray-50 ${
                             open && "bg-gray-200"
                           }`}
                         >
@@ -83,7 +84,7 @@ export const NewsList: VFC = () => {
                             <li>
                               <button
                                 className="flex items-start p-2 w-full text-red-500 hover:bg-gray-100 disabled:bg-gray-200"
-                                onClick={handleDeleteNews(news.nodeId ?? "")}
+                                onClick={handleDeleteNews(news.nodeId ?? "", close)}
                                 disabled={isDeleteNewsLoading}
                               >
                                 <RiDeleteBinLine className="mr-4 w-5 h-5 text-red-500" />
