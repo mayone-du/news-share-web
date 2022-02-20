@@ -15,6 +15,12 @@ import { RiDeleteBinLine } from "react-icons/ri";
 import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
 
+type FieldValues = {
+  url: string;
+  title: string;
+  description: string;
+};
+
 export const NewsList: VFC = () => {
   const today = dayjs().format(hyphenFormat);
   const {
@@ -28,7 +34,7 @@ export const NewsList: VFC = () => {
   });
   const { data: myUserInfoData } = useMyUserInfoQuery({ fetchPolicy: "cache-only" }); // layoutで取得してるのでcache-onlyでネットワークリクエストを抑える
   const [deleteNews, { loading: isDeleteNewsLoading }] = useDeleteNewsMutation();
-  const { register, setValue } = useForm();
+  const { register, setValue } = useForm<FieldValues>();
   const [editingNewsNodeId, setEditingNewsNodeId] = useState("");
 
   const handleClickNewsEditCancel = () => setEditingNewsNodeId("");
@@ -114,18 +120,24 @@ export const NewsList: VFC = () => {
             {/* コンテンツ */}
             <a
               href={news.url}
-              className={`block py-3 px-8 hover:bg-gray-50`}
+              className={`block py-3 px-8 hover:bg-gray-50 ${
+                editingNewsNodeId === news.nodeId ? "hover:bg-white cursor-default" : ""
+              }`}
               target="_blank"
               rel="noopener noreferrer"
               onClick={editingNewsNodeId === news.nodeId ? (e) => e.preventDefault() : undefined}
             >
-              <div className="">
-                <h3
-                  className="text-lg font-bold line-clamp-1"
-                  contentEditable={editingNewsNodeId === news.nodeId}
-                >
-                  {news.title || news.url}
-                </h3>
+              <div>
+                {editingNewsNodeId === news.nodeId ? (
+                  <input className="w-full p-1 block" {...register("title")} /> // TODO: defaultValue
+                ) : (
+                  <h3
+                    className="text-lg font-bold line-clamp-1"
+                    // contentEditable={editingNewsNodeId === news.nodeId ? true : undefined} TODO: contentEditableを使うと、Reactの警告が出る
+                  >
+                    {news.title || news.url}
+                  </h3>
+                )}
 
                 <div className="flex items-center">
                   <p className="my-2 mr-4 text-sm text-gray-400 line-clamp-2">{news.description}</p>
@@ -159,14 +171,17 @@ export const NewsList: VFC = () => {
             </a>
             {/* 編集中の場合に更新、キャンセルボタンを表示 */}
             {editingNewsNodeId === news.nodeId && (
-              <div className="flex items-center">
+              <div className="flex items-center gap-4 justify-end w-full px-4 pb-4">
                 <button
                   className="block px-2 py-1 rounded bg-gray-100 text-gray-600 hover:bg-gray-200"
                   onClick={() => alert("hoge")}
                 >
                   更新する
                 </button>
-                <button className="block" onClick={handleClickNewsEditCancel}>
+                <button
+                  className="block bg-gray-50 border rounded py-1 px-2"
+                  onClick={handleClickNewsEditCancel}
+                >
                   キャンセル
                 </button>
               </div>
