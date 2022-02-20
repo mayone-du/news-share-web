@@ -3,6 +3,7 @@ import Link from "next/link";
 import type { VFC } from "react";
 import { STATIC_ROUTES } from "src/constants/routes";
 import { useAuthModal } from "src/hooks/useAuthModal";
+import SlackIcon from "public/images/Slack_Mark.svg";
 
 export const AuthModal: VFC = () => {
   const { isOpenAuthModal, handleToggleAuthModal, handleClickAuth } = useAuthModal();
@@ -51,7 +52,7 @@ export const AuthModal: VFC = () => {
                   className="flex items-center px-2 mx-auto bg-gray-50 rounded border border-gray-200 ring-blue-200 shadow transition-all outline-none hover:bg-gray-100 hover:shadow-md focus-visible:ring-2 focus-visible:ring-blue-300 active:ring-2"
                   onClick={handleClickAuth}
                 >
-                  <img src="/images/Slack_Mark_Web.png" className="block w-12 h-12" />
+                  <img src="/images/Slack_Mark.svg" className="block w-10 h-10" />
                   <span className="mx-4 font-bold">SignIn with Slack</span>
                 </button>
               </div>
