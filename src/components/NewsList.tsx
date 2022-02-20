@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import { VFC } from "react";
+import { useState, VFC } from "react";
 import {
   Role,
   useDeleteNewsMutation,
@@ -13,6 +13,7 @@ import { Popover } from "@headlessui/react";
 import { HiOutlinePencil } from "react-icons/hi";
 import { RiDeleteBinLine } from "react-icons/ri";
 import toast from "react-hot-toast";
+import { useForm } from "react-hook-form";
 
 export const NewsList: VFC = () => {
   const today = dayjs().format(hyphenFormat);
@@ -23,11 +24,14 @@ export const NewsList: VFC = () => {
     refetch,
   } = useNewsListQuery({
     variables: { input: { sharedAt: today } },
-    // pollInterval: 1000 * 5, // mill secondなのでこの場合は5秒ごとにポーリング
+    pollInterval: 1000 * 10, // mill secondなのでこの場合は10秒ごとにポーリング
   });
-
   const { data: myUserInfoData } = useMyUserInfoQuery({ fetchPolicy: "cache-only" }); // layoutで取得してるのでcache-onlyでネットワークリクエストを抑える
   const [deleteNews, { loading: isDeleteNewsLoading }] = useDeleteNewsMutation();
+  const { register, setValue } = useForm();
+  const [editingNewsNodeId, setEditingNewsNodeId] = useState("");
+
+  const handleClickNewsEditCancel = () => setEditingNewsNodeId("");
   const handleDeleteNews = (nodeId: string, onClose: VoidFunction) => {
     return async () => {
       const toastId = toast.loading("ニュースを削除しています...");
@@ -53,7 +57,9 @@ export const NewsList: VFC = () => {
         return (
           <li
             key={news.nodeId}
-            className="relative mb-4 rounded border"
+            className={`relative mb-4 rounded border ${
+              news.nodeId === editingNewsNodeId ? "ring-2 ring-blue-200" : ""
+            }`}
             title={news.title || news.description || news.url}
           >
             {/* 管理者か自分の投稿したニュースであれば、ニュースに対してのメニュー表示 */}
@@ -75,7 +81,13 @@ export const NewsList: VFC = () => {
                             <li>
                               <button
                                 className="flex items-start p-2 w-full text-gray-600 hover:bg-gray-100"
-                                onClick={() => alert("developing...")}
+                                onClick={() => {
+                                  setEditingNewsNodeId(news.nodeId ?? "");
+                                  close();
+                                  // setValue("title", news.title);
+                                  // setValue("description", news.description);
+                                  // setValue("url", news.url);
+                                }}
                               >
                                 <HiOutlinePencil className="mr-4 w-5 h-5 text-gray-600" />
                                 編集する
@@ -102,12 +114,18 @@ export const NewsList: VFC = () => {
             {/* コンテンツ */}
             <a
               href={news.url}
-              className="block py-3 px-8 hover:bg-gray-50"
+              className={`block py-3 px-8 hover:bg-gray-50`}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={editingNewsNodeId === news.nodeId ? (e) => e.preventDefault() : undefined}
             >
               <div className="">
-                <h3 className="text-lg font-bold line-clamp-1">{news.title || news.url}</h3>
+                <h3
+                  className="text-lg font-bold line-clamp-1"
+                  contentEditable={editingNewsNodeId === news.nodeId}
+                >
+                  {news.title || news.url}
+                </h3>
 
                 <div className="flex items-center">
                   <p className="my-2 mr-4 text-sm text-gray-400 line-clamp-2">{news.description}</p>
@@ -139,6 +157,20 @@ export const NewsList: VFC = () => {
                 </div>
               </div>
             </a>
+            {/* 編集中の場合に更新、キャンセルボタンを表示 */}
+            {editingNewsNodeId === news.nodeId && (
+              <div className="flex items-center">
+                <button
+                  className="block px-2 py-1 rounded bg-gray-100 text-gray-600 hover:bg-gray-200"
+                  onClick={() => alert("hoge")}
+                >
+                  更新する
+                </button>
+                <button className="block" onClick={handleClickNewsEditCancel}>
+                  キャンセル
+                </button>
+              </div>
+            )}
           </li>
         );
       })}

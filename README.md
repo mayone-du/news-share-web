@@ -29,6 +29,12 @@ https://api.slack.com/legacy/oauth
 - npm build
 - npm start
 
+## TODO:
+
+- フロント側にスクレイピング機能をもたせて、投稿前にプレビューできるようにする
+- 問い合わせページと GitHub Issues とか連携させて、欲しい機能やバグの報告をできるようにする(プラスで Slack に通知したり、Slack から送信できるのもあり)
+- KBar と独自モーダルがかぶって見にくくなるので対応
+
 ## Note
 
 subscription が必要な場合は以下パッケージをインストールして apollo client の初期化部分のコメントを解除
