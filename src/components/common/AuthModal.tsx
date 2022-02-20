@@ -1,7 +1,6 @@
 import { Dialog, Transition } from "@headlessui/react";
 import Link from "next/link";
 import type { VFC } from "react";
-import { FcGoogle } from "react-icons/fc";
 import { STATIC_ROUTES } from "src/constants/routes";
 import { useAuthModal } from "src/hooks/useAuthModal";
 
@@ -39,25 +38,25 @@ export const AuthModal: VFC = () => {
             leaveFrom="opacity-100 scale-100"
             leaveTo="opacity-0 scale-95"
           >
-            <div className="overflow-hidden p-6 m-auto w-80 bg-white rounded-lg shadow-xl transition-all transform sm:w-96">
-              <Dialog.Title as="h3" className="text-2xl font-bold text-center text-gray-900">
-                TODO App
+            <div className="overflow-hidden p-8 m-auto w-80 bg-white rounded-lg shadow-xl transition-all transform sm:w-96">
+              <Dialog.Title as="h3" className="text-3xl font-bold text-center text-gray-900">
+                Qinニュースシェア
               </Dialog.Title>
 
-              <p className="mt-4 text-xs text-gray-500">コンセプト</p>
+              <p className="mt-6 text-sm text-gray-500">コンセプト</p>
 
-              <div className="mt-4">
+              <div className="my-6">
                 <button
                   type="button"
-                  className="flex items-center py-2 px-4 mx-auto bg-gray-50 rounded border border-gray-200 ring-blue-200 shadow transition-all outline-none hover:bg-gray-100 hover:shadow-md focus-visible:ring-2 focus-visible:ring-blue-300 active:ring-2"
+                  className="flex items-center px-2 mx-auto bg-gray-50 rounded border border-gray-200 ring-blue-200 shadow transition-all outline-none hover:bg-gray-100 hover:shadow-md focus-visible:ring-2 focus-visible:ring-blue-300 active:ring-2"
                   onClick={handleClickAuth}
                 >
-                  <FcGoogle className="w-6 h-6" />
-                  <span className="mx-4 font-bold">SignIn with Google</span>
+                  <img src="/images/Slack_Mark_Web.png" className="block w-12 h-12" />
+                  <span className="mx-4 font-bold">SignIn with Slack</span>
                 </button>
               </div>
 
-              <p className="mt-4 text-xs text-gray-500">
+              <p className="text-sm text-gray-500">
                 <Link href={STATIC_ROUTES.TERM}>
                   <a
                     // onClick={handleCloseModal}

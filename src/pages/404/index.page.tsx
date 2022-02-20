@@ -1,11 +1,12 @@
 import type { CustomNextPage } from "next";
 import { NextSeo } from "next-seo";
+import { ROUTE_LABELS } from "src/constants/labels";
 import { Layout } from "src/layouts";
 
 const NotFoundPage: CustomNextPage = () => {
   return (
     <>
-      <NextSeo title="お探しのページは見つかりませんでした。" />
+      <NextSeo title={ROUTE_LABELS[404]} />
 
       <div>
         <h2 className="text-3xl font-bold text-center">404 Not Found.</h2>

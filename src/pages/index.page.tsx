@@ -1,13 +1,13 @@
 import type { CustomNextPage } from "next";
 import { BreadcrumbJsonLd, NextSeo } from "next-seo";
 import { NewsList } from "src/components/NewsList";
-import { TITLES } from "src/constants/titles";
+import { ROUTE_LABELS } from "src/constants/labels";
 import { Layout } from "src/layouts";
 
 const IndexPage: CustomNextPage = () => {
   return (
     <>
-      <NextSeo title={TITLES.HOME} />
+      <NextSeo title={ROUTE_LABELS.INDEX} />
       <BreadcrumbJsonLd
         itemListElements={[
           {

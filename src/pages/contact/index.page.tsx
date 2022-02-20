@@ -1,7 +1,7 @@
 import type { CustomNextPage } from "next";
 import { NextSeo } from "next-seo";
 import { useForm } from "react-hook-form";
-import { TITLES } from "src/constants/titles";
+import { ROUTE_LABELS } from "src/constants/labels";
 import { Layout } from "src/layouts";
 
 type ContactInputs = {
@@ -20,7 +20,7 @@ const ContactIndexPage: CustomNextPage = () => {
   };
   return (
     <>
-      <NextSeo title={TITLES.CONTACT} />
+      <NextSeo title={ROUTE_LABELS.CONTACT} />
       <div>
         <h1>お問い合わせ</h1>
         <form onSubmit={handleSubmit(onSubmit)}>
