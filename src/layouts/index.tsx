@@ -13,6 +13,7 @@ import { Footer } from "src/layouts/Footer";
 import { Header } from "src/layouts/Header";
 import { LayoutErrorBoundary } from "src/layouts/LayoutErrorBoundary";
 import { SidebarLeft } from "src/layouts/SidebarLeft";
+import { SidebarRight } from "src/layouts/SidebarRight";
 
 // pagesのgetLayoutで指定されたページで呼ばれる。ページのリロード時に呼ばれ、ページ遷移時には呼ばれない。
 export const Layout = (page: NextPage) => {
@@ -46,7 +47,9 @@ export const Layout = (page: NextPage) => {
         <main className="col-span-2">
           <LayoutErrorBoundary>{page}</LayoutErrorBoundary>
         </main>
-        <div className="col-span-1 bg-lime-100">hoge{/* <SidebarRight /> */}</div>
+        <div className="col-span-1">
+          <SidebarRight />
+        </div>
       </div>
       <Footer />
     </div>
