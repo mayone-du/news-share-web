@@ -1,7 +1,6 @@
 import "tailwindcss/tailwind.css";
 import "nprogress/nprogress.css";
 
-import { getSession } from "next-auth/react";
 import { ApolloProvider } from "@apollo/client";
 import type { CustomAppProps } from "next/app";
 import Router from "next/router";
@@ -13,6 +12,25 @@ import NProgress from "nprogress";
 import { memo } from "react";
 import { Toaster } from "react-hot-toast";
 import { initializeApollo } from "src/graphql/apollo/client";
+import { KBarProvider, KBarPortal, KBarPositioner, KBarAnimator, KBarSearch } from "kbar";
+import { KBarResults } from "src/components/common/KBarResults";
+
+const actions = [
+  {
+    id: "blog",
+    name: "Blog",
+    shortcut: ["b"],
+    keywords: "writing words",
+    perform: () => (window.location.pathname = "blog"),
+  },
+  {
+    id: "contact",
+    name: "Contact",
+    shortcut: ["c"],
+    keywords: "email",
+    perform: () => (window.location.pathname = "contact"),
+  },
+];
 
 NProgress.configure({ showSpinner: false, speed: 400, minimum: 0.25 });
 Router.events.on("routeChangeStart", () => {
@@ -35,26 +53,37 @@ const App = memo((props: CustomAppProps) => {
     });
 
   return (
-    <SessionProvider session={props.pageProps.session}>
-      <ApolloProvider client={apolloClient}>
-        <ThemeProvider attribute="class" defaultTheme="light">
-          <DefaultSeo
-            title={"Template"}
-            titleTemplate={"%s | サイトの名前"}
-            description="Template Repo"
-            additionalMetaTags={[{ property: "", content: "" }]}
-            additionalLinkTags={[
-              {
-                rel: "manifest",
-                href: "/pwa/manifest.json",
-              },
-            ]}
-          />
-          {getLayout(<props.Component {...props.pageProps} />)}
-          <Toaster toastOptions={{ duration: 2500 }} />
-        </ThemeProvider>
-      </ApolloProvider>
-    </SessionProvider>
+    <KBarProvider actions={actions}>
+      <KBarPortal>
+        <KBarPositioner>
+          <KBarAnimator>
+            <KBarSearch className="border p-2" />
+            <KBarResults />
+          </KBarAnimator>
+        </KBarPositioner>
+      </KBarPortal>
+
+      <SessionProvider session={props.pageProps.session}>
+        <ApolloProvider client={apolloClient}>
+          <ThemeProvider attribute="class" defaultTheme="light">
+            <DefaultSeo
+              title={"Template"}
+              titleTemplate={"%s | サイトの名前"}
+              description="Template Repo"
+              additionalMetaTags={[{ property: "", content: "" }]}
+              additionalLinkTags={[
+                {
+                  rel: "manifest",
+                  href: "/pwa/manifest.json",
+                },
+              ]}
+            />
+            {getLayout(<props.Component {...props.pageProps} />)}
+            <Toaster toastOptions={{ duration: 2500 }} />
+          </ThemeProvider>
+        </ApolloProvider>
+      </SessionProvider>
+    </KBarProvider>
   );
 });
 
