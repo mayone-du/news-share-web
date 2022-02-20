@@ -3,7 +3,6 @@ import Link from "next/link";
 import type { VFC } from "react";
 import { STATIC_ROUTES } from "src/constants/routes";
 import { useAuthModal } from "src/hooks/useAuthModal";
-import SlackIcon from "public/images/Slack_Mark.svg";
 
 export const AuthModal: VFC = () => {
   const { isOpenAuthModal, handleToggleAuthModal, handleClickAuth } = useAuthModal();

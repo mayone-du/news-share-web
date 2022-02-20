@@ -15,12 +15,15 @@ export const SidebarLeft: VFC = () => {
             return (
               <li
                 key={menu.href}
-                className={`border rounded overflow-hidden mb-2 hover:shadow-sm transition-shadow ${
+                className={`rounded overflow-hidden mb-2 hover:bg-gray-300 transition-all ${
                   asPath === menu.href && "bg-orange-200"
                 }`}
               >
                 <Link href={menu.href}>
-                  <a className="block py-2 px-4">{menu.label}</a>
+                  <a className="flex items-center py-2 px-4 text-gray-700">
+                    <menu.Icon className="block w-6 h-6 mr-2" />
+                    {menu.label}
+                  </a>
                 </Link>
               </li>
             );
