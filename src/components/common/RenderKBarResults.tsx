@@ -2,7 +2,7 @@ import { KBarResults, useMatches } from "kbar";
 import type { ActionImpl, ActionId } from "kbar";
 
 import { forwardRef, useMemo, Fragment } from "react";
-import type { VFC, Ref } from "react";
+import type { VFC } from "react";
 
 export const RenderKBarResults: VFC = () => {
   const { results, rootActionId } = useMatches();
@@ -17,20 +17,14 @@ export const RenderKBarResults: VFC = () => {
   );
 };
 
-// TODO: forwardRefのこと調べたり別コンポーネント化したり？
-const ResultItem = forwardRef(
-  (
-    {
-      action,
-      active,
-      currentRootActionId,
-    }: {
-      action: ActionImpl;
-      active: boolean;
-      currentRootActionId?: ActionId | null;
-    },
-    ref: Ref<HTMLDivElement>,
-  ) => {
+type ResultItemProps = {
+  action: ActionImpl;
+  active: boolean;
+  currentRootActionId?: ActionId | null;
+};
+
+const ResultItem = forwardRef<HTMLDivElement, ResultItemProps>(
+  ({ action, active, currentRootActionId }, ref) => {
     const ancestors = useMemo(() => {
       if (!currentRootActionId) return action.ancestors;
       const index = action.ancestors.findIndex((ancestor) => ancestor.id === currentRootActionId);
@@ -44,64 +38,30 @@ const ResultItem = forwardRef(
     return (
       <div
         ref={ref}
-        style={{
-          padding: "12px 16px",
-          background: active ? "var(--a1)" : "transparent",
-          borderLeft: `2px solid ${active ? "var(--foreground)" : "transparent"}`,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          cursor: "pointer",
-        }}
+        className={`py-3 px-4 border flex items-center justify-between cursor-pointer shadow-xl ${
+          active ? "bg-gray-200" : "bg-white"
+        }`}
       >
-        <div
-          style={{
-            display: "flex",
-            gap: "8px",
-            alignItems: "center",
-            fontSize: 14,
-          }}
-        >
+        <div className="flex gap-2 items-center text-sm">
           {action.icon && action.icon}
-          <div style={{ display: "flex", flexDirection: "column" }}>
+          <div className="flex flex-col">
             <div>
               {ancestors.length > 0 &&
                 ancestors.map((ancestor) => (
-                  <Fragment key={ancestor.id}>
-                    <span
-                      style={{
-                        opacity: 0.5,
-                        marginRight: 8,
-                      }}
-                    >
-                      {ancestor.name}
-                    </span>
-                    <span
-                      style={{
-                        marginRight: 8,
-                      }}
-                    >
-                      &rsaquo;
-                    </span>
-                  </Fragment>
+                  <div key={ancestor.id}>
+                    <span className="opacity-50 mr-2">{ancestor.name}</span>
+                    <span className="mr-2">&rsaquo;</span>
+                  </div>
                 ))}
               <span>{action.name}</span>
             </div>
-            {action.subtitle && <span style={{ fontSize: 12 }}>{action.subtitle}</span>}
+            {action.subtitle && <span className="text-sm">{action.subtitle}</span>}
           </div>
         </div>
         {action.shortcut?.length ? (
-          <div aria-hidden style={{ display: "grid", gridAutoFlow: "column", gap: "4px" }}>
+          <div aria-hidden className="grid gap-1 grid-flow-col">
             {action.shortcut.map((sc) => (
-              <kbd
-                key={sc}
-                style={{
-                  padding: "4px 6px",
-                  background: "rgba(0 0 0 / .1)",
-                  borderRadius: "4px",
-                  fontSize: 14,
-                }}
-              >
+              <kbd key={sc} className="text-sm py-1 px-2 bg-gray-400 rounded">
                 {sc}
               </kbd>
             ))}

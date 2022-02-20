@@ -14,24 +14,7 @@ import { Toaster } from "react-hot-toast";
 import { initializeApollo } from "src/graphql/apollo/client";
 import { KBarProvider, KBarPortal, KBarPositioner, KBarAnimator, KBarSearch } from "kbar";
 import { RenderKBarResults } from "src/components/common/RenderKBarResults";
-
-// TODO: カスタマイズ
-const actions = [
-  {
-    id: "blog",
-    name: "Blog",
-    shortcut: ["b"],
-    keywords: "writing words",
-    perform: () => (window.location.pathname = "blog"),
-  },
-  {
-    id: "contact",
-    name: "Contact",
-    shortcut: ["c"],
-    keywords: "email",
-    perform: () => (window.location.pathname = "contact"),
-  },
-];
+import { useKBarActions } from "src/hooks/useKBarActions";
 
 NProgress.configure({ showSpinner: false, speed: 400, minimum: 0.25 });
 Router.events.on("routeChangeStart", () => {
@@ -46,6 +29,7 @@ Router.events.on("routeChangeError", () => {
 
 const App = memo((props: CustomAppProps) => {
   const apolloClient = initializeApollo();
+  const { actions } = useKBarActions();
 
   const getLayout =
     props.Component.getLayout ||
@@ -58,7 +42,7 @@ const App = memo((props: CustomAppProps) => {
       <KBarPortal>
         <KBarPositioner>
           <KBarAnimator>
-            <KBarSearch className="border p-2 outline-none" />
+            <KBarSearch className="rounded-t-md w-96 p-3 outline-none border-t-2 border-x-2 border-gray-100 focus:border-gray-300" />
             <RenderKBarResults />
           </KBarAnimator>
         </KBarPositioner>

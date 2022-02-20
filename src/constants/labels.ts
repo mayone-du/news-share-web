@@ -8,6 +8,5 @@ export const ROUTE_LABELS: Record<keyof typeof STATIC_ROUTES | 404, string> = {
   ARCHIVE: "アーカイブ",
   TERM: "利用規約",
   PRIVACY_POLICY: "プライバシーポリシー",
-  SAMPLE: "サンプル",
   "404": "ページが見つかりません",
 } as const;
