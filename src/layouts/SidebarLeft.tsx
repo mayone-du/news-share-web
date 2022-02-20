@@ -1,6 +1,6 @@
 import type { VFC } from "react";
 import Link from "next/link";
-import { SIDEBAR_LEFT_MENUS } from "src/constants/menus/sidebarLeft";
+import { SIDEBAR_LEFT_MENUS } from "src/constants/menus";
 import { useRouter } from "next/router";
 import { useCreateNewsModal } from "src/hooks/useCreateNewsModal";
 
@@ -16,7 +16,7 @@ export const SidebarLeft: VFC = () => {
               <li
                 key={menu.href}
                 className={`rounded overflow-hidden mb-2 hover:bg-gray-100 transition-all ${
-                  asPath === menu.href && "bg-gray-100"
+                  asPath === menu.href ? "bg-gray-100" : ""
                 }`}
               >
                 <Link href={menu.href}>

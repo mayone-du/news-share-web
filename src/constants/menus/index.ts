@@ -1,2 +1,2 @@
 export { FOOTER_MENUS } from "src/constants/menus/footer";
-export { HEADER_MENUS } from "src/constants/menus/header";
+export { SIDEBAR_LEFT_MENUS } from "src/constants/menus/sidebarLeft";

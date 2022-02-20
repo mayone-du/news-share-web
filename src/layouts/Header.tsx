@@ -2,7 +2,6 @@ import { Popover } from "@headlessui/react";
 import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
 import { useCallback } from "react";
-import { HEADER_MENUS } from "src/constants/menus/header";
 import { STATIC_ROUTES } from "src/constants/routes";
 import { useAuthModal } from "src/hooks/useAuthModal";
 import type { VFC } from "react";
@@ -13,9 +12,7 @@ export const Header: VFC = () => {
   const { data: myUserInfoData } = useMyUserInfoQuery({ fetchPolicy: "cache-only" });
   const { handleToggleAuthModal } = useAuthModal();
 
-  const handleSignOut = useCallback(() => {
-    signOut();
-  }, []);
+  const handleSignOut = useCallback(() => signOut(), []);
 
   const PROFILE_MENU_ITEMS = [
     {
@@ -33,16 +30,6 @@ export const Header: VFC = () => {
           </Link>
         </div>
         <ul className="flex justify-between items-center">
-          {/* ヘッダーメニューを事前に定義し、mapで回して表示 */}
-          {HEADER_MENUS.map((menu) => {
-            return (
-              <li key={menu.href} className="mx-2">
-                <Link href={menu.href}>
-                  <a>{menu.label}</a>
-                </Link>
-              </li>
-            );
-          })}
           {/* ローディング時 */}
           {status === "loading" && (
             <div className="ml-2 w-10 h-10 bg-gray-300 rounded-full animate-pulse"></div>
