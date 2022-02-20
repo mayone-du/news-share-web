@@ -13,8 +13,9 @@ import { memo } from "react";
 import { Toaster } from "react-hot-toast";
 import { initializeApollo } from "src/graphql/apollo/client";
 import { KBarProvider, KBarPortal, KBarPositioner, KBarAnimator, KBarSearch } from "kbar";
-import { KBarResults } from "src/components/common/KBarResults";
+import { RenderKBarResults } from "src/components/common/RenderKBarResults";
 
+// TODO: カスタマイズ
 const actions = [
   {
     id: "blog",
@@ -57,8 +58,8 @@ const App = memo((props: CustomAppProps) => {
       <KBarPortal>
         <KBarPositioner>
           <KBarAnimator>
-            <KBarSearch className="border p-2" />
-            <KBarResults />
+            <KBarSearch className="border p-2 outline-none" />
+            <RenderKBarResults />
           </KBarAnimator>
         </KBarPositioner>
       </KBarPortal>
