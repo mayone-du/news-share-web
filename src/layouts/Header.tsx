@@ -1,17 +1,16 @@
-import { useReactiveVar } from "@apollo/client";
 import { Popover } from "@headlessui/react";
 import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
-import { memo, useCallback } from "react";
+import { useCallback } from "react";
 import { HEADER_MENUS } from "src/constants/menus/header";
 import { STATIC_ROUTES } from "src/constants/routes";
-import { userInfoVar } from "src/global/state";
 import { useAuthModal } from "src/hooks/useAuthModal";
 import type { VFC } from "react";
+import { useMyUserInfoQuery } from "src/graphql/schemas/generated/schema";
 
 export const Header: VFC = () => {
-  const { data } = useSession();
-  const userInfo = useReactiveVar(userInfoVar);
+  const { data: session, status } = useSession();
+  const { data: myUserInfoData } = useMyUserInfoQuery({ fetchPolicy: "cache-only" });
   const { handleToggleAuthModal } = useAuthModal();
 
   const handleSignOut = useCallback(() => {
@@ -48,13 +47,25 @@ export const Header: VFC = () => {
               </li>
             );
           })}
-          {/* ローディング時の場合 */}
-          {userInfo.isLoading && (
+          {/* ローディング時 */}
+          {status === "loading" && (
             <div className="ml-2 w-10 h-10 bg-gray-300 rounded-full animate-pulse"></div>
           )}
-          {/* ログイン状態によって変更 */}
-          {/* ログイン時の場合 */}
-          {!userInfo.isLoading && userInfo.isAuthenticated && (
+          {/* 非認証時 */}
+          {status === "unauthenticated" && (
+            <li className="ml-2">
+              <div>
+                <button
+                  onClick={handleToggleAuthModal}
+                  className="block py-2 px-4 rounded border shadow-sm transition-all hover:bg-gray-50 hover:shadow"
+                >
+                  SignIn
+                </button>
+              </div>
+            </li>
+          )}
+          {/* 認証時 */}
+          {status === "authenticated" && (
             <li className="ml-2">
               <div className="top-16 mx-auto w-full">
                 <Popover className="relative">
@@ -67,7 +78,7 @@ export const Header: VFC = () => {
                           }`}
                         >
                           <img
-                            src={data?.user?.image ?? ""}
+                            src={session?.user?.image ?? ""}
                             className="block object-cover"
                             alt=""
                           />
@@ -78,11 +89,11 @@ export const Header: VFC = () => {
                             <li>
                               {/* ↓押した時にメニューを閉じたいためボタンにする */}
                               <Popover.Button className="block w-full text-left">
-                                <Link href={`/users/${userInfo.userId}`}>
+                                <Link href={`/users/`}>
                                   <a className="block py-2 px-4 transition-colors duration-300 hover:bg-gray-200">
-                                    <span className="block">sample username</span>
+                                    <span className="block">{session?.user?.name}</span>
                                     <span className="block text-xs text-gray-400">
-                                      @{userInfo.userId}
+                                      @{myUserInfoData?.myUserInfo?.oauthUserId}
                                     </span>
                                   </a>
                                 </Link>
@@ -117,19 +128,6 @@ export const Header: VFC = () => {
                     );
                   }}
                 </Popover>
-              </div>
-            </li>
-          )}
-          {/* 非ログイン時の場合 */}
-          {!userInfo.isLoading && !userInfo.isAuthenticated && (
-            <li className="ml-2">
-              <div>
-                <button
-                  onClick={handleToggleAuthModal}
-                  className="block py-2 px-4 rounded border shadow-sm transition-all hover:bg-gray-50 hover:shadow"
-                >
-                  SignIn
-                </button>
               </div>
             </li>
           )}

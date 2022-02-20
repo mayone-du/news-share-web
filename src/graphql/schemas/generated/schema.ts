@@ -120,6 +120,7 @@ export type PostponeNewsListInput = {
 export type Query = {
   __typename?: 'Query';
   allNews?: Maybe<NewsConnection>;
+  myUserInfo?: Maybe<User>;
   news?: Maybe<News>;
   newsList: Array<News>;
   searchNewsList: Array<News>;
@@ -212,21 +213,21 @@ export type User = {
 
 export type NewsFragmentFragment = { __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl?: string | null, createdAt: string, sharedAt: string };
 
-export type UserFragmentFragment = { __typename?: 'User', id: bigint, displayName: string, selfIntroduction: string, role?: Role | null, status?: Status | null };
+export type UserFragmentFragment = { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, role?: Role | null, status?: Status | null };
 
 export type CreateNewsMutationVariables = Exact<{
   input: CreateNewsInput;
 }>;
 
 
-export type CreateNewsMutation = { __typename?: 'Mutation', createNews?: { __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl?: string | null, createdAt: string, sharedAt: string, user: { __typename?: 'User', id: bigint, displayName: string, selfIntroduction: string, role?: Role | null, status?: Status | null } } | null };
+export type CreateNewsMutation = { __typename?: 'Mutation', createNews?: { __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl?: string | null, createdAt: string, sharedAt: string, user: { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, role?: Role | null, status?: Status | null } } | null };
 
 export type NewsListQueryVariables = Exact<{
   input: NewsListInput;
 }>;
 
 
-export type NewsListQuery = { __typename?: 'Query', newsList: Array<{ __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl?: string | null, createdAt: string, sharedAt: string, user: { __typename?: 'User', id: bigint, displayName: string, selfIntroduction: string, role?: Role | null, status?: Status | null } }> };
+export type NewsListQuery = { __typename?: 'Query', newsList: Array<{ __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl?: string | null, createdAt: string, sharedAt: string, user: { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, role?: Role | null, status?: Status | null } }> };
 
 export type TestQueryVariables = Exact<{
   customArg: Scalars['String'];
@@ -238,7 +239,12 @@ export type TestQuery = { __typename?: 'Query', test?: string | null };
 export type AuthUserMutationVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AuthUserMutation = { __typename?: 'Mutation', authUser?: { __typename?: 'User', id: bigint, displayName: string, selfIntroduction: string, role?: Role | null, status?: Status | null } | null };
+export type AuthUserMutation = { __typename?: 'Mutation', authUser?: { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, role?: Role | null, status?: Status | null } | null };
+
+export type MyUserInfoQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MyUserInfoQuery = { __typename?: 'Query', myUserInfo?: { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, role?: Role | null, status?: Status | null } | null };
 
 export const NewsFragmentFragmentDoc = gql`
     fragment NewsFragment on News {
@@ -255,6 +261,7 @@ export const NewsFragmentFragmentDoc = gql`
 export const UserFragmentFragmentDoc = gql`
     fragment UserFragment on User {
   id
+  oauthUserId
   displayName
   selfIntroduction
   role
@@ -402,3 +409,37 @@ export function useAuthUserMutation(baseOptions?: Apollo.MutationHookOptions<Aut
 export type AuthUserMutationHookResult = ReturnType<typeof useAuthUserMutation>;
 export type AuthUserMutationResult = Apollo.MutationResult<AuthUserMutation>;
 export type AuthUserMutationOptions = Apollo.BaseMutationOptions<AuthUserMutation, AuthUserMutationVariables>;
+export const MyUserInfoDocument = gql`
+    query MyUserInfo {
+  myUserInfo {
+    ...UserFragment
+  }
+}
+    ${UserFragmentFragmentDoc}`;
+
+/**
+ * __useMyUserInfoQuery__
+ *
+ * To run a query within a React component, call `useMyUserInfoQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMyUserInfoQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMyUserInfoQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useMyUserInfoQuery(baseOptions?: Apollo.QueryHookOptions<MyUserInfoQuery, MyUserInfoQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<MyUserInfoQuery, MyUserInfoQueryVariables>(MyUserInfoDocument, options);
+      }
+export function useMyUserInfoLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MyUserInfoQuery, MyUserInfoQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<MyUserInfoQuery, MyUserInfoQueryVariables>(MyUserInfoDocument, options);
+        }
+export type MyUserInfoQueryHookResult = ReturnType<typeof useMyUserInfoQuery>;
+export type MyUserInfoLazyQueryHookResult = ReturnType<typeof useMyUserInfoLazyQuery>;
+export type MyUserInfoQueryResult = Apollo.QueryResult<MyUserInfoQuery, MyUserInfoQueryVariables>;

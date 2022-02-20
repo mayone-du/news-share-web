@@ -1,11 +1,14 @@
-import { useReactiveVar } from "@apollo/client";
 import type { NextPage } from "next";
 import { getSession } from "next-auth/react";
 import { useEffect } from "react";
 import { CreateNewsModal } from "src/components/common";
 import { AuthModal } from "src/components/common";
-import { userInfoVar } from "src/global/state";
 import { initializeApollo } from "src/graphql/apollo/client";
+import {
+  MyUserInfoDocument,
+  MyUserInfoQuery,
+  MyUserInfoQueryVariables,
+} from "src/graphql/schemas/generated/schema";
 import { Footer } from "src/layouts/Footer";
 import { Header } from "src/layouts/Header";
 import { LayoutErrorBoundary } from "src/layouts/LayoutErrorBoundary";
@@ -13,29 +16,21 @@ import { SidebarLeft } from "src/layouts/SidebarLeft";
 
 // pagesのgetLayoutで指定されたページで呼ばれる。ページのリロード時に呼ばれ、ページ遷移時には呼ばれない。
 export const Layout = (page: NextPage) => {
-  const userInfo = useReactiveVar(userInfoVar);
-
   // 初回マウント時にユーザー情報を取得し、ReactiveVariablesでグローバル管理して、_appで値を参照する
   useEffect(() => {
-    if (!userInfo.isLoading) return;
     (async () => {
       const session = await getSession();
-      if (!session) return userInfoVar({ ...userInfo, isLoading: false });
-      userInfoVar({
-        isLoading: false,
-        isAuthenticated: true,
-        userId: "1",
-      });
-
-      // session情報があればユーザー情報を取得し、Reactive Variablesでグローバル管理
-      console.log("session", session);
-      // const apolloClient = initializeApollo();
-      // const { data } = await apolloClient.query<
-      //   GetMyUserInfoQuery,
-      //   GetMyUserInfoQueryVariables
-      // >({
-      //   query: GetMyUserInfoDocument,
-      // });
+      try {
+        if (!session) return;
+        // session情報があればユーザー情報を取得しておき、以降はcache-onlyで読み込む
+        const apolloClient = initializeApollo();
+        const { error } = await apolloClient.query<MyUserInfoQuery, MyUserInfoQueryVariables>({
+          query: MyUserInfoDocument,
+        });
+        if (error) throw error;
+      } catch (e) {
+        console.error(e);
+      }
     })();
   }, []);
 

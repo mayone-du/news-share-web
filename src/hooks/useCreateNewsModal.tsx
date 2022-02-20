@@ -1,17 +1,17 @@
-import { useReactiveVar } from "@apollo/client";
+import { useSession } from "next-auth/react";
 import { useCallback } from "react";
-import { isOpenCreateNewsModalVar, userInfoVar } from "src/global/state";
+import { isOpenCreateNewsModalVar } from "src/global/state";
 import { useAuthModal } from "src/hooks/useAuthModal";
 
 export const useCreateNewsModal = () => {
-  const userInfo = useReactiveVar(userInfoVar);
+  const { status } = useSession();
   const { handleToggleAuthModal } = useAuthModal();
 
   const handleOpenCreateNewsModal = useCallback(() => {
-    if (userInfo.isLoading) return;
-    if (!userInfo.isAuthenticated) return handleToggleAuthModal();
+    if (status === "loading") return;
+    if (status === "unauthenticated") return handleToggleAuthModal();
     isOpenCreateNewsModalVar(true);
-  }, [userInfo]);
+  }, [status]);
 
   const handleCloseCreateNewsModal = useCallback(() => isOpenCreateNewsModalVar(false), []);
 

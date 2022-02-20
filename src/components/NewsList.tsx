@@ -45,6 +45,7 @@ export const NewsList: VFC = () => {
                   src={news.imageUrl}
                   alt={news.title || news.description || news.url}
                   className="block w-20 h-20 object-cover rounded-md border border-gray-100"
+                  loading="lazy"
                 />
               ) : (
                 <div className="w-20 h-20" />
