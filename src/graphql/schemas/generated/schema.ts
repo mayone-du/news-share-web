@@ -35,8 +35,8 @@ export type Mutation = {
   createNews?: Maybe<News>;
   deleteNews?: Maybe<News>;
   postponeNewsList?: Maybe<Array<Maybe<News>>>;
+  updateMyUserInfo?: Maybe<User>;
   updateNews?: Maybe<News>;
-  updateUser?: Maybe<User>;
 };
 
 
@@ -55,13 +55,13 @@ export type MutationPostponeNewsListArgs = {
 };
 
 
-export type MutationUpdateNewsArgs = {
-  input: UpdateNewsInput;
+export type MutationUpdateMyUserInfoArgs = {
+  input: UpdateMyUserInfoInput;
 };
 
 
-export type MutationUpdateUserArgs = {
-  input: UpdateUserInput;
+export type MutationUpdateNewsArgs = {
+  input: UpdateNewsInput;
 };
 
 export type News = {
@@ -183,18 +183,17 @@ export enum Status {
   Inactive = 'INACTIVE'
 }
 
+export type UpdateMyUserInfoInput = {
+  displayName: Scalars['String'];
+  selfIntroduction: Scalars['String'];
+};
+
 export type UpdateNewsInput = {
   description?: InputMaybe<Scalars['String']>;
   nodeId: Scalars['ID'];
   sharedAt?: InputMaybe<Scalars['DateTime']>;
   title?: InputMaybe<Scalars['String']>;
   url?: InputMaybe<Scalars['String']>;
-};
-
-export type UpdateUserInput = {
-  displayName: Scalars['String'];
-  id: Scalars['BigInt'];
-  selfIntroduction: Scalars['String'];
 };
 
 export type User = {
@@ -255,6 +254,13 @@ export type AuthUserMutationVariables = Exact<{ [key: string]: never; }>;
 
 
 export type AuthUserMutation = { __typename?: 'Mutation', authUser?: { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, photoUrl: string, role?: Role | null, status?: Status | null } | null };
+
+export type UpdateMyUserInfoMutationVariables = Exact<{
+  input: UpdateMyUserInfoInput;
+}>;
+
+
+export type UpdateMyUserInfoMutation = { __typename?: 'Mutation', updateMyUserInfo?: { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, photoUrl: string, role?: Role | null, status?: Status | null } | null };
 
 export type MyUserInfoQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -495,6 +501,39 @@ export function useAuthUserMutation(baseOptions?: Apollo.MutationHookOptions<Aut
 export type AuthUserMutationHookResult = ReturnType<typeof useAuthUserMutation>;
 export type AuthUserMutationResult = Apollo.MutationResult<AuthUserMutation>;
 export type AuthUserMutationOptions = Apollo.BaseMutationOptions<AuthUserMutation, AuthUserMutationVariables>;
+export const UpdateMyUserInfoDocument = gql`
+    mutation UpdateMyUserInfo($input: UpdateMyUserInfoInput!) {
+  updateMyUserInfo(input: $input) {
+    ...UserFragment
+  }
+}
+    ${UserFragmentFragmentDoc}`;
+export type UpdateMyUserInfoMutationFn = Apollo.MutationFunction<UpdateMyUserInfoMutation, UpdateMyUserInfoMutationVariables>;
+
+/**
+ * __useUpdateMyUserInfoMutation__
+ *
+ * To run a mutation, you first call `useUpdateMyUserInfoMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateMyUserInfoMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateMyUserInfoMutation, { data, loading, error }] = useUpdateMyUserInfoMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateMyUserInfoMutation(baseOptions?: Apollo.MutationHookOptions<UpdateMyUserInfoMutation, UpdateMyUserInfoMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateMyUserInfoMutation, UpdateMyUserInfoMutationVariables>(UpdateMyUserInfoDocument, options);
+      }
+export type UpdateMyUserInfoMutationHookResult = ReturnType<typeof useUpdateMyUserInfoMutation>;
+export type UpdateMyUserInfoMutationResult = Apollo.MutationResult<UpdateMyUserInfoMutation>;
+export type UpdateMyUserInfoMutationOptions = Apollo.BaseMutationOptions<UpdateMyUserInfoMutation, UpdateMyUserInfoMutationVariables>;
 export const MyUserInfoDocument = gql`
     query MyUserInfo {
   myUserInfo {

@@ -1,0 +1,5 @@
+mutation UpdateMyUserInfo($input: UpdateMyUserInfoInput!) {
+  updateMyUserInfo(input: $input) {
+    ...UserFragment
+  }
+}
