@@ -1,0 +1,8 @@
+mutation UpdateNews($input: UpdateNewsInput!) {
+  updateNews(input: $input) {
+    ...NewsFragment
+    user {
+      ...UserFragment
+    }
+  }
+}

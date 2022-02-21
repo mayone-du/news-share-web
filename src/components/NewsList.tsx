@@ -1,10 +1,12 @@
 import dayjs from "dayjs";
 import { useState, VFC } from "react";
 import {
+  News,
   Role,
   useDeleteNewsMutation,
   useMyUserInfoQuery,
   useNewsListQuery,
+  useUpdateNewsMutation,
 } from "src/graphql/schemas/generated/schema";
 import { calcFromNow, hyphenFormat } from "src/utils";
 import { BiChevronDown } from "react-icons/bi";
@@ -16,7 +18,6 @@ import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
 
 type FieldValues = {
-  url: string;
   title: string;
   description: string;
 };
@@ -33,24 +34,42 @@ export const NewsList: VFC = () => {
     pollInterval: 1000 * 10, // mill secondなのでこの場合は10秒ごとにポーリング
   });
   const { data: myUserInfoData } = useMyUserInfoQuery({ fetchPolicy: "cache-only" }); // layoutで取得してるのでcache-onlyでネットワークリクエストを抑える
+  const [updateNews, { loading: isUpdateNewsLoading }] = useUpdateNewsMutation();
   const [deleteNews, { loading: isDeleteNewsLoading }] = useDeleteNewsMutation();
-  const { register, setValue } = useForm<FieldValues>();
+  const { register, setValue, handleSubmit } = useForm<FieldValues>();
   const [editingNewsNodeId, setEditingNewsNodeId] = useState("");
+  const isEditingNewsId = (newsId?: string | null) => newsId === editingNewsNodeId;
 
-  const handleClickNewsEditCancel = () => setEditingNewsNodeId("");
-  const handleDeleteNews = (nodeId: string, onClose: VoidFunction) => {
-    return async () => {
-      const toastId = toast.loading("ニュースを削除しています...");
-      try {
-        await deleteNews({ variables: { input: { nodeId } } });
-        onClose();
-        await refetch();
-        toast.success("ニュースを削除しました", { id: toastId });
-      } catch (e) {
-        console.error(e);
-        toast.error("ニュースの削除に失敗しました", { id: toastId });
-      }
+  const handleClickNewsEditMode =
+    (news: Pick<News, "nodeId" | "title" | "description">, onClose: VoidFunction) => () => {
+      setEditingNewsNodeId(news.nodeId ?? "");
+      setValue("title", news.title);
+      setValue("description", news.description);
+      onClose();
     };
+  const handleClickNewsEditCancel = () => setEditingNewsNodeId("");
+  const handleDeleteNews = (nodeId: string, onClose: VoidFunction) => async () => {
+    const toastId = toast.loading("ニュースを削除しています...");
+    try {
+      await deleteNews({ variables: { input: { nodeId } } });
+      onClose();
+      await refetch();
+      toast.success("ニュースを削除しました", { id: toastId });
+    } catch (e) {
+      console.error(e);
+      toast.error("ニュースの削除に失敗しました", { id: toastId });
+    }
+  };
+  const handleUpdateNews = async (values: FieldValues) => {
+    const toastId = toast.loading("ニュースを更新しています...");
+    try {
+      await updateNews({ variables: { input: { nodeId: editingNewsNodeId, ...values } } });
+      setEditingNewsNodeId("");
+      toast.success("ニュースを更新しました", { id: toastId });
+    } catch (e) {
+      console.error(e);
+      toast.error("ニュースの更新に失敗しました", { id: toastId });
+    }
   };
 
   if (loading) return <div>Loading</div>;
@@ -64,7 +83,7 @@ export const NewsList: VFC = () => {
           <li
             key={news.nodeId}
             className={`relative mb-4 rounded border ${
-              news.nodeId === editingNewsNodeId ? "ring-2 ring-blue-200" : ""
+              isEditingNewsId(news.nodeId) ? "ring-2 ring-blue-200" : ""
             }`}
             title={news.title || news.description || news.url}
           >
@@ -78,7 +97,7 @@ export const NewsList: VFC = () => {
                         <Popover.Button
                           className={`items-center absolute top-2 right-2 justify-center p-1 rounded-full flex hover:bg-gray-200 border border-transparent hover:border-gray-50 ${
                             open && "bg-gray-200"
-                          }`}
+                          } ${isEditingNewsId(news.nodeId) && "hidden"}`}
                         >
                           <BiChevronDown className="w-6 h-6 text-gray-600" />
                         </Popover.Button>
@@ -87,13 +106,7 @@ export const NewsList: VFC = () => {
                             <li>
                               <button
                                 className="flex items-start p-2 w-full text-gray-600 hover:bg-gray-100"
-                                onClick={() => {
-                                  setEditingNewsNodeId(news.nodeId ?? "");
-                                  close();
-                                  // setValue("title", news.title);
-                                  // setValue("description", news.description);
-                                  // setValue("url", news.url);
-                                }}
+                                onClick={handleClickNewsEditMode(news, close)}
                               >
                                 <HiOutlinePencil className="mr-4 w-5 h-5 text-gray-600" />
                                 編集する
@@ -121,18 +134,21 @@ export const NewsList: VFC = () => {
             <a
               href={news.url}
               className={`block py-3 px-8 hover:bg-gray-50 ${
-                editingNewsNodeId === news.nodeId ? "hover:bg-white cursor-default" : ""
+                isEditingNewsId(news.nodeId) ? "hover:bg-white cursor-default" : ""
               }`}
               target="_blank"
               rel="noopener noreferrer"
-              onClick={editingNewsNodeId === news.nodeId ? (e) => e.preventDefault() : undefined}
+              onClick={isEditingNewsId(news.nodeId) ? (e) => e.preventDefault() : undefined}
             >
               <div>
-                {editingNewsNodeId === news.nodeId ? (
-                  <input className="w-full p-1 block" {...register("title")} /> // TODO: defaultValue
+                {isEditingNewsId(news.nodeId) ? (
+                  <input
+                    className="block rounded text-lg font-bold outline-none mb-2 w-full"
+                    {...register("title")}
+                  />
                 ) : (
                   <h3
-                    className="text-lg font-bold line-clamp-1"
+                    className="text-lg font-bold line-clamp-1 mb-2"
                     // contentEditable={editingNewsNodeId === news.nodeId ? true : undefined} TODO: contentEditableを使うと、Reactの警告が出る
                   >
                     {news.title || news.url}
@@ -140,7 +156,16 @@ export const NewsList: VFC = () => {
                 )}
 
                 <div className="flex items-center">
-                  <p className="my-2 mr-4 text-sm text-gray-400 line-clamp-2">{news.description}</p>
+                  {isEditingNewsId(news.nodeId) ? (
+                    <textarea
+                      className="w-full outline-none mb-2 mr-4 text-sm text-gray-400 resize-none"
+                      {...register("description")}
+                    />
+                  ) : (
+                    <p className="mb-2 mr-4 text-sm text-gray-400 line-clamp-2">
+                      {news.description}
+                    </p>
+                  )}
                   {news.imageUrl ? (
                     <img
                       src={news.imageUrl}
@@ -173,8 +198,9 @@ export const NewsList: VFC = () => {
             {editingNewsNodeId === news.nodeId && (
               <div className="flex items-center gap-4 justify-end w-full px-4 pb-4">
                 <button
-                  className="block px-2 py-1 rounded bg-gray-100 text-gray-600 hover:bg-gray-200"
-                  onClick={() => alert("hoge")}
+                  className="block bg-gray-50 border rounded py-1 px-2"
+                  onClick={handleSubmit(handleUpdateNews)}
+                  disabled={isUpdateNewsLoading}
                 >
                   更新する
                 </button>
