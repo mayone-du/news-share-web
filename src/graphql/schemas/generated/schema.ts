@@ -33,6 +33,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   authUser?: Maybe<User>;
   createNews?: Maybe<News>;
+  createSlackNotification?: Maybe<SlackNotification>;
   deleteNews?: Maybe<News>;
   postponeNewsList?: Maybe<Array<Maybe<News>>>;
   updateMyUserInfo?: Maybe<User>;
@@ -70,6 +71,8 @@ export type News = {
   description: Scalars['String'];
   id: Scalars['BigInt'];
   imageUrl?: Maybe<Scalars['String']>;
+  isImportant: Scalars['Boolean'];
+  isViewed: Scalars['Boolean'];
   nodeId?: Maybe<Scalars['ID']>;
   sharedAt: Scalars['DateTime'];
   title: Scalars['String'];
@@ -194,6 +197,8 @@ export type UpdateMyUserInfoInput = {
 
 export type UpdateNewsInput = {
   description?: InputMaybe<Scalars['String']>;
+  isImportant?: InputMaybe<Scalars['Boolean']>;
+  isViewed?: InputMaybe<Scalars['Boolean']>;
   nodeId: Scalars['ID'];
   sharedAt?: InputMaybe<Scalars['DateTime']>;
   title?: InputMaybe<Scalars['String']>;
@@ -216,6 +221,8 @@ export type User = {
 };
 
 export type NewsFragmentFragment = { __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl?: string | null, createdAt: string, sharedAt: string };
+
+export type SlackNotificationFragmentFragment = { __typename?: 'SlackNotification', id: bigint, isSent: boolean, createdAt: string, updatedAt: string };
 
 export type UserFragmentFragment = { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, photoUrl: string, role?: Role | null, status?: Status | null };
 
@@ -254,6 +261,11 @@ export type SearchNewsListQueryVariables = Exact<{
 
 export type SearchNewsListQuery = { __typename?: 'Query', searchNewsList: Array<{ __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl?: string | null, createdAt: string, sharedAt: string }> };
 
+export type CreateSlackNotificationMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type CreateSlackNotificationMutation = { __typename?: 'Mutation', createSlackNotification?: { __typename?: 'SlackNotification', id: bigint, isSent: boolean, createdAt: string, updatedAt: string } | null };
+
 export type TestQueryVariables = Exact<{
   customArg: Scalars['String'];
 }>;
@@ -288,6 +300,14 @@ export const NewsFragmentFragmentDoc = gql`
   imageUrl
   createdAt
   sharedAt
+}
+    `;
+export const SlackNotificationFragmentFragmentDoc = gql`
+    fragment SlackNotificationFragment on SlackNotification {
+  id
+  isSent
+  createdAt
+  updatedAt
 }
     `;
 export const UserFragmentFragmentDoc = gql`
@@ -482,6 +502,38 @@ export function useSearchNewsListLazyQuery(baseOptions?: Apollo.LazyQueryHookOpt
 export type SearchNewsListQueryHookResult = ReturnType<typeof useSearchNewsListQuery>;
 export type SearchNewsListLazyQueryHookResult = ReturnType<typeof useSearchNewsListLazyQuery>;
 export type SearchNewsListQueryResult = Apollo.QueryResult<SearchNewsListQuery, SearchNewsListQueryVariables>;
+export const CreateSlackNotificationDocument = gql`
+    mutation CreateSlackNotification {
+  createSlackNotification {
+    ...SlackNotificationFragment
+  }
+}
+    ${SlackNotificationFragmentFragmentDoc}`;
+export type CreateSlackNotificationMutationFn = Apollo.MutationFunction<CreateSlackNotificationMutation, CreateSlackNotificationMutationVariables>;
+
+/**
+ * __useCreateSlackNotificationMutation__
+ *
+ * To run a mutation, you first call `useCreateSlackNotificationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateSlackNotificationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createSlackNotificationMutation, { data, loading, error }] = useCreateSlackNotificationMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useCreateSlackNotificationMutation(baseOptions?: Apollo.MutationHookOptions<CreateSlackNotificationMutation, CreateSlackNotificationMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateSlackNotificationMutation, CreateSlackNotificationMutationVariables>(CreateSlackNotificationDocument, options);
+      }
+export type CreateSlackNotificationMutationHookResult = ReturnType<typeof useCreateSlackNotificationMutation>;
+export type CreateSlackNotificationMutationResult = Apollo.MutationResult<CreateSlackNotificationMutation>;
+export type CreateSlackNotificationMutationOptions = Apollo.BaseMutationOptions<CreateSlackNotificationMutation, CreateSlackNotificationMutationVariables>;
 export const TestDocument = gql`
     query Test($customArg: String!) {
   test(customArg: $customArg)

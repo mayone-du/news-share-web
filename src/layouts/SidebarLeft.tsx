@@ -3,10 +3,26 @@ import Link from "next/link";
 import { SIDEBAR_LEFT_MENUS } from "src/constants/menus";
 import { useRouter } from "next/router";
 import { useCreateNewsModal } from "src/hooks/useCreateNewsModal";
+import {
+  Role,
+  useMyUserInfoQuery,
+  useCreateSlackNotificationMutation,
+} from "src/graphql/schemas/generated/schema";
+import { CgSpinner } from "react-icons/cg";
 
 export const SidebarLeft: VFC = () => {
   const { asPath } = useRouter();
   const { handleOpenCreateNewsModal } = useCreateNewsModal();
+  const { data } = useMyUserInfoQuery({ fetchPolicy: "cache-only" });
+  const [createSlackNotification, { loading }] = useCreateSlackNotificationMutation();
+  const handleCreateSlackNotification = async () => {
+    try {
+      await createSlackNotification();
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   return (
     <aside>
       <nav>
@@ -35,6 +51,16 @@ export const SidebarLeft: VFC = () => {
         >
           ニュース・記事を投稿する
         </button>
+        {data?.myUserInfo?.role === "ADMIN" || data?.myUserInfo?.role === "DEVELOPER" ? (
+          <button
+            className="flex items-center py-2 px-4 mt-4 rounded border shadow-sm transition-all hover:bg-gray-50 hover:shadow"
+            onClick={handleCreateSlackNotification}
+            disabled={loading}
+          >
+            Slackへ送信する
+            {loading && <CgSpinner className="ml-2 animate-spin" />}
+          </button>
+        ) : null}
       </nav>
     </aside>
   );

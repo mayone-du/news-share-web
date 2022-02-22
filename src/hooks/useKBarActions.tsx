@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { STATIC_ROUTES } from "src/constants/routes";
 
 export const useKBarActions = () => {
-  const router = useRouter();
+  const { push } = useRouter();
 
   const actions: Action[] = [
     {
@@ -11,7 +11,7 @@ export const useKBarActions = () => {
       name: "Back HOME",
       shortcut: ["h"],
       keywords: "back home",
-      perform: () => router.push(STATIC_ROUTES.INDEX),
+      perform: () => push(STATIC_ROUTES.INDEX),
     },
     {
       id: "theme change",
@@ -26,7 +26,7 @@ export const useKBarActions = () => {
       name: "Contact",
       shortcut: ["c"],
       keywords: "email",
-      perform: () => router.push(STATIC_ROUTES.CONTACT),
+      perform: () => push(STATIC_ROUTES.CONTACT),
     },
     {
       id: "slack",

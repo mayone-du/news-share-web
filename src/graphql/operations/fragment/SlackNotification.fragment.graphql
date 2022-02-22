@@ -1,0 +1,6 @@
+fragment SlackNotificationFragment on SlackNotification {
+  id
+  isSent
+  createdAt
+  updatedAt
+}

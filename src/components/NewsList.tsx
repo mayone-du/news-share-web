@@ -16,6 +16,7 @@ import { HiOutlinePencil } from "react-icons/hi";
 import { RiDeleteBinLine } from "react-icons/ri";
 import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
+import { CgSpinner } from "react-icons/cg";
 
 type FieldValues = {
   title: string;
@@ -42,6 +43,7 @@ export const NewsList: VFC = () => {
 
   const handleClickNewsEditMode =
     (news: Pick<News, "nodeId" | "title" | "description">, onClose: VoidFunction) => () => {
+      console.log(news);
       setEditingNewsNodeId(news.nodeId ?? "");
       setValue("title", news.title);
       setValue("description", news.description);
@@ -72,7 +74,20 @@ export const NewsList: VFC = () => {
     }
   };
 
-  if (loading) return <div>Loading</div>;
+  const isDisplayNewsMenu = (userId: bigint) => {
+    return (
+      myUserInfoData?.myUserInfo?.role === Role.Admin ||
+      myUserInfoData?.myUserInfo?.role === Role.Developer ||
+      myUserInfoData?.myUserInfo?.id === userId
+    );
+  };
+
+  if (loading)
+    return (
+      <div>
+        <CgSpinner className="animate-spin" />
+      </div>
+    );
   if (error)
     return (
       <div>
@@ -93,47 +108,46 @@ export const NewsList: VFC = () => {
             title={news.title || news.description || news.url}
           >
             {/* 管理者か自分の投稿したニュースであれば、ニュースに対してのメニュー表示 */}
-            {myUserInfoData?.myUserInfo?.role === Role.Admin ||
-              (news.user.id === myUserInfoData?.myUserInfo?.id && (
-                <Popover>
-                  {({ open, close }) => {
-                    return (
-                      <div>
-                        <Popover.Button
-                          className={`items-center absolute top-2 right-2 justify-center p-1 rounded-full flex hover:bg-gray-200 border border-transparent hover:border-gray-50 ${
-                            open && "bg-gray-200"
-                          } ${isEditingNewsId(news.nodeId) && "hidden"}`}
-                        >
-                          <BiChevronDown className="w-6 h-6 text-gray-600" />
-                        </Popover.Button>
-                        <Popover.Panel className="absolute -right-4 top-10 z-10 mt-4 w-72 bg-white rounded border shadow-md transform dark:bg-black">
-                          <ul>
-                            <li>
-                              <button
-                                className="flex items-start p-2 w-full text-gray-600 hover:bg-gray-100"
-                                onClick={handleClickNewsEditMode(news, close)}
-                              >
-                                <HiOutlinePencil className="mr-4 w-5 h-5 text-gray-600" />
-                                編集する
-                              </button>
-                            </li>
-                            <li>
-                              <button
-                                className="flex items-start p-2 w-full text-red-500 hover:bg-gray-100 disabled:bg-gray-200"
-                                onClick={handleDeleteNews(news.nodeId ?? "", close)}
-                                disabled={isDeleteNewsLoading}
-                              >
-                                <RiDeleteBinLine className="mr-4 w-5 h-5 text-red-500" />
-                                削除する
-                              </button>
-                            </li>
-                          </ul>
-                        </Popover.Panel>
-                      </div>
-                    );
-                  }}
-                </Popover>
-              ))}
+            {isDisplayNewsMenu(news.user.id) && (
+              <Popover>
+                {({ open, close }) => {
+                  return (
+                    <div>
+                      <Popover.Button
+                        className={`items-center absolute top-2 right-2 justify-center p-1 rounded-full flex hover:bg-gray-200 border border-transparent hover:border-gray-50 ${
+                          open && "bg-gray-200"
+                        } ${isEditingNewsId(news.nodeId) && "hidden"}`}
+                      >
+                        <BiChevronDown className="w-6 h-6 text-gray-600" />
+                      </Popover.Button>
+                      <Popover.Panel className="absolute -right-4 top-10 z-10 mt-4 w-72 bg-white rounded border shadow-md transform dark:bg-black">
+                        <ul>
+                          <li>
+                            <button
+                              className="flex items-start p-2 w-full text-gray-600 hover:bg-gray-100"
+                              onClick={handleClickNewsEditMode(news, close)}
+                            >
+                              <HiOutlinePencil className="mr-4 w-5 h-5 text-gray-600" />
+                              編集する
+                            </button>
+                          </li>
+                          <li>
+                            <button
+                              className="flex items-start p-2 w-full text-red-500 hover:bg-gray-100 disabled:bg-gray-200"
+                              onClick={handleDeleteNews(news.nodeId ?? "", close)}
+                              disabled={isDeleteNewsLoading}
+                            >
+                              <RiDeleteBinLine className="mr-4 w-5 h-5 text-red-500" />
+                              削除する
+                            </button>
+                          </li>
+                        </ul>
+                      </Popover.Panel>
+                    </div>
+                  );
+                }}
+              </Popover>
+            )}
 
             {/* コンテンツ */}
             <a
