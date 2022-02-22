@@ -1,14 +1,13 @@
-import dayjs from "dayjs";
 import { useState, VFC } from "react";
 import {
   News,
   Role,
   useDeleteNewsMutation,
   useMyUserInfoQuery,
-  useNewsListQuery,
   useUpdateNewsMutation,
 } from "src/graphql/schemas/generated/schema";
-import { calcFromNow, hyphenFormat } from "src/utils";
+import type { NewsListQueryResult } from "src/graphql/schemas/generated/schema";
+import { calcFromNow } from "src/utils";
 import { BiChevronDown } from "react-icons/bi";
 import { AiOutlineClockCircle } from "react-icons/ai";
 import { Popover } from "@headlessui/react";
@@ -23,17 +22,14 @@ type FieldValues = {
   description: string;
 };
 
-export const NewsList: VFC = () => {
-  const today = dayjs().format(hyphenFormat);
+type Props = {
+  newsListQueryResult: NewsListQueryResult;
+};
+
+export const NewsList: VFC<Props> = (props) => {
   const {
-    data: NewsListData,
-    loading,
-    error,
-    refetch,
-  } = useNewsListQuery({
-    variables: { input: { sharedAt: today } },
-    pollInterval: 1000 * 10, // mill secondなのでこの場合は10秒ごとにポーリング
-  });
+    newsListQueryResult: { data: NewsListData, loading, error, refetch },
+  } = props;
   const { data: myUserInfoData } = useMyUserInfoQuery({ fetchPolicy: "cache-only" }); // layoutで取得してるのでcache-onlyでネットワークリクエストを抑える
   const [updateNews, { loading: isUpdateNewsLoading }] = useUpdateNewsMutation();
   const [deleteNews, { loading: isDeleteNewsLoading }] = useDeleteNewsMutation();
@@ -43,7 +39,6 @@ export const NewsList: VFC = () => {
 
   const handleClickNewsEditMode =
     (news: Pick<News, "nodeId" | "title" | "description">, onClose: VoidFunction) => () => {
-      console.log(news);
       setEditingNewsNodeId(news.nodeId ?? "");
       setValue("title", news.title);
       setValue("description", news.description);
@@ -163,21 +158,18 @@ export const NewsList: VFC = () => {
                 {isEditingNewsId(news.nodeId) ? (
                   <input
                     className="block rounded text-lg font-bold outline-none mb-2 w-full"
+                    placeholder="ニュースのタイトル"
                     {...register("title")}
                   />
                 ) : (
-                  <h3
-                    className="text-lg font-bold line-clamp-1 mb-2"
-                    // contentEditable={isEditingNewsId(news.nodeId) ? true : undefined} TODO: contentEditableを使うと、Reactの警告が出る
-                  >
-                    {news.title || news.url}
-                  </h3>
+                  <h3 className="text-lg font-bold line-clamp-1 mb-2">{news.title || news.url}</h3>
                 )}
 
                 <div className="flex justify-between">
                   {isEditingNewsId(news.nodeId) ? (
                     <textarea
                       className="w-full outline-none mb-2 mr-4 text-sm text-gray-400 resize-none"
+                      placeholder="ニュースの説明"
                       {...register("description")}
                     />
                   ) : (

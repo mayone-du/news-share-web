@@ -9,6 +9,7 @@ import {
   useCreateSlackNotificationMutation,
 } from "src/graphql/schemas/generated/schema";
 import { CgSpinner } from "react-icons/cg";
+import toast from "react-hot-toast";
 
 export const SidebarLeft: VFC = () => {
   const { asPath } = useRouter();
@@ -16,10 +17,13 @@ export const SidebarLeft: VFC = () => {
   const { data } = useMyUserInfoQuery({ fetchPolicy: "cache-only" });
   const [createSlackNotification, { loading }] = useCreateSlackNotificationMutation();
   const handleCreateSlackNotification = async () => {
+    const toastId = toast.loading("Slack通知を送信しています...");
     try {
       await createSlackNotification();
+      toast.success("Slack通知を送信しました", { id: toastId });
     } catch (e) {
       console.error(e);
+      toast.error("Slack通知の送信に失敗しました", { id: toastId });
     }
   };
 
