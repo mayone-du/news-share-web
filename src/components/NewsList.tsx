@@ -16,6 +16,7 @@ import { RiDeleteBinLine } from "react-icons/ri";
 import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import { CgSpinner } from "react-icons/cg";
+import { FiHeart } from "react-icons/fi";
 
 type FieldValues = {
   title: string;
@@ -102,6 +103,7 @@ export const NewsList: VFC<Props> = (props) => {
             }`}
             title={news.title || news.description || news.url}
           >
+            {/* UI的にはリンクの中だけど、要素的にはリンクの外に配置したい */}
             {/* 管理者か自分の投稿したニュースであれば、ニュースに対してのメニュー表示 */}
             {isDisplayNewsMenu(news.user.id) && (
               <Popover>
@@ -143,6 +145,13 @@ export const NewsList: VFC<Props> = (props) => {
                 }}
               </Popover>
             )}
+
+            <button
+              onClick={() => alert("like")}
+              className="block text-xs text-gray-400 absolute bottom-3 left-60"
+            >
+              <FiHeart className="w-6 h-6" />
+            </button>
 
             {/* コンテンツ */}
             <a
@@ -198,7 +207,7 @@ export const NewsList: VFC<Props> = (props) => {
                   <span className="mr-4 text-sm font-bold text-gray-600">
                     {news.user.displayName}
                   </span>
-                  <span className="flex items-center text-xs text-gray-400">
+                  <span className="flex mr-4 items-center text-xs text-gray-400">
                     <AiOutlineClockCircle className="mr-1 w-4 h-4" />
                     {calcFromNow(news.createdAt)}
                   </span>
