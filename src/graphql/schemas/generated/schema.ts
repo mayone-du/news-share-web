@@ -127,6 +127,7 @@ export type Query = {
   news?: Maybe<News>;
   newsList: Array<News>;
   searchNewsList: Array<News>;
+  slackNotification?: Maybe<SlackNotification>;
   test?: Maybe<Scalars['String']>;
   user?: Maybe<User>;
 };
@@ -265,6 +266,11 @@ export type CreateSlackNotificationMutationVariables = Exact<{ [key: string]: ne
 
 
 export type CreateSlackNotificationMutation = { __typename?: 'Mutation', createSlackNotification?: { __typename?: 'SlackNotification', id: bigint, isSent: boolean, createdAt: string, updatedAt: string } | null };
+
+export type SlackNotificationQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type SlackNotificationQuery = { __typename?: 'Query', slackNotification?: { __typename?: 'SlackNotification', id: bigint, isSent: boolean, createdAt: string, updatedAt: string } | null };
 
 export type TestQueryVariables = Exact<{
   customArg: Scalars['String'];
@@ -534,6 +540,40 @@ export function useCreateSlackNotificationMutation(baseOptions?: Apollo.Mutation
 export type CreateSlackNotificationMutationHookResult = ReturnType<typeof useCreateSlackNotificationMutation>;
 export type CreateSlackNotificationMutationResult = Apollo.MutationResult<CreateSlackNotificationMutation>;
 export type CreateSlackNotificationMutationOptions = Apollo.BaseMutationOptions<CreateSlackNotificationMutation, CreateSlackNotificationMutationVariables>;
+export const SlackNotificationDocument = gql`
+    query SlackNotification {
+  slackNotification {
+    ...SlackNotificationFragment
+  }
+}
+    ${SlackNotificationFragmentFragmentDoc}`;
+
+/**
+ * __useSlackNotificationQuery__
+ *
+ * To run a query within a React component, call `useSlackNotificationQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSlackNotificationQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSlackNotificationQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useSlackNotificationQuery(baseOptions?: Apollo.QueryHookOptions<SlackNotificationQuery, SlackNotificationQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SlackNotificationQuery, SlackNotificationQueryVariables>(SlackNotificationDocument, options);
+      }
+export function useSlackNotificationLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SlackNotificationQuery, SlackNotificationQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SlackNotificationQuery, SlackNotificationQueryVariables>(SlackNotificationDocument, options);
+        }
+export type SlackNotificationQueryHookResult = ReturnType<typeof useSlackNotificationQuery>;
+export type SlackNotificationLazyQueryHookResult = ReturnType<typeof useSlackNotificationLazyQuery>;
+export type SlackNotificationQueryResult = Apollo.QueryResult<SlackNotificationQuery, SlackNotificationQueryVariables>;
 export const TestDocument = gql`
     query Test($customArg: String!) {
   test(customArg: $customArg)

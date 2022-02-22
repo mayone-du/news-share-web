@@ -1,0 +1,5 @@
+query SlackNotification {
+  slackNotification {
+    ...SlackNotificationFragment
+  }
+}
