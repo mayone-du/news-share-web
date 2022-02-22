@@ -73,7 +73,12 @@ export const NewsList: VFC = () => {
   };
 
   if (loading) return <div>Loading</div>;
-  if (error) return <div>Error</div>;
+  if (error)
+    return (
+      <div>
+        <p className="text-red-500">ニュースの取得に失敗しました</p>
+      </div>
+    );
   if (NewsListData?.newsList.length === 0) return <div>ニュースはまだありません</div>;
 
   return (
@@ -149,13 +154,13 @@ export const NewsList: VFC = () => {
                 ) : (
                   <h3
                     className="text-lg font-bold line-clamp-1 mb-2"
-                    // contentEditable={editingNewsNodeId === news.nodeId ? true : undefined} TODO: contentEditableを使うと、Reactの警告が出る
+                    // contentEditable={isEditingNewsId(news.nodeId) ? true : undefined} TODO: contentEditableを使うと、Reactの警告が出る
                   >
                     {news.title || news.url}
                   </h3>
                 )}
 
-                <div className="flex items-center">
+                <div className="flex justify-between">
                   {isEditingNewsId(news.nodeId) ? (
                     <textarea
                       className="w-full outline-none mb-2 mr-4 text-sm text-gray-400 resize-none"
@@ -195,7 +200,7 @@ export const NewsList: VFC = () => {
               </div>
             </a>
             {/* 編集中の場合に更新、キャンセルボタンを表示 */}
-            {editingNewsNodeId === news.nodeId && (
+            {isEditingNewsId(news.nodeId) && (
               <div className="flex items-center gap-4 justify-end w-full px-4 pb-4">
                 <button
                   className="block bg-gray-50 border rounded py-1 px-2"
