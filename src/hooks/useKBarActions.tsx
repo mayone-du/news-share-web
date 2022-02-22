@@ -18,8 +18,14 @@ export const useKBarActions = () => {
       name: "Change Theme",
       shortcut: ["t"],
       keywords: "theme toggle change",
-      perform: () =>
-        alert("TODO: コンポーネントツリーの外でレンダリングされてるためthemeにアクセスできない"),
+      perform: () => {
+        // useThemeが使えないため、自力で更新
+        const currentTheme = localStorage.getItem("theme");
+        const htmlTag = document.querySelector("html");
+        if (!htmlTag) throw Error("html tag not found");
+        htmlTag.style.colorScheme = currentTheme === "dark" ? "light" : "dark";
+        localStorage.setItem("theme", currentTheme === "dark" ? "light" : "dark");
+      },
     },
     {
       id: "contact",

@@ -4,12 +4,12 @@ import "nprogress/nprogress.css";
 import { ApolloProvider } from "@apollo/client";
 import type { CustomAppProps } from "next/app";
 import Router from "next/router";
-// import type { AppProps } from "next/app";
 import { SessionProvider } from "next-auth/react";
 import { DefaultSeo } from "next-seo";
 import { ThemeProvider } from "next-themes";
 import NProgress from "nprogress";
 import { memo } from "react";
+import type { VFC } from "react";
 import { Toaster } from "react-hot-toast";
 import { initializeApollo } from "src/graphql/apollo/client";
 import { KBarProvider, KBarPortal, KBarPositioner, KBarAnimator, KBarSearch } from "kbar";
@@ -27,7 +27,7 @@ Router.events.on("routeChangeError", () => {
   return NProgress.done();
 });
 
-const App = memo((props: CustomAppProps) => {
+const App: VFC<CustomAppProps> = memo((props) => {
   const apolloClient = initializeApollo();
   const { actions } = useKBarActions();
 
