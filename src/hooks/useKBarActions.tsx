@@ -20,10 +20,12 @@ export const useKBarActions = () => {
       keywords: "theme toggle change",
       perform: () => {
         // useThemeが使えないため、自力で更新
+        // TODO: Headless UIのみ更新されない
         const currentTheme = localStorage.getItem("theme");
         const htmlTag = document.querySelector("html");
         if (!htmlTag) throw Error("html tag not found");
         htmlTag.style.colorScheme = currentTheme === "dark" ? "light" : "dark";
+        htmlTag.className = currentTheme === "dark" ? "dark" : "light";
         localStorage.setItem("theme", currentTheme === "dark" ? "light" : "dark");
       },
     },
