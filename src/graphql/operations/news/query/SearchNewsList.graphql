@@ -1,5 +1,11 @@
 query SearchNewsList($input: SearchNewsListInput!) {
   searchNewsList(input: $input) {
     ...NewsFragment
+    likes {
+      ...LikeFragment
+    }
+    user {
+      ...UserFragment
+    }
   }
 }

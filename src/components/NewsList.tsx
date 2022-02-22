@@ -148,7 +148,7 @@ export const NewsList: VFC<Props> = (props) => {
 
             <button
               onClick={() => alert("like")}
-              className="block text-xs text-gray-400 absolute bottom-3 left-60"
+              className="block text-xs text-gray-400 absolute bottom-3 left-60 outline-none"
             >
               <FiHeart className="w-6 h-6" />
             </button>

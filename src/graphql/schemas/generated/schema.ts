@@ -29,6 +29,16 @@ export type DeleteNewsInput = {
   nodeId: Scalars['ID'];
 };
 
+export type Like = {
+  __typename?: 'Like';
+  createdAt: Scalars['DateTime'];
+  id: Scalars['BigInt'];
+  isLiked: Scalars['Boolean'];
+  news: News;
+  updatedAt: Scalars['DateTime'];
+  user: User;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   authUser?: Maybe<User>;
@@ -73,6 +83,7 @@ export type News = {
   imageUrl?: Maybe<Scalars['String']>;
   isImportant: Scalars['Boolean'];
   isViewed: Scalars['Boolean'];
+  likes: Array<Like>;
   nodeId?: Maybe<Scalars['ID']>;
   sharedAt: Scalars['DateTime'];
   title: Scalars['String'];
@@ -211,6 +222,7 @@ export type User = {
   createdAt: Scalars['DateTime'];
   displayName: Scalars['String'];
   id: Scalars['BigInt'];
+  likes: Array<Like>;
   newsList: Array<News>;
   oauthUserId: Scalars['String'];
   photoUrl: Scalars['String'];
@@ -220,6 +232,8 @@ export type User = {
   updatedAt: Scalars['DateTime'];
   username: Scalars['String'];
 };
+
+export type LikeFragmentFragment = { __typename?: 'Like', id: bigint, isLiked: boolean, createdAt: string, updatedAt: string, news: { __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl?: string | null, createdAt: string, sharedAt: string }, user: { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, photoUrl: string, role?: Role | null, status?: Status | null } };
 
 export type NewsFragmentFragment = { __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl?: string | null, createdAt: string, sharedAt: string };
 
@@ -232,7 +246,7 @@ export type CreateNewsMutationVariables = Exact<{
 }>;
 
 
-export type CreateNewsMutation = { __typename?: 'Mutation', createNews?: { __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl?: string | null, createdAt: string, sharedAt: string, user: { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, photoUrl: string, role?: Role | null, status?: Status | null } } | null };
+export type CreateNewsMutation = { __typename?: 'Mutation', createNews?: { __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl?: string | null, createdAt: string, sharedAt: string, likes: Array<{ __typename?: 'Like', id: bigint, isLiked: boolean, createdAt: string, updatedAt: string, news: { __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl?: string | null, createdAt: string, sharedAt: string }, user: { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, photoUrl: string, role?: Role | null, status?: Status | null } }>, user: { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, photoUrl: string, role?: Role | null, status?: Status | null } } | null };
 
 export type DeleteNewsMutationVariables = Exact<{
   input: DeleteNewsInput;
@@ -246,21 +260,21 @@ export type UpdateNewsMutationVariables = Exact<{
 }>;
 
 
-export type UpdateNewsMutation = { __typename?: 'Mutation', updateNews?: { __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl?: string | null, createdAt: string, sharedAt: string, user: { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, photoUrl: string, role?: Role | null, status?: Status | null } } | null };
+export type UpdateNewsMutation = { __typename?: 'Mutation', updateNews?: { __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl?: string | null, createdAt: string, sharedAt: string, likes: Array<{ __typename?: 'Like', id: bigint, isLiked: boolean, createdAt: string, updatedAt: string, news: { __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl?: string | null, createdAt: string, sharedAt: string }, user: { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, photoUrl: string, role?: Role | null, status?: Status | null } }>, user: { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, photoUrl: string, role?: Role | null, status?: Status | null } } | null };
 
 export type NewsListQueryVariables = Exact<{
   input: NewsListInput;
 }>;
 
 
-export type NewsListQuery = { __typename?: 'Query', newsList: Array<{ __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl?: string | null, createdAt: string, sharedAt: string, user: { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, photoUrl: string, role?: Role | null, status?: Status | null } }> };
+export type NewsListQuery = { __typename?: 'Query', newsList: Array<{ __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl?: string | null, createdAt: string, sharedAt: string, likes: Array<{ __typename?: 'Like', id: bigint, isLiked: boolean, createdAt: string, updatedAt: string, news: { __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl?: string | null, createdAt: string, sharedAt: string }, user: { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, photoUrl: string, role?: Role | null, status?: Status | null } }>, user: { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, photoUrl: string, role?: Role | null, status?: Status | null } }> };
 
 export type SearchNewsListQueryVariables = Exact<{
   input: SearchNewsListInput;
 }>;
 
 
-export type SearchNewsListQuery = { __typename?: 'Query', searchNewsList: Array<{ __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl?: string | null, createdAt: string, sharedAt: string }> };
+export type SearchNewsListQuery = { __typename?: 'Query', searchNewsList: Array<{ __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl?: string | null, createdAt: string, sharedAt: string, likes: Array<{ __typename?: 'Like', id: bigint, isLiked: boolean, createdAt: string, updatedAt: string, news: { __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl?: string | null, createdAt: string, sharedAt: string }, user: { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, photoUrl: string, role?: Role | null, status?: Status | null } }>, user: { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, photoUrl: string, role?: Role | null, status?: Status | null } }> };
 
 export type CreateSlackNotificationMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -308,14 +322,6 @@ export const NewsFragmentFragmentDoc = gql`
   sharedAt
 }
     `;
-export const SlackNotificationFragmentFragmentDoc = gql`
-    fragment SlackNotificationFragment on SlackNotification {
-  id
-  isSent
-  createdAt
-  updatedAt
-}
-    `;
 export const UserFragmentFragmentDoc = gql`
     fragment UserFragment on User {
   id
@@ -327,16 +333,43 @@ export const UserFragmentFragmentDoc = gql`
   status
 }
     `;
+export const LikeFragmentFragmentDoc = gql`
+    fragment LikeFragment on Like {
+  id
+  isLiked
+  createdAt
+  updatedAt
+  news {
+    ...NewsFragment
+  }
+  user {
+    ...UserFragment
+  }
+}
+    ${NewsFragmentFragmentDoc}
+${UserFragmentFragmentDoc}`;
+export const SlackNotificationFragmentFragmentDoc = gql`
+    fragment SlackNotificationFragment on SlackNotification {
+  id
+  isSent
+  createdAt
+  updatedAt
+}
+    `;
 export const CreateNewsDocument = gql`
     mutation CreateNews($input: CreateNewsInput!) {
   createNews(input: $input) {
     ...NewsFragment
+    likes {
+      ...LikeFragment
+    }
     user {
       ...UserFragment
     }
   }
 }
     ${NewsFragmentFragmentDoc}
+${LikeFragmentFragmentDoc}
 ${UserFragmentFragmentDoc}`;
 export type CreateNewsMutationFn = Apollo.MutationFunction<CreateNewsMutation, CreateNewsMutationVariables>;
 
@@ -401,12 +434,16 @@ export const UpdateNewsDocument = gql`
     mutation UpdateNews($input: UpdateNewsInput!) {
   updateNews(input: $input) {
     ...NewsFragment
+    likes {
+      ...LikeFragment
+    }
     user {
       ...UserFragment
     }
   }
 }
     ${NewsFragmentFragmentDoc}
+${LikeFragmentFragmentDoc}
 ${UserFragmentFragmentDoc}`;
 export type UpdateNewsMutationFn = Apollo.MutationFunction<UpdateNewsMutation, UpdateNewsMutationVariables>;
 
@@ -438,12 +475,16 @@ export const NewsListDocument = gql`
     query NewsList($input: NewsListInput!) {
   newsList(input: $input) {
     ...NewsFragment
+    likes {
+      ...LikeFragment
+    }
     user {
       ...UserFragment
     }
   }
 }
     ${NewsFragmentFragmentDoc}
+${LikeFragmentFragmentDoc}
 ${UserFragmentFragmentDoc}`;
 
 /**
@@ -477,9 +518,17 @@ export const SearchNewsListDocument = gql`
     query SearchNewsList($input: SearchNewsListInput!) {
   searchNewsList(input: $input) {
     ...NewsFragment
+    likes {
+      ...LikeFragment
+    }
+    user {
+      ...UserFragment
+    }
   }
 }
-    ${NewsFragmentFragmentDoc}`;
+    ${NewsFragmentFragmentDoc}
+${LikeFragmentFragmentDoc}
+${UserFragmentFragmentDoc}`;
 
 /**
  * __useSearchNewsListQuery__

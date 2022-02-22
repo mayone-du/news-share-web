@@ -82,15 +82,18 @@ export const CreateNewsModal: VFC = () => {
                 onSubmit={handleSubmit(handleCreateNews)}
                 className="flex flex-col justify-between"
               >
-                <div>
+                <div className="mb-2">
                   <input
                     type="url"
                     autoFocus
-                    className="block py-2 px-3 my-4 mx-auto w-full rounded border ring-blue-200 outline-none focus:ring-2"
+                    className="block py-2 px-3 mt-4 mb-2 mx-auto w-full rounded border ring-blue-200 outline-none focus:ring-2"
                     {...register("url", { required: true, maxLength: 255 })}
                   />
                   {errors.url && (
-                    <p className="text-sm text-red-400">エラー {errors.url.message}</p>
+                    <p className="text-sm text-red-400 mb-2">
+                      {errors.url.type === "required" && "URLを入力してください"}
+                      {errors.url.type === "maxLength" && "URLの長さは255文字以下にしてください"}
+                    </p>
                   )}
                 </div>
                 <button

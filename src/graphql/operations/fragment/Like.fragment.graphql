@@ -1,0 +1,12 @@
+fragment LikeFragment on Like {
+  id
+  isLiked
+  createdAt
+  updatedAt
+  news {
+    ...NewsFragment
+  }
+  user {
+    ...UserFragment
+  }
+}

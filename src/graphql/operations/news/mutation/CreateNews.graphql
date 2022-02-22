@@ -1,6 +1,9 @@
 mutation CreateNews($input: CreateNewsInput!) {
   createNews(input: $input) {
     ...NewsFragment
+    likes {
+      ...LikeFragment
+    }
     user {
       ...UserFragment
     }
