@@ -47,6 +47,8 @@ export const NewsList: VFC<Props> = (props) => {
     myUserInfoData?.myUserInfo?.id === userId;
   const isLikedNews = (news: News) =>
     news.likes.some((like) => like.user.id === myUserInfoData?.myUserInfo?.id && like.isLiked);
+  const isTodaySharedAt = (sharedAt: string) =>
+    dayjs(sharedAt).format(hyphenFormat) === dayjs().format(hyphenFormat);
 
   const handleClickNewsEditMode =
     (news: Pick<News, "nodeId" | "title" | "description">, handleClosePopover: VoidFunction) =>
@@ -149,16 +151,18 @@ export const NewsList: VFC<Props> = (props) => {
                       </Popover.Button>
                       <Popover.Panel className="absolute -right-4 top-10 z-10 mt-4 w-72 bg-white rounded border shadow-md transform dark:bg-black">
                         <ul>
-                          <li>
-                            <button
-                              className="flex items-center p-2 w-full text-gray-600 hover:bg-gray-100 border-b"
-                              onClick={handlePostponeNews(news.nodeId, close)}
-                              // onClick={handlePostponeNews(news.nodeId, close)}
-                            >
-                              <HiOutlinePencil className="mr-4 w-5 h-5 text-gray-500" />
-                              明日に延期する
-                            </button>
-                          </li>
+                          {/* 今日シェアする予定のニュース以外は延期できない */}
+                          {isTodaySharedAt(news.sharedAt) && (
+                            <li>
+                              <button
+                                className="flex items-center p-2 w-full text-gray-600 hover:bg-gray-100 border-b"
+                                onClick={handlePostponeNews(news.nodeId, close)}
+                              >
+                                <HiOutlinePencil className="mr-4 w-5 h-5 text-gray-500" />
+                                明日に延期する
+                              </button>
+                            </li>
+                          )}
                           <li>
                             <button
                               className="flex items-center p-2 w-full text-gray-600 hover:bg-gray-100"
