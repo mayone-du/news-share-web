@@ -42,12 +42,20 @@ export type Like = {
 export type Mutation = {
   __typename?: 'Mutation';
   authUser?: Maybe<User>;
+  createLike?: Maybe<Like>;
   createNews?: Maybe<News>;
   createSlackNotification?: Maybe<SlackNotification>;
   deleteNews?: Maybe<News>;
   postponeNewsList?: Maybe<Array<Maybe<News>>>;
+  toggleLike?: Maybe<Like>;
+  updateLike?: Maybe<Like>;
   updateMyUserInfo?: Maybe<User>;
   updateNews?: Maybe<News>;
+};
+
+
+export type MutationCreateLikeArgs = {
+  input: ToggleLikeInput;
 };
 
 
@@ -63,6 +71,16 @@ export type MutationDeleteNewsArgs = {
 
 export type MutationPostponeNewsListArgs = {
   input: PostponeNewsListInput;
+};
+
+
+export type MutationToggleLikeArgs = {
+  input: ToggleLikeInput;
+};
+
+
+export type MutationUpdateLikeArgs = {
+  input: ToggleLikeInput;
 };
 
 
@@ -202,6 +220,11 @@ export enum Status {
   Inactive = 'INACTIVE'
 }
 
+export type ToggleLikeInput = {
+  isLiked: Scalars['Boolean'];
+  newsId: Scalars['BigInt'];
+};
+
 export type UpdateMyUserInfoInput = {
   displayName: Scalars['String'];
   selfIntroduction: Scalars['String'];
@@ -240,6 +263,13 @@ export type NewsFragmentFragment = { __typename?: 'News', id: bigint, nodeId?: s
 export type SlackNotificationFragmentFragment = { __typename?: 'SlackNotification', id: bigint, isSent: boolean, createdAt: string, updatedAt: string };
 
 export type UserFragmentFragment = { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, photoUrl: string, role?: Role | null, status?: Status | null };
+
+export type ToggleLikeMutationVariables = Exact<{
+  input: ToggleLikeInput;
+}>;
+
+
+export type ToggleLikeMutation = { __typename?: 'Mutation', toggleLike?: { __typename?: 'Like', id: bigint, isLiked: boolean, createdAt: string, updatedAt: string, news: { __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl?: string | null, createdAt: string, sharedAt: string }, user: { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, photoUrl: string, role?: Role | null, status?: Status | null } } | null };
 
 export type CreateNewsMutationVariables = Exact<{
   input: CreateNewsInput;
@@ -356,6 +386,39 @@ export const SlackNotificationFragmentFragmentDoc = gql`
   updatedAt
 }
     `;
+export const ToggleLikeDocument = gql`
+    mutation ToggleLike($input: ToggleLikeInput!) {
+  toggleLike(input: $input) {
+    ...LikeFragment
+  }
+}
+    ${LikeFragmentFragmentDoc}`;
+export type ToggleLikeMutationFn = Apollo.MutationFunction<ToggleLikeMutation, ToggleLikeMutationVariables>;
+
+/**
+ * __useToggleLikeMutation__
+ *
+ * To run a mutation, you first call `useToggleLikeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useToggleLikeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [toggleLikeMutation, { data, loading, error }] = useToggleLikeMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useToggleLikeMutation(baseOptions?: Apollo.MutationHookOptions<ToggleLikeMutation, ToggleLikeMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ToggleLikeMutation, ToggleLikeMutationVariables>(ToggleLikeDocument, options);
+      }
+export type ToggleLikeMutationHookResult = ReturnType<typeof useToggleLikeMutation>;
+export type ToggleLikeMutationResult = Apollo.MutationResult<ToggleLikeMutation>;
+export type ToggleLikeMutationOptions = Apollo.BaseMutationOptions<ToggleLikeMutation, ToggleLikeMutationVariables>;
 export const CreateNewsDocument = gql`
     mutation CreateNews($input: CreateNewsInput!) {
   createNews(input: $input) {

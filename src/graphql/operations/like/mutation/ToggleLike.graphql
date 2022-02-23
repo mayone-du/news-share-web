@@ -1,0 +1,5 @@
+mutation ToggleLike($input: ToggleLikeInput!) {
+  toggleLike(input: $input) {
+    ...LikeFragment
+  }
+}

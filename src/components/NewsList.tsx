@@ -5,6 +5,7 @@ import {
   useDeleteNewsMutation,
   useMyUserInfoQuery,
   useUpdateNewsMutation,
+  useToggleLikeMutation,
 } from "src/graphql/schemas/generated/schema";
 import type { NewsListQueryResult } from "src/graphql/schemas/generated/schema";
 import { calcFromNow } from "src/utils";
@@ -17,6 +18,7 @@ import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import { CgSpinner } from "react-icons/cg";
 import { FiHeart } from "react-icons/fi";
+import { FaHeart } from "react-icons/fa";
 
 type FieldValues = {
   title: string;
@@ -34,6 +36,7 @@ export const NewsList: VFC<Props> = (props) => {
   const { data: myUserInfoData } = useMyUserInfoQuery({ fetchPolicy: "cache-only" }); // layoutで取得してるのでcache-onlyでネットワークリクエストを抑える
   const [updateNews, { loading: isUpdateNewsLoading }] = useUpdateNewsMutation();
   const [deleteNews, { loading: isDeleteNewsLoading }] = useDeleteNewsMutation();
+  const [toggleLike, { loading: isToggleLikeLoading }] = useToggleLikeMutation();
   const { register, setValue, handleSubmit } = useForm<FieldValues>();
   const [editingNewsNodeId, setEditingNewsNodeId] = useState("");
   const isEditingNewsId = (newsId?: string | null) => newsId === editingNewsNodeId;
@@ -70,6 +73,14 @@ export const NewsList: VFC<Props> = (props) => {
     }
   };
 
+  const handleToggleLike = (newsId: bigint, isLiked: boolean) => async () => {
+    try {
+      await toggleLike({ variables: { input: { newsId, isLiked } } });
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   const isDisplayNewsMenu = (userId: bigint) => {
     return (
       myUserInfoData?.myUserInfo?.role === Role.Admin ||
@@ -77,6 +88,8 @@ export const NewsList: VFC<Props> = (props) => {
       myUserInfoData?.myUserInfo?.id === userId
     );
   };
+  const isLikedNews = (news: News) =>
+    news.likes.some((like) => like.user.id === myUserInfoData?.myUserInfo?.id && like.isLiked);
 
   if (loading)
     return (
@@ -146,11 +159,17 @@ export const NewsList: VFC<Props> = (props) => {
               </Popover>
             )}
 
+            {/* TODO: newsの型 最悪 as を使う */}
+            {/* TODO: いいねしたときのanimation */}
             <button
-              onClick={() => alert("like")}
+              onClick={handleToggleLike(news.id, !isLikedNews(news))}
               className="block text-xs text-gray-400 absolute bottom-3 left-60 outline-none"
             >
-              <FiHeart className="w-6 h-6" />
+              {isLikedNews(news) ? (
+                <FaHeart className="w-6 h-6 text-red-500" />
+              ) : (
+                <FiHeart className="w-6 h-6" />
+              )}
             </button>
 
             {/* コンテンツ */}
