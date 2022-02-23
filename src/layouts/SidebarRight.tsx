@@ -9,8 +9,8 @@ export const SidebarRight: VFC = () => {
   });
 
   return (
-    <aside className="p-4 rounded border">
-      <h3 className="text-lg">
+    <aside className="flex flex-col gap-4">
+      <h3 className="text-lg p-4 rounded border">
         {error && "エラーが発生しました"}
         {loading ? (
           "読み込み中..."
@@ -22,6 +22,8 @@ export const SidebarRight: VFC = () => {
           "ニュースはまだありません"
         )}
       </h3>
+
+      <div className="p-4 rounded border">Twitterで探す→的な？</div>
     </aside>
   );
 };

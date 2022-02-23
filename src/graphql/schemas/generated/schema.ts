@@ -235,7 +235,7 @@ export type UpdateNewsInput = {
   isImportant?: InputMaybe<Scalars['Boolean']>;
   isViewed?: InputMaybe<Scalars['Boolean']>;
   nodeId: Scalars['ID'];
-  sharedAt?: InputMaybe<Scalars['DateTime']>;
+  sharedAt?: InputMaybe<Scalars['String']>;
   title?: InputMaybe<Scalars['String']>;
   url?: InputMaybe<Scalars['String']>;
 };

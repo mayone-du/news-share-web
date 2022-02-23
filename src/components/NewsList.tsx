@@ -8,7 +8,7 @@ import {
   useToggleLikeMutation,
 } from "src/graphql/schemas/generated/schema";
 import type { NewsListQueryResult } from "src/graphql/schemas/generated/schema";
-import { calcFromNow } from "src/utils";
+import { calcFromNow, hyphenFormat } from "src/utils";
 import { BiChevronDown } from "react-icons/bi";
 import { AiOutlineClockCircle } from "react-icons/ai";
 import { Popover } from "@headlessui/react";
@@ -19,6 +19,7 @@ import { useForm } from "react-hook-form";
 import { CgSpinner } from "react-icons/cg";
 import { FiHeart } from "react-icons/fi";
 import { FaHeart } from "react-icons/fa";
+import dayjs from "dayjs";
 
 type FieldValues = {
   title: string;
@@ -40,27 +41,36 @@ export const NewsList: VFC<Props> = (props) => {
   const { register, setValue, handleSubmit } = useForm<FieldValues>();
   const [editingNewsNodeId, setEditingNewsNodeId] = useState("");
   const isEditingNewsId = (newsId?: string | null) => newsId === editingNewsNodeId;
+  const isDisplayNewsMenu = (userId: bigint) =>
+    myUserInfoData?.myUserInfo?.role === Role.Admin ||
+    myUserInfoData?.myUserInfo?.role === Role.Developer ||
+    myUserInfoData?.myUserInfo?.id === userId;
+  const isLikedNews = (news: News) =>
+    news.likes.some((like) => like.user.id === myUserInfoData?.myUserInfo?.id && like.isLiked);
 
   const handleClickNewsEditMode =
-    (news: Pick<News, "nodeId" | "title" | "description">, onClose: VoidFunction) => () => {
+    (news: Pick<News, "nodeId" | "title" | "description">, handleClosePopover: VoidFunction) =>
+    () => {
       setEditingNewsNodeId(news.nodeId ?? "");
       setValue("title", news.title);
       setValue("description", news.description);
-      onClose();
+      handleClosePopover();
     };
   const handleClickNewsEditCancel = () => setEditingNewsNodeId("");
-  const handleDeleteNews = (nodeId: string, onClose: VoidFunction) => async () => {
-    const toastId = toast.loading("ニュースを削除しています...");
-    try {
-      await deleteNews({ variables: { input: { nodeId } } });
-      onClose();
-      await refetch();
-      toast.success("ニュースを削除しました", { id: toastId });
-    } catch (e) {
-      console.error(e);
-      toast.error("ニュースの削除に失敗しました", { id: toastId });
-    }
-  };
+  const handleDeleteNews =
+    (nodeId: string | null | undefined, handleClosePopover: VoidFunction) => async () => {
+      if (!nodeId) return; // TODO: throw する？
+      const toastId = toast.loading("ニュースを削除しています...");
+      try {
+        handleClosePopover();
+        await deleteNews({ variables: { input: { nodeId } } });
+        await refetch();
+        toast.success("ニュースを削除しました", { id: toastId });
+      } catch (e) {
+        console.error(e);
+        toast.error("ニュースの削除に失敗しました", { id: toastId });
+      }
+    };
   const handleUpdateNews = async (values: FieldValues) => {
     const toastId = toast.loading("ニュースを更新しています...");
     try {
@@ -72,24 +82,31 @@ export const NewsList: VFC<Props> = (props) => {
       toast.error("ニュースの更新に失敗しました", { id: toastId });
     }
   };
+  const handlePostponeNews =
+    (nodeId: string | null | undefined, handleClosePopover: VoidFunction) => async () => {
+      if (!nodeId) return; // TODO: throw する？
+      const toastId = toast.loading("ニュースを延期しています...");
+      try {
+        handleClosePopover();
+        await updateNews({
+          variables: { input: { nodeId, sharedAt: dayjs().add(1, "day").format(hyphenFormat) } },
+        });
+        await refetch();
+        toast.success("ニュースを延期しました", { id: toastId });
+      } catch (e) {
+        console.error(e);
+        toast.error("ニュースの延期に失敗しました", { id: toastId });
+      }
+    };
 
   const handleToggleLike = (newsId: bigint, isLiked: boolean) => async () => {
     try {
       await toggleLike({ variables: { input: { newsId, isLiked } } });
+      await refetch();
     } catch (e) {
       console.error(e);
     }
   };
-
-  const isDisplayNewsMenu = (userId: bigint) => {
-    return (
-      myUserInfoData?.myUserInfo?.role === Role.Admin ||
-      myUserInfoData?.myUserInfo?.role === Role.Developer ||
-      myUserInfoData?.myUserInfo?.id === userId
-    );
-  };
-  const isLikedNews = (news: News) =>
-    news.likes.some((like) => like.user.id === myUserInfoData?.myUserInfo?.id && like.isLiked);
 
   if (loading)
     return (
@@ -134,20 +151,30 @@ export const NewsList: VFC<Props> = (props) => {
                         <ul>
                           <li>
                             <button
-                              className="flex items-start p-2 w-full text-gray-600 hover:bg-gray-100"
+                              className="flex items-center p-2 w-full text-gray-600 hover:bg-gray-100 border-b"
+                              onClick={handlePostponeNews(news.nodeId, close)}
+                              // onClick={handlePostponeNews(news.nodeId, close)}
+                            >
+                              <HiOutlinePencil className="mr-4 w-5 h-5 text-gray-500" />
+                              明日に延期する
+                            </button>
+                          </li>
+                          <li>
+                            <button
+                              className="flex items-center p-2 w-full text-gray-600 hover:bg-gray-100"
                               onClick={handleClickNewsEditMode(news, close)}
                             >
-                              <HiOutlinePencil className="mr-4 w-5 h-5 text-gray-600" />
+                              <HiOutlinePencil className="mr-4 w-5 h-5 text-gray-500" />
                               編集する
                             </button>
                           </li>
                           <li>
                             <button
-                              className="flex items-start p-2 w-full text-red-500 hover:bg-gray-100 disabled:bg-gray-200"
-                              onClick={handleDeleteNews(news.nodeId ?? "", close)}
+                              className="flex items-center p-2 w-full text-red-500 hover:bg-gray-100 disabled:bg-gray-200"
+                              onClick={handleDeleteNews(news.nodeId, close)}
                               disabled={isDeleteNewsLoading}
                             >
-                              <RiDeleteBinLine className="mr-4 w-5 h-5 text-red-500" />
+                              <RiDeleteBinLine className="mr-4 w-5 h-5 text-red-400" />
                               削除する
                             </button>
                           </li>
@@ -185,7 +212,7 @@ export const NewsList: VFC<Props> = (props) => {
               <div>
                 {isEditingNewsId(news.nodeId) ? (
                   <input
-                    className="block rounded text-lg font-bold outline-none mb-2 w-full"
+                    className="block text-lg font-bold outline-none mb-2 w-full"
                     placeholder="ニュースのタイトル"
                     {...register("title")}
                   />
