@@ -18,3 +18,5 @@ export const calcFromNow = (date: string) => {
   if (minuteDiff > 0) return `${minuteDiff}分前`;
   return "1分以内";
 };
+
+export const isStartedNewsShare = dayjs() > dayjs().hour(22).minute(45);

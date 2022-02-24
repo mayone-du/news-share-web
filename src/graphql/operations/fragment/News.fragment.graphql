@@ -5,6 +5,9 @@ fragment NewsFragment on News {
   description
   url
   imageUrl
+  isViewed
+  isImportant
   createdAt
+  updatedAt
   sharedAt
 }

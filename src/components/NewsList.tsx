@@ -1,4 +1,4 @@
-import { useState, VFC } from "react";
+import { SyntheticEvent, useState, VFC } from "react";
 import {
   News,
   Role,
@@ -8,12 +8,13 @@ import {
   useToggleLikeMutation,
 } from "src/graphql/schemas/generated/schema";
 import type { NewsListQueryResult } from "src/graphql/schemas/generated/schema";
-import { calcFromNow, hyphenFormat } from "src/utils";
+import { calcFromNow, hyphenFormat, isStartedNewsShare } from "src/utils";
 import { BiChevronDown } from "react-icons/bi";
 import { AiOutlineClockCircle } from "react-icons/ai";
 import { Popover } from "@headlessui/react";
 import { HiOutlinePencil } from "react-icons/hi";
 import { RiDeleteBinLine } from "react-icons/ri";
+import { BsCalendarCheck, BsCheck } from "react-icons/bs";
 import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import { CgSpinner } from "react-icons/cg";
@@ -45,7 +46,7 @@ export const NewsList: VFC<Props> = (props) => {
     myUserInfoData?.myUserInfo?.role === Role.Admin ||
     myUserInfoData?.myUserInfo?.role === Role.Developer ||
     myUserInfoData?.myUserInfo?.id === userId;
-  const isLikedNews = (news: News) =>
+  const isLikedNews = (news: Pick<News, "likes">) =>
     news.likes.some((like) => like.user.id === myUserInfoData?.myUserInfo?.id && like.isLiked);
   const isTodaySharedAt = (sharedAt: string) =>
     dayjs(sharedAt).format(hyphenFormat) === dayjs().format(hyphenFormat);
@@ -100,7 +101,18 @@ export const NewsList: VFC<Props> = (props) => {
         toast.error("ニュースの延期に失敗しました", { id: toastId });
       }
     };
-
+  const handleUpdateViewedNews =
+    (news: Pick<News, "nodeId" | "isViewed">) => async (e: SyntheticEvent) => {
+      if (!news.nodeId) return; // TODO: throw する？
+      if (isEditingNewsId(news.nodeId)) return e.preventDefault(); // 編集中の場合はリンクの機能を持たせない
+      if (news.isViewed || !isStartedNewsShare || myUserInfoData?.myUserInfo?.role === Role.User)
+        return; // すでに閲覧済み、ニュースシェアが始まっていない、一般ユーザーの場合は何もしない
+      try {
+        await updateNews({ variables: { input: { nodeId: news.nodeId, isViewed: true } } });
+      } catch (e) {
+        console.error(e);
+      }
+    };
   const handleToggleLike = (newsId: bigint, isLiked: boolean) => async () => {
     try {
       await toggleLike({ variables: { input: { newsId, isLiked } } });
@@ -157,8 +169,9 @@ export const NewsList: VFC<Props> = (props) => {
                               <button
                                 className="flex items-center p-2 w-full text-gray-600 hover:bg-gray-100 border-b"
                                 onClick={handlePostponeNews(news.nodeId, close)}
+                                disabled={isUpdateNewsLoading || isDeleteNewsLoading}
                               >
-                                <HiOutlinePencil className="mr-4 w-5 h-5 text-gray-500" />
+                                <BsCalendarCheck className="mr-4 w-5 h-5 text-gray-500" />
                                 明日に延期する
                               </button>
                             </li>
@@ -167,6 +180,7 @@ export const NewsList: VFC<Props> = (props) => {
                             <button
                               className="flex items-center p-2 w-full text-gray-600 hover:bg-gray-100"
                               onClick={handleClickNewsEditMode(news, close)}
+                              disabled={isUpdateNewsLoading || isDeleteNewsLoading}
                             >
                               <HiOutlinePencil className="mr-4 w-5 h-5 text-gray-500" />
                               編集する
@@ -176,7 +190,7 @@ export const NewsList: VFC<Props> = (props) => {
                             <button
                               className="flex items-center p-2 w-full text-red-500 hover:bg-gray-100 disabled:bg-gray-200"
                               onClick={handleDeleteNews(news.nodeId, close)}
-                              disabled={isDeleteNewsLoading}
+                              disabled={isUpdateNewsLoading || isDeleteNewsLoading}
                             >
                               <RiDeleteBinLine className="mr-4 w-5 h-5 text-red-400" />
                               削除する
@@ -203,6 +217,8 @@ export const NewsList: VFC<Props> = (props) => {
               )}
             </button>
 
+            {news.isViewed && <BsCheck className="w-6 h-6 text-green-400 absolute top-3 left-1" />}
+
             {/* コンテンツ */}
             <a
               href={news.url}
@@ -211,7 +227,7 @@ export const NewsList: VFC<Props> = (props) => {
               }`}
               target="_blank"
               rel="noopener noreferrer"
-              onClick={isEditingNewsId(news.nodeId) ? (e) => e.preventDefault() : undefined}
+              onClick={handleUpdateViewedNews(news)}
             >
               <div>
                 {isEditingNewsId(news.nodeId) ? (
