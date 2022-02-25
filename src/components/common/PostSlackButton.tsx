@@ -32,19 +32,34 @@ export const PostSlackButton: VFC = () => {
   const handleCloseDialog = useCallback(() => setIsOpenDialog(false), []);
   const handleOpenDialog = useCallback(() => setIsOpenDialog(true), []);
   const handleEndNewsShare = async () => {
-    const willPostponeNewsIds = newsListData?.newsList
-      .filter((news) => !news.isViewed)
-      .map((news) => news.id);
+    const willPostponeNewsIds =
+      newsListData?.newsList.map((news) => news.isViewed || news.nodeId).filter<string>(Boolean) ??
+      [];
+    console.log(willPostponeNewsIds);
     const toastId = toast.loading(
       willPostponeNewsIds?.length
         ? "Slackへ送信とニュースの延期をしています..."
         : "Slackへ送信しています...",
     );
-    try {
-      await createSlackNotification();
-    } catch (e) {
-      console.error(e);
-      toast.error("Slack通知の送信に失敗しました", { id: toastId });
+    if (willPostponeNewsIds?.length) {
+      try {
+        await createSlackNotification();
+        await postponeNewsList({
+          variables: {
+            input: { nodeIds: willPostponeNewsIds, sharedAt: dayjs().format(hyphenFormat) },
+          },
+        });
+      } catch (e) {
+        console.error(e);
+        toast.error("Slack通知とニュースの延期に失敗しました", { id: toastId });
+      }
+    } else {
+      try {
+        await createSlackNotification();
+      } catch (e) {
+        console.error(e);
+        toast.error("Slack通知の送信に失敗しました", { id: toastId });
+      }
     }
   };
 

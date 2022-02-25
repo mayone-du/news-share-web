@@ -183,7 +183,7 @@ export const NewsList: VFC<Props> = (props) => {
                           {isTodaySharedAt(news.sharedAt) && (
                             <li>
                               <button
-                                className="flex items-center p-2 w-full text-gray-600 border-b hover:bg-gray-100"
+                                className="flex items-center p-2 w-full text-gray-600 hover:bg-gray-100"
                                 onClick={handlePostponeNews(news.nodeId, close)}
                                 disabled={isUpdateNewsLoading || isDeleteNewsLoading}
                               >
