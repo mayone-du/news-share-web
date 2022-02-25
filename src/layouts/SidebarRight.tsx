@@ -10,12 +10,12 @@ export const SidebarRight: VFC = () => {
 
   return (
     <aside className="flex flex-col gap-4">
-      <div className="p-4 border rounded">
-        <h3>{isStartedNewsShare ? "ニュースシェア中" : "ニュースを共有してみよう"}</h3>
-        <p>{dayjs().format("hh:mm")}</p>
+      <div className="p-4 rounded border">
+        <h3>{isStartedNewsShare(dayjs()) ? "ニュースシェア中" : "ニュースを共有してみよう"}</h3>
+        <p>{dayjs().format("HH:mm")}</p>
       </div>
 
-      <h3 className="text-lg p-4 rounded border">
+      <h3 className="p-4 text-lg rounded border">
         {error && "エラーが発生しました"}
         {loading ? (
           "読み込み中..."

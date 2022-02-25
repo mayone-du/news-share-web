@@ -3,31 +3,12 @@ import Link from "next/link";
 import { SIDEBAR_LEFT_MENUS } from "src/constants/menus";
 import { useRouter } from "next/router";
 import { useCreateNewsModal } from "src/hooks/useCreateNewsModal";
-import {
-  Role,
-  useMyUserInfoQuery,
-  useCreateSlackNotificationMutation,
-  useSlackNotificationQuery,
-} from "src/graphql/schemas/generated/schema";
-import { CgSpinner } from "react-icons/cg";
-import toast from "react-hot-toast";
+import { useCreateSlackNotificationMutation } from "src/graphql/schemas/generated/schema";
+import { PostSlackButton } from "src/components/common/PostSlackButton";
 
 export const SidebarLeft: VFC = () => {
   const { asPath } = useRouter();
   const { handleOpenCreateNewsModal } = useCreateNewsModal();
-  const { data: myUserInfoData } = useMyUserInfoQuery({ fetchPolicy: "cache-only" });
-  const { data: slackNotificationData } = useSlackNotificationQuery();
-  const [createSlackNotification, { loading }] = useCreateSlackNotificationMutation();
-  const handleCreateSlackNotification = async () => {
-    const toastId = toast.loading("Slack通知を送信しています...");
-    try {
-      await createSlackNotification();
-      toast.success("Slack通知を送信しました", { id: toastId });
-    } catch (e) {
-      console.error(e);
-      toast.error("Slack通知の送信に失敗しました", { id: toastId });
-    }
-  };
 
   return (
     <aside>
@@ -57,17 +38,7 @@ export const SidebarLeft: VFC = () => {
         >
           ニュース・記事を投稿する
         </button>
-        {myUserInfoData?.myUserInfo?.role === Role.Admin ||
-        myUserInfoData?.myUserInfo?.role === Role.Developer ? (
-          <button
-            className="flex items-center py-2 px-4 mt-4 rounded border shadow-sm transition-all hover:bg-gray-50 hover:shadow disabled:bg-gray-300"
-            onClick={handleCreateSlackNotification}
-            disabled={loading || slackNotificationData?.slackNotification?.isSent}
-          >
-            Slackへ送信する
-            {loading && <CgSpinner className="ml-2 animate-spin" />}
-          </button>
-        ) : null}
+        <PostSlackButton />
       </nav>
     </aside>
   );

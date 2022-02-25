@@ -1,4 +1,4 @@
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 
 // TODO: constantsでもいいな
 export const hyphenFormat = "YYYY-MM-DD";
@@ -19,4 +19,5 @@ export const calcFromNow = (date: string) => {
   return "1分以内";
 };
 
-export const isStartedNewsShare = dayjs() > dayjs().hour(22).minute(45);
+// 呼び出す側で現在日時をインスタンス化して渡す
+export const isStartedNewsShare = (now: Dayjs) => now > dayjs().hour(22).minute(45);

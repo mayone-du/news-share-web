@@ -285,6 +285,13 @@ export type DeleteNewsMutationVariables = Exact<{
 
 export type DeleteNewsMutation = { __typename?: 'Mutation', deleteNews?: { __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl?: string | null, isViewed: boolean, isImportant: boolean, createdAt: string, updatedAt: string, sharedAt: string } | null };
 
+export type PostponeNewsListMutationVariables = Exact<{
+  input: PostponeNewsListInput;
+}>;
+
+
+export type PostponeNewsListMutation = { __typename?: 'Mutation', postponeNewsList?: Array<{ __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl?: string | null, isViewed: boolean, isImportant: boolean, createdAt: string, updatedAt: string, sharedAt: string } | null> | null };
+
 export type UpdateNewsMutationVariables = Exact<{
   input: UpdateNewsInput;
 }>;
@@ -496,6 +503,39 @@ export function useDeleteNewsMutation(baseOptions?: Apollo.MutationHookOptions<D
 export type DeleteNewsMutationHookResult = ReturnType<typeof useDeleteNewsMutation>;
 export type DeleteNewsMutationResult = Apollo.MutationResult<DeleteNewsMutation>;
 export type DeleteNewsMutationOptions = Apollo.BaseMutationOptions<DeleteNewsMutation, DeleteNewsMutationVariables>;
+export const PostponeNewsListDocument = gql`
+    mutation PostponeNewsList($input: PostponeNewsListInput!) {
+  postponeNewsList(input: $input) {
+    ...NewsFragment
+  }
+}
+    ${NewsFragmentFragmentDoc}`;
+export type PostponeNewsListMutationFn = Apollo.MutationFunction<PostponeNewsListMutation, PostponeNewsListMutationVariables>;
+
+/**
+ * __usePostponeNewsListMutation__
+ *
+ * To run a mutation, you first call `usePostponeNewsListMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `usePostponeNewsListMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [postponeNewsListMutation, { data, loading, error }] = usePostponeNewsListMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function usePostponeNewsListMutation(baseOptions?: Apollo.MutationHookOptions<PostponeNewsListMutation, PostponeNewsListMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<PostponeNewsListMutation, PostponeNewsListMutationVariables>(PostponeNewsListDocument, options);
+      }
+export type PostponeNewsListMutationHookResult = ReturnType<typeof usePostponeNewsListMutation>;
+export type PostponeNewsListMutationResult = Apollo.MutationResult<PostponeNewsListMutation>;
+export type PostponeNewsListMutationOptions = Apollo.BaseMutationOptions<PostponeNewsListMutation, PostponeNewsListMutationVariables>;
 export const UpdateNewsDocument = gql`
     mutation UpdateNews($input: UpdateNewsInput!) {
   updateNews(input: $input) {

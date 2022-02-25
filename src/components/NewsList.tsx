@@ -14,7 +14,8 @@ import { AiOutlineClockCircle } from "react-icons/ai";
 import { Popover } from "@headlessui/react";
 import { HiOutlinePencil } from "react-icons/hi";
 import { RiDeleteBinLine } from "react-icons/ri";
-import { BsCalendarCheck, BsCheck } from "react-icons/bs";
+import { BsCalendarCheck, BsCheck, BsCheck2 } from "react-icons/bs";
+import { IoMdReturnLeft } from "react-icons/io";
 import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import { CgSpinner } from "react-icons/cg";
@@ -105,10 +106,26 @@ export const NewsList: VFC<Props> = (props) => {
     (news: Pick<News, "nodeId" | "isViewed">) => async (e: SyntheticEvent) => {
       if (!news.nodeId) return; // TODO: throw する？
       if (isEditingNewsId(news.nodeId)) return e.preventDefault(); // 編集中の場合はリンクの機能を持たせない
-      if (news.isViewed || !isStartedNewsShare || myUserInfoData?.myUserInfo?.role === Role.User)
+      if (
+        news.isViewed ||
+        !isStartedNewsShare(dayjs()) ||
+        myUserInfoData?.myUserInfo?.role === Role.User
+      )
         return; // すでに閲覧済み、ニュースシェアが始まっていない、一般ユーザーの場合は何もしない
       try {
         await updateNews({ variables: { input: { nodeId: news.nodeId, isViewed: true } } });
+      } catch (e) {
+        console.error(e);
+      }
+    };
+  const handleToggleViewedNews =
+    (news: Pick<News, "nodeId" | "isViewed">, handleClosePopover: VoidFunction) => async () => {
+      if (!news.nodeId) return; // TODO: throw する？
+      try {
+        handleClosePopover();
+        await updateNews({
+          variables: { input: { nodeId: news.nodeId, isViewed: !news.isViewed } },
+        });
       } catch (e) {
         console.error(e);
       }
@@ -145,7 +162,6 @@ export const NewsList: VFC<Props> = (props) => {
             className={`relative mb-4 rounded border ${
               isEditingNewsId(news.nodeId) ? "ring-2 ring-blue-200" : ""
             }`}
-            title={news.title || news.description || news.url}
           >
             {/* UI的にはリンクの中だけど、要素的にはリンクの外に配置したい */}
             {/* 管理者か自分の投稿したニュースであれば、ニュースに対してのメニュー表示 */}
@@ -167,7 +183,7 @@ export const NewsList: VFC<Props> = (props) => {
                           {isTodaySharedAt(news.sharedAt) && (
                             <li>
                               <button
-                                className="flex items-center p-2 w-full text-gray-600 hover:bg-gray-100 border-b"
+                                className="flex items-center p-2 w-full text-gray-600 border-b hover:bg-gray-100"
                                 onClick={handlePostponeNews(news.nodeId, close)}
                                 disabled={isUpdateNewsLoading || isDeleteNewsLoading}
                               >
@@ -176,6 +192,20 @@ export const NewsList: VFC<Props> = (props) => {
                               </button>
                             </li>
                           )}
+                          <li>
+                            <button
+                              className="flex items-center p-2 w-full text-gray-600 border-b hover:bg-gray-100"
+                              onClick={handleToggleViewedNews(news, close)}
+                              disabled={isUpdateNewsLoading || isDeleteNewsLoading}
+                            >
+                              {news.isViewed ? (
+                                <IoMdReturnLeft className="mr-4 w-5 h-5 text-gray-500" />
+                              ) : (
+                                <BsCheck2 className="mr-4 w-5 h-5 text-gray-500" />
+                              )}
+                              {news.isViewed ? "シェアしていない状態に戻す" : "シェア済みにする"}
+                            </button>
+                          </li>
                           <li>
                             <button
                               className="flex items-center p-2 w-full text-gray-600 hover:bg-gray-100"
@@ -208,7 +238,7 @@ export const NewsList: VFC<Props> = (props) => {
             {/* TODO: いいねしたときのanimation */}
             <button
               onClick={handleToggleLike(news.id, !isLikedNews(news))}
-              className="block text-xs text-gray-400 absolute bottom-3 left-60 outline-none"
+              className="block absolute bottom-3 left-60 text-xs text-gray-400 outline-none"
             >
               {isLikedNews(news) ? (
                 <FaHeart className="w-6 h-6 text-red-500" />
@@ -217,7 +247,7 @@ export const NewsList: VFC<Props> = (props) => {
               )}
             </button>
 
-            {news.isViewed && <BsCheck className="w-6 h-6 text-green-400 absolute top-3 left-1" />}
+            {news.isViewed && <BsCheck className="absolute left-1 top-3 w-6 h-6 text-green-400" />}
 
             {/* コンテンツ */}
             <a
@@ -232,23 +262,23 @@ export const NewsList: VFC<Props> = (props) => {
               <div>
                 {isEditingNewsId(news.nodeId) ? (
                   <input
-                    className="block text-lg font-bold outline-none mb-2 w-full"
+                    className="block mb-2 w-full text-lg font-bold outline-none"
                     placeholder="ニュースのタイトル"
                     {...register("title")}
                   />
                 ) : (
-                  <h3 className="text-lg font-bold line-clamp-1 mb-2">{news.title || news.url}</h3>
+                  <h3 className="mb-2 text-lg font-bold line-clamp-1">{news.title || news.url}</h3>
                 )}
 
                 <div className="flex justify-between">
                   {isEditingNewsId(news.nodeId) ? (
                     <textarea
-                      className="w-full outline-none mb-2 mr-4 text-sm text-gray-400 resize-none"
+                      className="mr-4 mb-2 w-full text-sm text-gray-400 outline-none resize-none"
                       placeholder="ニュースの説明"
                       {...register("description")}
                     />
                   ) : (
-                    <p className="mb-2 mr-4 text-sm text-gray-400 line-clamp-2">
+                    <p className="mr-4 mb-2 text-sm text-gray-400 line-clamp-2">
                       {news.description}
                     </p>
                   )}
@@ -273,7 +303,7 @@ export const NewsList: VFC<Props> = (props) => {
                   <span className="mr-4 text-sm font-bold text-gray-600">
                     {news.user.displayName}
                   </span>
-                  <span className="flex mr-4 items-center text-xs text-gray-400">
+                  <span className="flex items-center mr-4 text-xs text-gray-400">
                     <AiOutlineClockCircle className="mr-1 w-4 h-4" />
                     {calcFromNow(news.createdAt)}
                   </span>
@@ -282,16 +312,16 @@ export const NewsList: VFC<Props> = (props) => {
             </a>
             {/* 編集中の場合に更新、キャンセルボタンを表示 */}
             {isEditingNewsId(news.nodeId) && (
-              <div className="flex items-center gap-4 justify-end w-full px-4 pb-4">
+              <div className="flex gap-4 justify-end items-center px-4 pb-4 w-full">
                 <button
-                  className="block bg-gray-50 border rounded py-1 px-2"
+                  className="block py-1 px-2 bg-gray-50 rounded border"
                   onClick={handleSubmit(handleUpdateNews)}
                   disabled={isUpdateNewsLoading}
                 >
                   更新する
                 </button>
                 <button
-                  className="block bg-gray-50 border rounded py-1 px-2"
+                  className="block py-1 px-2 bg-gray-50 rounded border"
                   onClick={handleClickNewsEditCancel}
                 >
                   キャンセル
