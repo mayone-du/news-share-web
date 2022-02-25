@@ -14,6 +14,7 @@ import toast from "react-hot-toast";
 import { hyphenFormat } from "src/utils";
 import dayjs from "dayjs";
 import { useRouter } from "next/router";
+import { BsCheck2 } from "react-icons/bs";
 
 export const PostSlackButton: VFC = () => {
   const { asPath } = useRouter();
@@ -49,6 +50,7 @@ export const PostSlackButton: VFC = () => {
             input: { nodeIds: willPostponeNewsIds, sharedAt: dayjs().format(hyphenFormat) },
           },
         });
+        toast.success("ニュースの延期とSlackへ送信が完了しました", { id: toastId });
       } catch (e) {
         console.error(e);
         toast.error("Slack通知とニュースの延期に失敗しました", { id: toastId });
@@ -73,6 +75,9 @@ export const PostSlackButton: VFC = () => {
             className="flex items-center py-2 px-4 mt-4 rounded border shadow-sm transition-all hover:bg-gray-50 hover:shadow disabled:bg-gray-300"
             onClick={handleOpenDialog}
           >
+            {slackNotificationData?.slackNotification?.isSent && (
+              <BsCheck2 className="text-emerald-400 w-4 h-4 mr-2" />
+            )}
             Slackへ送信する
           </button>
           <Transition appear show={isOpenDialog} as="div">
@@ -107,9 +112,15 @@ export const PostSlackButton: VFC = () => {
                   leaveTo="opacity-0 scale-95"
                 >
                   <div className="overflow-hidden p-8 m-auto w-80 bg-white rounded-lg shadow-xl transition-all transform sm:w-96">
-                    <Dialog.Title as="h3" className="text-3xl font-bold text-center text-gray-900">
-                      Qinニュースシェア
+                    <Dialog.Title as="h3" className="text-xl font-bold text-center text-gray-900">
+                      今日のニュースシェアを終了する
                     </Dialog.Title>
+
+                    <ul className="px-4 flex flex-col list-disc mt-4 gap-1 text-gray-600">
+                      <li>既にシェアしたニュースをSlackへ送信</li>
+                      <li>シェアしていないニュースを明日へ延期</li>
+                    </ul>
+                    <p className="text-gray-500 text-sm mt-2">以上の2つを行います</p>
 
                     {slackNotificationData?.slackNotification?.isSent && (
                       <p className="mt-6 text-sm text-red-500">

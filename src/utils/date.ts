@@ -19,5 +19,6 @@ export const calcFromNow = (date: string) => {
   return "1分以内";
 };
 
-// 呼び出す側で現在日時をインスタンス化して渡す
-export const isStartedNewsShare = (now: Dayjs) => now > dayjs().hour(22).minute(45);
+// 呼び出す側で現在日時をインスタンス化して渡す 22:45 ~ 23:10までをニュースシェアの時間とみなす
+export const isStartedNewsShare = (now: Dayjs) =>
+  now >= dayjs().hour(22).minute(45) && now <= dayjs().hour(23).minute(10);
