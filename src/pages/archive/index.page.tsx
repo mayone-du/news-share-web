@@ -8,20 +8,26 @@ import { ROUTE_LABELS } from "src/constants";
 import { useNewsListQuery } from "src/graphql/schemas/generated/schema";
 import { Layout } from "src/layouts";
 import { hyphenFormat } from "src/utils";
+import { useDebouncedCallback } from "use-debounce";
+
+const YESTERDAY = dayjs().subtract(1, "day").format(hyphenFormat);
+const TOMORROW = dayjs().add(1, "day").format(hyphenFormat);
 
 const ArchiveIndexPage: CustomNextPage = () => {
-  const yesterday = dayjs().subtract(1, "day").format(hyphenFormat);
-  const tomorrow = dayjs().add(1, "day").format(hyphenFormat);
-  const [searchDate, setSearchDate] = useState(yesterday);
+  const [searchDate, setSearchDate] = useState(YESTERDAY);
   const newsListQueryResult = useNewsListQuery({
     variables: { input: { sharedAt: searchDate } },
   });
+
+  console.log(searchDate);
+  const debounced = useDebouncedCallback((val) => setSearchDate(val), 1000); // milli secound
   const handleChangeSearchDate = (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.value) return;
-    setSearchDate(dayjs(e.target.value).format(hyphenFormat));
+    debounced(dayjs(e.target.value).format(hyphenFormat));
   };
-  const handleChangeSearchYesterDay = () => setSearchDate(yesterday);
-  const handleChangeSearchTomorrow = () => setSearchDate(tomorrow);
+
+  const handleChangeSearchYesterDay = () => setSearchDate(YESTERDAY);
+  const handleChangeSearchTomorrow = () => setSearchDate(TOMORROW);
 
   return (
     <>
@@ -29,7 +35,7 @@ const ArchiveIndexPage: CustomNextPage = () => {
       <div className="flex items-center justify-between mb-4">
         <button
           className={`block border rounded px-4 py-2 shadow hover:bg-gray-50 transition-colors ${
-            searchDate === yesterday ? "bg-blue-50" : ""
+            searchDate === YESTERDAY ? "bg-blue-50" : ""
           }`}
           onClick={handleChangeSearchYesterDay}
         >
@@ -37,7 +43,7 @@ const ArchiveIndexPage: CustomNextPage = () => {
         </button>
         <button
           className={`block border rounded px-4 py-2 shadow hover:bg-gray-50 transition-colors ${
-            searchDate === tomorrow ? "bg-blue-50" : ""
+            searchDate === TOMORROW ? "bg-blue-50" : ""
           }`}
           onClick={handleChangeSearchTomorrow}
         >
@@ -48,7 +54,7 @@ const ArchiveIndexPage: CustomNextPage = () => {
         type="date"
         className="block py-2 px-4 mb-4 w-full rounded border border-gray-500 outline-none"
         onChange={handleChangeSearchDate}
-        value={searchDate}
+        defaultValue={searchDate}
       />
       <NewsList newsListQueryResult={newsListQueryResult} />
     </>
