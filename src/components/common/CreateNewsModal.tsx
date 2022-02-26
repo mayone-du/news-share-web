@@ -1,13 +1,15 @@
+import type { Reference } from "@apollo/client";
 import { useReactiveVar } from "@apollo/client";
 import { Dialog, Transition } from "@headlessui/react";
 import type { VFC } from "react";
 import { isOpenCreateNewsModalVar } from "src/global/state";
 import { useForm } from "react-hook-form";
-import { useCreateNewsMutation, useNewsListLazyQuery } from "src/graphql/schemas/generated/schema";
+import {
+  NewsFragmentFragmentDoc,
+  useCreateNewsMutation,
+} from "src/graphql/schemas/generated/schema";
 import toast from "react-hot-toast";
 import { useCreateNewsModal } from "src/hooks/useCreateNewsModal";
-import dayjs from "dayjs";
-import { hyphenFormat } from "src/utils";
 
 type FieldValues = {
   url: string;
@@ -16,10 +18,7 @@ type FieldValues = {
 export const CreateNewsModal: VFC = () => {
   const isOpenCreateNewsModal = useReactiveVar(isOpenCreateNewsModalVar);
   const { handleCloseCreateNewsModal } = useCreateNewsModal();
-  const [query] = useNewsListLazyQuery({
-    variables: { input: { sharedAt: dayjs().format(hyphenFormat) } },
-  });
-  const [createNews, { data, loading, error }] = useCreateNewsMutation();
+  const [createNews, { loading, error }] = useCreateNewsMutation();
   const {
     handleSubmit,
     register,
@@ -30,10 +29,36 @@ export const CreateNewsModal: VFC = () => {
   const handleCreateNews = async (data: FieldValues) => {
     const toastId = toast.loading("投稿中...");
     try {
-      await createNews({ variables: { input: { url: data.url } } });
+      await createNews({
+        variables: { input: { url: data.url } },
+        update: (cache, { data }) => {
+          if (!data?.createNews) return;
+          cache.modify({
+            fields: {
+              newsList: (existingNewsList: Reference[]) => {
+                const createdNewsRef = cache.writeFragment({
+                  data: data.createNews,
+                  fragment: NewsFragmentFragmentDoc,
+                });
+                return [...existingNewsList, createdNewsRef];
+              },
+            },
+          });
+
+          // DELETE
+          // cache.modify({
+          //   fields: {
+          //     newsList: (existingNewsListRefs: Reference[], { readField }) => {
+          //       return existingNewsListRefs.filter((news) => {
+          //         createNewsData.id !== readField("id", news);
+          //       });
+          //     },
+          //   },
+          // });
+        },
+      });
       handleCloseCreateNewsModal();
       reset();
-      await query(); // refetch
       toast.success("投稿しました", { id: toastId });
     } catch (e) {
       console.error(e);

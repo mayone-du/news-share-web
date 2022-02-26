@@ -45,7 +45,7 @@ export type Mutation = {
   createLike?: Maybe<Like>;
   createNews?: Maybe<News>;
   createSlackNotification?: Maybe<SlackNotification>;
-  deleteNews?: Maybe<News>;
+  deleteNews?: Maybe<Scalars['Boolean']>;
   postponeNewsList?: Maybe<Array<Maybe<News>>>;
   toggleLike?: Maybe<Like>;
   updateLike?: Maybe<Like>;
@@ -315,7 +315,7 @@ export type DeleteNewsMutationVariables = Exact<{
 }>;
 
 
-export type DeleteNewsMutation = { __typename?: 'Mutation', deleteNews?: { __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl?: string | null, isViewed: boolean, isImportant: boolean, createdAt: string, updatedAt: string, sharedAt: string, likes: Array<{ __typename?: 'Like', id: bigint, isLiked: boolean, createdAt: string, updatedAt: string, news: { __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl?: string | null, isViewed: boolean, isImportant: boolean, createdAt: string, updatedAt: string, sharedAt: string }, user: { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, photoUrl: string, role?: Role | null, status?: Status | null } }>, user: { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, photoUrl: string, role?: Role | null, status?: Status | null } } | null };
+export type DeleteNewsMutation = { __typename?: 'Mutation', deleteNews?: boolean | null };
 
 export type PostponeNewsListMutationVariables = Exact<{
   input: PostponeNewsListInput;
@@ -526,19 +526,9 @@ export type CreateNewsMutationResult = Apollo.MutationResult<CreateNewsMutation>
 export type CreateNewsMutationOptions = Apollo.BaseMutationOptions<CreateNewsMutation, CreateNewsMutationVariables>;
 export const DeleteNewsDocument = gql`
     mutation DeleteNews($input: DeleteNewsInput!) {
-  deleteNews(input: $input) {
-    ...NewsFragment
-    likes {
-      ...LikeFragment
-    }
-    user {
-      ...UserFragment
-    }
-  }
+  deleteNews(input: $input)
 }
-    ${NewsFragmentFragmentDoc}
-${LikeFragmentFragmentDoc}
-${UserFragmentFragmentDoc}`;
+    `;
 export type DeleteNewsMutationFn = Apollo.MutationFunction<DeleteNewsMutation, DeleteNewsMutationVariables>;
 
 /**

@@ -25,6 +25,7 @@ import dayjs from "dayjs";
 import { useRouter } from "next/router";
 import { InvalidIdError } from "src/errors";
 import { Tooltip } from "src/components/common/Tooltip";
+import { Reference } from "@apollo/client";
 
 type FieldValues = {
   title: string;
@@ -71,8 +72,21 @@ export const NewsList: VFC<Props> = (props) => {
       const toastId = toast.loading("ニュースを削除しています...");
       try {
         handleClosePopover();
-        await deleteNews({ variables: { input: { nodeId } } });
-        await refetch();
+        await deleteNews({
+          variables: { input: { nodeId } },
+          update: (cache, { data }) => {
+            if (!data?.deleteNews) return;
+            cache.modify({
+              fields: {
+                newsList: (existingNewsListRefs: Reference[], { readField }) => {
+                  return existingNewsListRefs.filter(
+                    (newsListRef) => readField("nodeId", newsListRef) !== nodeId, // deleteは削除が成功したかどうかしか返さないので、削除時に使用したIDをもとにキャッシュから削除
+                  );
+                },
+              },
+            });
+          },
+        });
         toast.success("ニュースを削除しました", { id: toastId });
       } catch (e) {
         console.error(e);

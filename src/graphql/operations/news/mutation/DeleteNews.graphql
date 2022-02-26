@@ -1,11 +1,3 @@
 mutation DeleteNews($input: DeleteNewsInput!) {
-  deleteNews(input: $input) {
-    ...NewsFragment
-    likes {
-      ...LikeFragment
-    }
-    user {
-      ...UserFragment
-    }
-  }
+  deleteNews(input: $input)
 }
