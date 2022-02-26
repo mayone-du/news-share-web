@@ -1762,6 +1762,13 @@
   dependencies:
     "defer-to-connect" "^1.0.1"
 
+"@tailwindcss/forms@^0.4.0":
+  "integrity" "sha512-DeaQBx6EgEeuZPQACvC+mKneJsD8am1uiJugjgQK1+/Vt+Ai0GpFBC2T2fqnUad71WgOxyrZPE6BG1VaI6YqfQ=="
+  "resolved" "https://registry.npmjs.org/@tailwindcss/forms/-/forms-0.4.0.tgz"
+  "version" "0.4.0"
+  dependencies:
+    "mini-svg-data-uri" "^1.2.3"
+
 "@tailwindcss/line-clamp@0.3.1":
   "integrity" "sha512-pNr0T8LAc3TUx/gxCfQZRe9NB2dPEo/cedPHzUGIPxqDMhgjwNm6jYxww4W5l0zAsAddxr+XfZcqttGiFDgrGg=="
   "resolved" "https://registry.npmjs.org/@tailwindcss/line-clamp/-/line-clamp-0.3.1.tgz"
@@ -6457,6 +6464,11 @@
   "resolved" "https://registry.npmjs.org/min-indent/-/min-indent-1.0.1.tgz"
   "version" "1.0.1"
 
+"mini-svg-data-uri@^1.2.3":
+  "integrity" "sha512-gSfqpMRC8IxghvMcxzzmMnWpXAChSA+vy4cia33RgerMS8Fex95akUyQZPbxJJmeBGiGmK7n/1OpUX8ksRjIdA=="
+  "resolved" "https://registry.npmjs.org/mini-svg-data-uri/-/mini-svg-data-uri-1.4.3.tgz"
+  "version" "1.4.3"
+
 "minimatch@^3.0.4":
   "integrity" "sha512-tUpxzX0VAzJHjLu0xUfFv1gwVp9ba3IOuRAVH2EGuRW8a5emA2FlACLqiT/lDVtS1W+TGNwqz3sWaNyLgDJWuw=="
   "resolved" "https://registry.npmjs.org/minimatch/-/minimatch-3.0.5.tgz"
@@ -8377,7 +8389,7 @@
     "buffer" "^5.7.0"
     "node-fetch" "^2.6.1"
 
-"tailwindcss@^3.0.22", "tailwindcss@^3.0.7", "tailwindcss@>=2.0.0 || >=3.0.0 || >=3.0.0-alpha.1", "tailwindcss@>=3.0.0 || >= 3.0.0-alpha.1 || insiders":
+"tailwindcss@^3.0.22", "tailwindcss@^3.0.7", "tailwindcss@>=2.0.0 || >=3.0.0 || >=3.0.0-alpha.1", "tailwindcss@>=3.0.0 || >= 3.0.0-alpha.1", "tailwindcss@>=3.0.0 || >= 3.0.0-alpha.1 || insiders":
   "integrity" "sha512-F8lt74RlNZirnkaSk310+vGQta7c0/hgx7/bqxruM4wS9lp8oqV93lzavajC3VT0Lp4UUtUVIt8ifKcmGzkr0A=="
   "resolved" "https://registry.npmjs.org/tailwindcss/-/tailwindcss-3.0.22.tgz"
   "version" "3.0.22"
