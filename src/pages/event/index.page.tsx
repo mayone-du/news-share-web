@@ -7,7 +7,8 @@ const EventIndexPage: CustomNextPage = () => {
   return (
     <>
       <NextSeo title={ROUTE_LABELS.EVENT} />
-      <iframe src="https://github.blog/" />
+      <p>運営はメモを投稿でき、拡大したiframeとメモを同時に見れる</p>
+      <iframe src="https://github.blog/" className="block border w-full h-96" />
     </>
   );
 };

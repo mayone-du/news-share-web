@@ -25,9 +25,14 @@ export const SidebarRight: VFC = () => {
           {dayjs().format("HH : mm")}
         </p>
         <p>
-          <span className="mx-2 text-xl font-bold">{data?.newsList.length}</span>件のニュース
+          <span className="text-xl font-bold">{data?.newsList.length}</span>件のニュース
         </p>
       </div>
+
+      <p className="p-4 text-sm rounded border">
+        TODO:
+        拡張機能でDOM経由でoViceのチャットを拾い、このAPIに投げて複製、表示する。しまぶーさんのみリクエストできるようにする？API側でチャットのリクエストは拡張機能からしか受け付けないようにする
+      </p>
 
       <p className="p-4 text-sm rounded border">
         明日シェア予定のニュースの件数を表示
