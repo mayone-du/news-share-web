@@ -80,7 +80,7 @@ export const NewsList: VFC<Props> = (props) => {
               fields: {
                 newsList: (existingNewsListRefs: Reference[], { readField }) => {
                   return existingNewsListRefs.filter(
-                    (newsListRef) => readField("nodeId", newsListRef) !== nodeId, // deleteは削除が成功したかどうかしか返さないので、削除時に使用したIDをもとにキャッシュから削除
+                    (newsListRef) => readField("nodeId", newsListRef) !== data.deleteNews?.nodeId,
                   );
                 },
               },

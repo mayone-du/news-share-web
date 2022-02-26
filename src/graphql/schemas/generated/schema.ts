@@ -45,7 +45,7 @@ export type Mutation = {
   createLike?: Maybe<Like>;
   createNews?: Maybe<News>;
   createSlackNotification?: Maybe<SlackNotification>;
-  deleteNews?: Maybe<Scalars['Boolean']>;
+  deleteNews?: Maybe<News>;
   postponeNewsList?: Maybe<Array<Maybe<News>>>;
   toggleLike?: Maybe<Like>;
   updateLike?: Maybe<Like>;
@@ -315,7 +315,7 @@ export type DeleteNewsMutationVariables = Exact<{
 }>;
 
 
-export type DeleteNewsMutation = { __typename?: 'Mutation', deleteNews?: boolean | null };
+export type DeleteNewsMutation = { __typename?: 'Mutation', deleteNews?: { __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl?: string | null, isViewed: boolean, isImportant: boolean, createdAt: string, updatedAt: string, sharedAt: string } | null };
 
 export type PostponeNewsListMutationVariables = Exact<{
   input: PostponeNewsListInput;
@@ -526,9 +526,11 @@ export type CreateNewsMutationResult = Apollo.MutationResult<CreateNewsMutation>
 export type CreateNewsMutationOptions = Apollo.BaseMutationOptions<CreateNewsMutation, CreateNewsMutationVariables>;
 export const DeleteNewsDocument = gql`
     mutation DeleteNews($input: DeleteNewsInput!) {
-  deleteNews(input: $input)
+  deleteNews(input: $input) {
+    ...NewsFragment
+  }
 }
-    `;
+    ${NewsFragmentFragmentDoc}`;
 export type DeleteNewsMutationFn = Apollo.MutationFunction<DeleteNewsMutation, DeleteNewsMutationVariables>;
 
 /**
