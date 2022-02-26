@@ -18,28 +18,21 @@ export const SidebarRight: VFC = () => {
   return (
     <aside className="flex flex-col gap-4">
       <div className="p-4 rounded border">
-        <p className="font-bold text-sm">{dayjs().format("MM/DD（ddd）")}</p>
-        <p className="font-bold text-3xl">{dayjs().format("HH : mm")}</p>
-        {/* <h3>{isStartedNewsShare(dayjs()) ? "ニュースシェア中" : "ニュースを共有してみよう"}</h3> */}
+        <p className="text-sm font-bold">{dayjs().format("MM/DD（ddd）")}</p>
+        <p
+          className={`font-bold text-3xl ${isStartedNewsShare(dayjs()) ? "text-emerald-400" : ""}`}
+        >
+          {dayjs().format("HH : mm")}
+        </p>
+        <p>
+          <span className="mx-2 text-xl font-bold">{data?.newsList.length}</span>件のニュース
+        </p>
       </div>
 
-      <h3 className="p-4 text-lg rounded border">
-        {error && "エラーが発生しました"}
-        {loading ? (
-          "読み込み中..."
-        ) : data?.newsList.length ? (
-          <div>
-            今日のニュース<span className="mx-2 text-xl font-bold">{data.newsList.length}</span>件
-          </div>
-        ) : (
-          "ニュースはまだありません"
-        )}
-
-        <p className="text-sm">
-          明日シェア予定のニュースの件数を表示
-          アーカイブへのリンクも設置するのと、アーカイブはクエリパラメーターをつける
-        </p>
-      </h3>
+      <p className="p-4 text-sm rounded border">
+        明日シェア予定のニュースの件数を表示
+        アーカイブへのリンクも設置するのと、アーカイブはクエリパラメーターをつける
+      </p>
 
       <div className="p-4 rounded border">延期済みのニュースを見れるようにする</div>
 

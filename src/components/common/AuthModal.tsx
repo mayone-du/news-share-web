@@ -52,7 +52,7 @@ export const AuthModal: VFC = () => {
                   onClick={handleClickAuth}
                 >
                   <img src="/images/Slack_Mark.svg" className="block w-10 h-10" />
-                  <span className="ml-1 mr-4 font-bold">SignIn with Slack</span>
+                  <span className="mr-4 ml-1 font-bold">SignIn with Slack</span>
                 </button>
               </div>
 

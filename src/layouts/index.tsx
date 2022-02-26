@@ -40,7 +40,7 @@ export const Layout = (page: NextPage) => {
       <AuthModal />
       <CreateNewsModal />
       <Header />
-      <div className="grid lg:grid-cols-4 grid-cols-8 lg:gap-8 gap-4 lg:px-44 px-10 pt-8 mx-auto max-w-[1680px]">
+      <div className="grid grid-cols-8 gap-4 px-10 pt-8 mx-auto lg:grid-cols-4 lg:gap-8 lg:px-44 max-w-[1680px]">
         <div className="col-span-1">
           <SidebarLeft />
         </div>

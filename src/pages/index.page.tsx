@@ -11,7 +11,7 @@ import { hyphenFormat } from "src/utils";
 const IndexPage: CustomNextPage = () => {
   const newsListQueryResult = useNewsListQuery({
     variables: { input: { sharedAt: dayjs().format(hyphenFormat) } },
-    pollInterval: 1000 * 30, // mill secondなのでこの場合は30秒ごとにポーリング
+    pollInterval: 1000 * 30, // milli secondなのでこの場合は30秒ごとにポーリング
   });
   return (
     <>

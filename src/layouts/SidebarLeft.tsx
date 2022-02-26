@@ -22,9 +22,9 @@ export const SidebarLeft: VFC = () => {
                 }`}
               >
                 <Link href={menu.href}>
-                  <a className="flex items-center lg:py-2 py-1 lg:px-4 px-2 text-gray-900">
-                    <menu.Icon className="block lg:mr-2 w-6 h-6 text-gray-500" />
-                    <span className="lg:inline hidden">{menu.label}</span>
+                  <a className="flex items-center py-1 px-2 text-gray-900 lg:py-2 lg:px-4">
+                    <menu.Icon className="block w-6 h-6 text-gray-500 lg:mr-2" />
+                    <span className="hidden lg:inline">{menu.label}</span>
                   </a>
                 </Link>
               </li>

@@ -31,13 +31,13 @@ export const getStaticProps: GetStaticProps = async (context) => {
     query: UserDocument,
     variables: { input: { oauthUserId: context.params?.oauthUserId?.toString() ?? "" } },
   }); // IDからUser情報を取得
-  return { props: data };
+  return { props: data, revalidate: 1000 * 60 * 60 * 12 }; // 半日ごと
 };
 
 const UserDetailPage: CustomNextPage<UserQuery> = (props) => {
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-4">{props.user?.displayName}</h1>
+      <h1 className="mb-4 text-2xl font-bold">{props.user?.displayName}</h1>
       <ul>
         {props.user?.likes.map((like) => (
           <li key={like.id.toString()}>{like.news.title}</li>

@@ -5,8 +5,8 @@ import { FOOTER_MENUS } from "src/constants";
 
 export const Footer: VFC = memo(() => {
   return (
-    <footer className="mt-12">
-      <nav className="px-64 bg-gray-200">
+    <footer className="mt-20">
+      <nav className="px-64 bg-gray-100">
         <ul className="flex">
           {FOOTER_MENUS.map((menu) => {
             return (
