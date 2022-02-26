@@ -3,7 +3,6 @@ import Link from "next/link";
 import { SIDEBAR_LEFT_MENUS } from "src/constants/menus";
 import { useRouter } from "next/router";
 import { useCreateNewsModal } from "src/hooks/useCreateNewsModal";
-import { useCreateSlackNotificationMutation } from "src/graphql/schemas/generated/schema";
 import { PostSlackButton } from "src/components/common/PostSlackButton";
 
 export const SidebarLeft: VFC = () => {
@@ -23,9 +22,9 @@ export const SidebarLeft: VFC = () => {
                 }`}
               >
                 <Link href={menu.href}>
-                  <a className="flex items-center py-2 px-4 text-gray-900">
-                    <menu.Icon className="block mr-2 w-6 h-6 text-gray-500" />
-                    {menu.label}
+                  <a className="flex items-center lg:py-2 py-1 lg:px-4 px-2 text-gray-900">
+                    <menu.Icon className="block lg:mr-2 w-6 h-6 text-gray-500" />
+                    <span className="lg:inline hidden">{menu.label}</span>
                   </a>
                 </Link>
               </li>

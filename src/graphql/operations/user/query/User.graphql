@@ -1,5 +1,11 @@
 query User($input: UserInput!) {
   user(input: $input) {
     ...UserFragment
+    likes {
+      ...LikeFragment
+    }
+    newsList {
+      ...NewsFragment
+    }
   }
 }

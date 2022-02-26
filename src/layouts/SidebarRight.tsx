@@ -1,12 +1,19 @@
 import dayjs from "dayjs";
-import type { VFC } from "react";
+import { useEffect, useState, VFC } from "react";
 import { useNewsListQuery } from "src/graphql/schemas/generated/schema";
 import { hyphenFormat, isStartedNewsShare } from "src/utils";
 
+// TODO: コンポーネント分割
 export const SidebarRight: VFC = () => {
   const { data, loading, error } = useNewsListQuery({
     variables: { input: { sharedAt: dayjs().format(hyphenFormat) } },
   });
+  const [state, setState] = useState(false);
+
+  // 1分毎に再レンダリングさせる
+  useEffect(() => {
+    setTimeout(() => setState(!state), 1000 * 60); // 60秒
+  }, [state]);
 
   return (
     <aside className="flex flex-col gap-4">

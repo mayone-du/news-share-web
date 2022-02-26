@@ -1,6 +1,7 @@
 import type { CustomNextPage, GetStaticPaths, GetStaticProps } from "next";
 import { initializeApollo } from "src/graphql/apollo/client";
 import {
+  UserDocument,
   UserQuery,
   UserQueryVariables,
   UsersDocument,
@@ -9,6 +10,7 @@ import {
 } from "src/graphql/schemas/generated/schema";
 import { Layout } from "src/layouts";
 
+// TODO: 型をもう少し良い感じにする
 export const getStaticPaths: GetStaticPaths = async (context) => {
   const apolloClient = initializeApollo();
   const { data } = await apolloClient.query<UsersQuery, UsersQueryVariables>({
@@ -25,17 +27,24 @@ export const getStaticPaths: GetStaticPaths = async (context) => {
 
 export const getStaticProps: GetStaticProps = async (context) => {
   const apolloClient = initializeApollo();
-  // const { oauthUserId } = context.params;
-  console.log(context.params);
   const { data } = await apolloClient.query<UserQuery, UserQueryVariables>({
-    query: UsersDocument,
+    query: UserDocument,
+    variables: { input: { oauthUserId: context.params?.oauthUserId?.toString() ?? "" } },
   }); // IDからUser情報を取得
   return { props: data };
 };
 
 const UserDetailPage: CustomNextPage<UserQuery> = (props) => {
-  console.log(props);
-  return <div>{props.user?.displayName}</div>;
+  return (
+    <div>
+      <h1 className="text-2xl font-bold mb-4">{props.user?.displayName}</h1>
+      <ul>
+        {props.user?.likes.map((like) => (
+          <li key={like.id.toString()}>{like.news.title}</li>
+        ))}
+      </ul>
+    </div>
+  );
 };
 
 UserDetailPage.getLayout = Layout;
