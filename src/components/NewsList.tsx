@@ -14,7 +14,7 @@ import { AiOutlineClockCircle } from "react-icons/ai";
 import { Popover } from "@headlessui/react";
 import { HiOutlinePencil } from "react-icons/hi";
 import { RiDeleteBinLine } from "react-icons/ri";
-import { BsCalendarCheck, BsCheck, BsCheck2 } from "react-icons/bs";
+import { BsCalendar, BsCheck, BsCheck2 } from "react-icons/bs";
 import { IoMdReturnLeft } from "react-icons/io";
 import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
@@ -22,6 +22,7 @@ import { CgSpinner } from "react-icons/cg";
 import { FiHeart } from "react-icons/fi";
 import { FaHeart } from "react-icons/fa";
 import dayjs from "dayjs";
+import { useRouter } from "next/router";
 
 type FieldValues = {
   title: string;
@@ -33,6 +34,7 @@ type Props = {
 };
 
 export const NewsList: VFC<Props> = (props) => {
+  const { asPath } = useRouter();
   const {
     newsListQueryResult: { data: NewsListData, loading, error, refetch },
   } = props;
@@ -107,11 +109,12 @@ export const NewsList: VFC<Props> = (props) => {
       if (!news.nodeId) return; // TODO: throw する？
       if (isEditingNewsId(news.nodeId)) return e.preventDefault(); // 編集中の場合はリンクの機能を持たせない
       if (
-        news.isViewed ||
-        !isStartedNewsShare(dayjs()) ||
-        myUserInfoData?.myUserInfo?.role === Role.User
+        (news.isViewed ||
+          !isStartedNewsShare(dayjs()) ||
+          myUserInfoData?.myUserInfo?.role === Role.User,
+        asPath !== "/")
       )
-        return; // すでに閲覧済み、ニュースシェアが始まっていない、一般ユーザーの場合は何もしない
+        return; // すでに閲覧済み、ニュースシェアが始まっていない、一般ユーザー、トップページ以外の場合は何もしない
       try {
         await updateNews({ variables: { input: { nodeId: news.nodeId, isViewed: true } } });
       } catch (e) {
@@ -187,7 +190,7 @@ export const NewsList: VFC<Props> = (props) => {
                                 onClick={handlePostponeNews(news.nodeId, close)}
                                 disabled={isUpdateNewsLoading || isDeleteNewsLoading}
                               >
-                                <BsCalendarCheck className="mr-4 w-5 h-5 text-gray-500" />
+                                <BsCalendar className="mr-4 w-5 h-5 text-gray-500" />
                                 明日に延期する
                               </button>
                             </li>

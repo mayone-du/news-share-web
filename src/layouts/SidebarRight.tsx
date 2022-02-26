@@ -26,6 +26,11 @@ export const SidebarRight: VFC = () => {
         ) : (
           "ニュースはまだありません"
         )}
+
+        <p className="text-sm">
+          明日シェア予定のニュースの件数を表示
+          アーカイブへのリンクも設置するのと、アーカイブはクエリパラメーターをつける
+        </p>
       </h3>
 
       <div className="p-4 rounded border">延期済みのニュースを見れるようにする</div>

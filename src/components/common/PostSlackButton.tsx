@@ -137,7 +137,7 @@ export const PostSlackButton: VFC = () => {
                       );
                     })} */}
 
-                    <div className="my-6">
+                    <div className="mt-6">
                       <button
                         type="button"
                         className="flex items-center py-2 px-6 mx-auto bg-gray-50 rounded border border-gray-200 ring-blue-200 shadow transition-all outline-none hover:bg-gray-100 hover:shadow-md focus-visible:ring-2 focus-visible:ring-blue-300 active:ring-2"
@@ -157,15 +157,3 @@ export const PostSlackButton: VFC = () => {
     </div>
   );
 };
-
-// {myUserInfoData?.myUserInfo?.role === Role.Admin ||
-// myUserInfoData?.myUserInfo?.role === Role.Developer ? (
-//   <button
-//     className="flex items-center py-2 px-4 mt-4 rounded border shadow-sm transition-all hover:bg-gray-50 hover:shadow disabled:bg-gray-300"
-//     onClick={handleCreateSlackNotification}
-//     disabled={loading || slackNotificationData?.slackNotification?.isSent}
-//   >
-//     Slackへ送信する
-//     {loading && <CgSpinner className="ml-2 animate-spin" />}
-//   </button>
-// ) : null}
