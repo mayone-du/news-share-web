@@ -72,7 +72,7 @@ export const Header: VFC = () => {
                             <li>
                               {/* ↓押した時にメニューを閉じたいためボタンにする */}
                               <Popover.Button className="block w-full text-left">
-                                <Link href={`/users/`}>
+                                <Link href={`/user/${myUserInfoData?.myUserInfo?.oauthUserId}`}>
                                   <a className="block py-2 px-4 transition-colors duration-300 hover:bg-gray-200">
                                     <span className="block">{session?.user?.name}</span>
                                     <span className="block text-xs text-gray-400">

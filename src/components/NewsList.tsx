@@ -23,6 +23,7 @@ import { FiHeart } from "react-icons/fi";
 import { FaHeart } from "react-icons/fa";
 import dayjs from "dayjs";
 import { useRouter } from "next/router";
+import { InvalidIdError } from "src/errors";
 
 type FieldValues = {
   title: string;
@@ -65,7 +66,7 @@ export const NewsList: VFC<Props> = (props) => {
   const handleClickNewsEditCancel = () => setEditingNewsNodeId("");
   const handleDeleteNews =
     (nodeId: string | null | undefined, handleClosePopover: VoidFunction) => async () => {
-      if (!nodeId) return; // TODO: throw する？
+      if (!nodeId) throw InvalidIdError();
       const toastId = toast.loading("ニュースを削除しています...");
       try {
         handleClosePopover();
@@ -90,7 +91,7 @@ export const NewsList: VFC<Props> = (props) => {
   };
   const handlePostponeNews =
     (nodeId: string | null | undefined, handleClosePopover: VoidFunction) => async () => {
-      if (!nodeId) return; // TODO: throw する？
+      if (!nodeId) throw InvalidIdError();
       const toastId = toast.loading("ニュースを延期しています...");
       try {
         handleClosePopover();
@@ -106,7 +107,7 @@ export const NewsList: VFC<Props> = (props) => {
     };
   const handleUpdateViewedNews =
     (news: Pick<News, "nodeId" | "isViewed">) => async (e: SyntheticEvent) => {
-      if (!news.nodeId) return; // TODO: throw する？
+      if (!news.nodeId) throw InvalidIdError();
       if (isEditingNewsId(news.nodeId)) return e.preventDefault(); // 編集中の場合はリンクの機能を持たせない
       if (
         (news.isViewed ||
@@ -123,7 +124,7 @@ export const NewsList: VFC<Props> = (props) => {
     };
   const handleToggleViewedNews =
     (news: Pick<News, "nodeId" | "isViewed">, handleClosePopover: VoidFunction) => async () => {
-      if (!news.nodeId) return; // TODO: throw する？
+      if (!news.nodeId) throw InvalidIdError();
       try {
         handleClosePopover();
         await updateNews({
@@ -273,23 +274,23 @@ export const NewsList: VFC<Props> = (props) => {
                   <h3 className="mb-2 text-lg font-bold line-clamp-1">{news.title || news.url}</h3>
                 )}
 
-                <div className="flex justify-between">
+                <div className="grid grid-cols-6 gap-6">
                   {isEditingNewsId(news.nodeId) ? (
                     <textarea
-                      className="mr-4 mb-2 w-full text-sm text-gray-400 outline-none resize-none"
+                      className="col-span-5 mb-2 text-sm text-gray-400 outline-none resize-none"
                       placeholder="ニュースの説明"
                       {...register("description")}
                     />
                   ) : (
-                    <p className="mr-4 mb-2 text-sm text-gray-400 line-clamp-2">
-                      {news.description}
-                    </p>
+                    <div className="col-span-5">
+                      <p className="mb-2 text-sm text-gray-400 line-clamp-3">{news.description}</p>
+                    </div>
                   )}
                   {news.imageUrl ? (
                     <img
                       src={news.imageUrl}
                       alt={news.title || news.description || news.url}
-                      className="block object-cover w-16 h-16 rounded-md border border-gray-100"
+                      className="block object-cover col-span-1 rounded-md border border-gray-100 aspect-square"
                       loading="lazy"
                     />
                   ) : null}

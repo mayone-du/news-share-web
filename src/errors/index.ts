@@ -1,2 +1,3 @@
-// TODO: エラー・メッセージ等を設定する
-export {};
+export const InvalidIdError = () => {
+  return Error("Invalid ID Error");
+};

@@ -26,17 +26,19 @@ export const PostSlackButton: VFC = () => {
   });
   const { data: slackNotificationData, loading: isSlackNotificationLoading } =
     useSlackNotificationQuery();
-  const [createSlackNotification, { loading: isCreateSlackNotificationLoading }] =
-    useCreateSlackNotificationMutation();
-  const [postponeNewsList, { loading: isPostponeNewsListLoading }] = usePostponeNewsListMutation();
+  const [
+    createSlackNotification,
+    { error: createSalckNotificationError, loading: isCreateSlackNotificationLoading },
+  ] = useCreateSlackNotificationMutation();
+  const [postponeNewsList, { error: postponeNewsListError, loading: isPostponeNewsListLoading }] =
+    usePostponeNewsListMutation();
   const [isOpenDialog, setIsOpenDialog] = useState(false);
   const handleCloseDialog = useCallback(() => setIsOpenDialog(false), []);
   const handleOpenDialog = useCallback(() => setIsOpenDialog(true), []);
   const handleEndNewsShare = async () => {
-    const willPostponeNewsIds =
-      newsListData?.newsList.map((news) => news.isViewed || news.nodeId).filter<string>(Boolean) ??
-      [];
-    console.log(willPostponeNewsIds);
+    const willPostponeNewsIds = (newsListData?.newsList
+      .map((news) => (news.isViewed ? news.nodeId : null))
+      .filter(Boolean) ?? []) as string[]; // filterでfalsyな値を削除しているため
     const toastId = toast.loading(
       willPostponeNewsIds?.length
         ? "Slackへ送信とニュースの延期をしています..."
@@ -53,7 +55,9 @@ export const PostSlackButton: VFC = () => {
         toast.success("ニュースの延期とSlackへ送信が完了しました", { id: toastId });
       } catch (e) {
         console.error(e);
-        toast.error("Slack通知とニュースの延期に失敗しました", { id: toastId });
+        if (createSalckNotificationError)
+          return toast.error("Slack通知とニュースの延期に失敗しました", { id: toastId });
+        toast.error("ニュースの延期に失敗しました", { id: toastId });
       }
     } else {
       try {
@@ -76,7 +80,7 @@ export const PostSlackButton: VFC = () => {
             onClick={handleOpenDialog}
           >
             {slackNotificationData?.slackNotification?.isSent && (
-              <BsCheck2 className="text-emerald-400 w-4 h-4 mr-2" />
+              <BsCheck2 className="mr-2 w-4 h-4 font-bold text-emerald-400" />
             )}
             Slackへ送信する
           </button>
@@ -116,11 +120,11 @@ export const PostSlackButton: VFC = () => {
                       今日のニュースシェアを終了する
                     </Dialog.Title>
 
-                    <ul className="px-4 flex flex-col list-disc mt-4 gap-1 text-gray-600">
+                    <ul className="flex flex-col gap-1 px-4 mt-4 list-disc text-gray-600">
                       <li>既にシェアしたニュースをSlackへ送信</li>
                       <li>シェアしていないニュースを明日へ延期</li>
                     </ul>
-                    <p className="text-gray-500 text-sm mt-2">以上の2つを行います</p>
+                    <p className="mt-2 text-sm text-gray-500">以上の2つを行います</p>
 
                     {slackNotificationData?.slackNotification?.isSent && (
                       <p className="mt-6 text-sm text-red-500">
@@ -131,7 +135,7 @@ export const PostSlackButton: VFC = () => {
                     {/* TODO: プレビュー表示？ */}
                     {/* {newsListData?.newsList.map((news) => {
                       return (
-                        <div key={news.nodeId} className="text-gray-600 text-sm line-clamp-1">
+                        <div key={news.nodeId} className="text-sm text-gray-600 line-clamp-1">
                           {news.title}
                         </div>
                       );
@@ -142,7 +146,11 @@ export const PostSlackButton: VFC = () => {
                         type="button"
                         className="flex items-center py-2 px-6 mx-auto bg-gray-50 rounded border border-gray-200 ring-blue-200 shadow transition-all outline-none hover:bg-gray-100 hover:shadow-md focus-visible:ring-2 focus-visible:ring-blue-300 active:ring-2"
                         onClick={handleEndNewsShare}
-                        disabled={isSlackNotificationLoading || isCreateSlackNotificationLoading}
+                        disabled={
+                          isSlackNotificationLoading ||
+                          isCreateSlackNotificationLoading ||
+                          isPostponeNewsListLoading
+                        }
                       >
                         実行する
                       </button>

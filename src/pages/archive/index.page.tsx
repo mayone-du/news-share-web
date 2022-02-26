@@ -24,7 +24,7 @@ const ArchiveIndexPage: CustomNextPage = () => {
       <NextSeo title={ROUTE_LABELS.ARCHIVE} />
       <input
         type="date"
-        className="block py-2 px-4 mb-4 w-full rounded border"
+        className="block py-2 px-4 mb-4 w-full rounded border border-gray-500 outline-none"
         onChange={handleChangeSearchDate}
         value={searchDate}
       />

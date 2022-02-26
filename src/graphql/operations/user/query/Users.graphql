@@ -1,0 +1,13 @@
+query Users($first: Int = 100) {
+  users(first: $first) {
+    edges {
+      node {
+        ...UserFragment
+      }
+      cursor
+    }
+    pageInfo {
+      ...PageInfoFragment
+    }
+  }
+}

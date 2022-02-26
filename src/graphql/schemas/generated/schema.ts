@@ -146,7 +146,7 @@ export type PageInfo = {
 
 export type PostponeNewsListInput = {
   nodeIds: Array<Scalars['ID']>;
-  sharedAt: Scalars['DateTime'];
+  sharedAt: Scalars['String'];
 };
 
 export type Query = {
@@ -159,6 +159,7 @@ export type Query = {
   slackNotification?: Maybe<SlackNotification>;
   test?: Maybe<Scalars['String']>;
   user?: Maybe<User>;
+  users?: Maybe<UserConnection>;
 };
 
 
@@ -191,7 +192,15 @@ export type QueryTestArgs = {
 
 
 export type QueryUserArgs = {
-  id?: InputMaybe<Scalars['BigInt']>;
+  input: UserInput;
+};
+
+
+export type QueryUsersArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
 };
 
 export enum Role {
@@ -256,9 +265,32 @@ export type User = {
   username: Scalars['String'];
 };
 
+export type UserConnection = {
+  __typename?: 'UserConnection';
+  /** https://facebook.github.io/relay/graphql/connections.htm#sec-Edge-Types */
+  edges?: Maybe<Array<Maybe<UserEdge>>>;
+  /** https://facebook.github.io/relay/graphql/connections.htm#sec-undefined.PageInfo */
+  pageInfo: PageInfo;
+  totalCount?: Maybe<Scalars['Int']>;
+};
+
+export type UserEdge = {
+  __typename?: 'UserEdge';
+  /** https://facebook.github.io/relay/graphql/connections.htm#sec-Cursor */
+  cursor: Scalars['String'];
+  /** https://facebook.github.io/relay/graphql/connections.htm#sec-Node */
+  node?: Maybe<User>;
+};
+
+export type UserInput = {
+  oauthUserId: Scalars['String'];
+};
+
 export type LikeFragmentFragment = { __typename?: 'Like', id: bigint, isLiked: boolean, createdAt: string, updatedAt: string, news: { __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl?: string | null, isViewed: boolean, isImportant: boolean, createdAt: string, updatedAt: string, sharedAt: string }, user: { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, photoUrl: string, role?: Role | null, status?: Status | null } };
 
 export type NewsFragmentFragment = { __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl?: string | null, isViewed: boolean, isImportant: boolean, createdAt: string, updatedAt: string, sharedAt: string };
+
+export type PageInfoFragmentFragment = { __typename?: 'PageInfo', hasPreviousPage: boolean, hasNextPage: boolean, startCursor?: string | null, endCursor?: string | null };
 
 export type SlackNotificationFragmentFragment = { __typename?: 'SlackNotification', id: bigint, isSent: boolean, createdAt: string, updatedAt: string };
 
@@ -347,6 +379,20 @@ export type MyUserInfoQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type MyUserInfoQuery = { __typename?: 'Query', myUserInfo?: { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, photoUrl: string, role?: Role | null, status?: Status | null } | null };
 
+export type UserQueryVariables = Exact<{
+  input: UserInput;
+}>;
+
+
+export type UserQuery = { __typename?: 'Query', user?: { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, photoUrl: string, role?: Role | null, status?: Status | null } | null };
+
+export type UsersQueryVariables = Exact<{
+  first?: InputMaybe<Scalars['Int']>;
+}>;
+
+
+export type UsersQuery = { __typename?: 'Query', users?: { __typename?: 'UserConnection', edges?: Array<{ __typename?: 'UserEdge', cursor: string, node?: { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, photoUrl: string, role?: Role | null, status?: Status | null } | null } | null> | null, pageInfo: { __typename?: 'PageInfo', hasPreviousPage: boolean, hasNextPage: boolean, startCursor?: string | null, endCursor?: string | null } } | null };
+
 export const NewsFragmentFragmentDoc = gql`
     fragment NewsFragment on News {
   id
@@ -388,6 +434,14 @@ export const LikeFragmentFragmentDoc = gql`
 }
     ${NewsFragmentFragmentDoc}
 ${UserFragmentFragmentDoc}`;
+export const PageInfoFragmentFragmentDoc = gql`
+    fragment PageInfoFragment on PageInfo {
+  hasPreviousPage
+  hasNextPage
+  startCursor
+  endCursor
+}
+    `;
 export const SlackNotificationFragmentFragmentDoc = gql`
     fragment SlackNotificationFragment on SlackNotification {
   id
@@ -861,3 +915,82 @@ export function useMyUserInfoLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
 export type MyUserInfoQueryHookResult = ReturnType<typeof useMyUserInfoQuery>;
 export type MyUserInfoLazyQueryHookResult = ReturnType<typeof useMyUserInfoLazyQuery>;
 export type MyUserInfoQueryResult = Apollo.QueryResult<MyUserInfoQuery, MyUserInfoQueryVariables>;
+export const UserDocument = gql`
+    query User($input: UserInput!) {
+  user(input: $input) {
+    ...UserFragment
+  }
+}
+    ${UserFragmentFragmentDoc}`;
+
+/**
+ * __useUserQuery__
+ *
+ * To run a query within a React component, call `useUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUserQuery(baseOptions: Apollo.QueryHookOptions<UserQuery, UserQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserQuery, UserQueryVariables>(UserDocument, options);
+      }
+export function useUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserQuery, UserQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserQuery, UserQueryVariables>(UserDocument, options);
+        }
+export type UserQueryHookResult = ReturnType<typeof useUserQuery>;
+export type UserLazyQueryHookResult = ReturnType<typeof useUserLazyQuery>;
+export type UserQueryResult = Apollo.QueryResult<UserQuery, UserQueryVariables>;
+export const UsersDocument = gql`
+    query Users($first: Int = 100) {
+  users(first: $first) {
+    edges {
+      node {
+        ...UserFragment
+      }
+      cursor
+    }
+    pageInfo {
+      ...PageInfoFragment
+    }
+  }
+}
+    ${UserFragmentFragmentDoc}
+${PageInfoFragmentFragmentDoc}`;
+
+/**
+ * __useUsersQuery__
+ *
+ * To run a query within a React component, call `useUsersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUsersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUsersQuery({
+ *   variables: {
+ *      first: // value for 'first'
+ *   },
+ * });
+ */
+export function useUsersQuery(baseOptions?: Apollo.QueryHookOptions<UsersQuery, UsersQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UsersQuery, UsersQueryVariables>(UsersDocument, options);
+      }
+export function useUsersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UsersQuery, UsersQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UsersQuery, UsersQueryVariables>(UsersDocument, options);
+        }
+export type UsersQueryHookResult = ReturnType<typeof useUsersQuery>;
+export type UsersLazyQueryHookResult = ReturnType<typeof useUsersLazyQuery>;
+export type UsersQueryResult = Apollo.QueryResult<UsersQuery, UsersQueryVariables>;
