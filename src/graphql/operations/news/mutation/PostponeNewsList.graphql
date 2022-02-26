@@ -1,5 +1,11 @@
 mutation PostponeNewsList($input: PostponeNewsListInput!) {
   postponeNewsList(input: $input) {
     ...NewsFragment
+    likes {
+      ...LikeFragment
+    }
+    user {
+      ...UserFragment
+    }
   }
 }

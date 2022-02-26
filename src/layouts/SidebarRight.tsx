@@ -18,8 +18,9 @@ export const SidebarRight: VFC = () => {
   return (
     <aside className="flex flex-col gap-4">
       <div className="p-4 rounded border">
-        <h3>{isStartedNewsShare(dayjs()) ? "ニュースシェア中" : "ニュースを共有してみよう"}</h3>
-        <p>{dayjs().format("HH:mm")}</p>
+        <p className="font-bold text-sm">{dayjs().format("MM/DD（ddd）")}</p>
+        <p className="font-bold text-3xl">{dayjs().format("HH : mm")}</p>
+        {/* <h3>{isStartedNewsShare(dayjs()) ? "ニュースシェア中" : "ニュースを共有してみよう"}</h3> */}
       </div>
 
       <h3 className="p-4 text-lg rounded border">

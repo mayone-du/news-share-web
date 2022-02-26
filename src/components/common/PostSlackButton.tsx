@@ -9,12 +9,10 @@ import {
   useNewsListQuery,
   usePostponeNewsListMutation,
 } from "src/graphql/schemas/generated/schema";
-import { CgSpinner } from "react-icons/cg";
 import toast from "react-hot-toast";
 import { hyphenFormat } from "src/utils";
 import dayjs from "dayjs";
 import { useRouter } from "next/router";
-import { BsCheck2 } from "react-icons/bs";
 
 export const PostSlackButton: VFC = () => {
   const { asPath } = useRouter();
@@ -23,6 +21,7 @@ export const PostSlackButton: VFC = () => {
   const { data: newsListData } = useNewsListQuery({
     variables: { input: { sharedAt: dayjs().format(hyphenFormat) } },
     fetchPolicy: "cache-only",
+    nextFetchPolicy: "network-only",
   });
   const { data: slackNotificationData, loading: isSlackNotificationLoading } =
     useSlackNotificationQuery();
@@ -36,20 +35,25 @@ export const PostSlackButton: VFC = () => {
   const handleCloseDialog = useCallback(() => setIsOpenDialog(false), []);
   const handleOpenDialog = useCallback(() => setIsOpenDialog(true), []);
   const handleEndNewsShare = async () => {
+    // シェアしていないもの(見ていないもの)は延期する
     const willPostponeNewsIds = (newsListData?.newsList
-      .map((news) => (news.isViewed ? news.nodeId : null))
+      .map((news) => (news.isViewed ? null : news.nodeId))
       .filter(Boolean) ?? []) as string[]; // filterでfalsyな値を削除しているため
     const toastId = toast.loading(
       willPostponeNewsIds?.length
         ? "Slackへ送信とニュースの延期をしています..."
         : "Slackへ送信しています...",
     );
+    // 延期するニュースがある場合
     if (willPostponeNewsIds?.length) {
       try {
         await createSlackNotification();
         await postponeNewsList({
           variables: {
-            input: { nodeIds: willPostponeNewsIds, sharedAt: dayjs().format(hyphenFormat) },
+            input: {
+              nodeIds: willPostponeNewsIds,
+              sharedAt: dayjs().add(1, "day").format(hyphenFormat),
+            },
           },
         });
         toast.success("ニュースの延期とSlackへ送信が完了しました", { id: toastId });
@@ -67,6 +71,7 @@ export const PostSlackButton: VFC = () => {
         toast.error("Slack通知の送信に失敗しました", { id: toastId });
       }
     }
+    handleCloseDialog();
   };
 
   if (!myUserInfoData?.myUserInfo) return null;
@@ -79,9 +84,6 @@ export const PostSlackButton: VFC = () => {
             className="flex items-center py-2 px-4 mt-4 rounded border shadow-sm transition-all hover:bg-gray-50 hover:shadow disabled:bg-gray-300"
             onClick={handleOpenDialog}
           >
-            {slackNotificationData?.slackNotification?.isSent && (
-              <BsCheck2 className="mr-2 w-4 h-4 font-bold text-emerald-400" />
-            )}
             Slackへ送信する
           </button>
           <Transition appear show={isOpenDialog} as="div">

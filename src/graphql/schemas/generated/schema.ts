@@ -315,14 +315,14 @@ export type DeleteNewsMutationVariables = Exact<{
 }>;
 
 
-export type DeleteNewsMutation = { __typename?: 'Mutation', deleteNews?: { __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl?: string | null, isViewed: boolean, isImportant: boolean, createdAt: string, updatedAt: string, sharedAt: string } | null };
+export type DeleteNewsMutation = { __typename?: 'Mutation', deleteNews?: { __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl?: string | null, isViewed: boolean, isImportant: boolean, createdAt: string, updatedAt: string, sharedAt: string, likes: Array<{ __typename?: 'Like', id: bigint, isLiked: boolean, createdAt: string, updatedAt: string, news: { __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl?: string | null, isViewed: boolean, isImportant: boolean, createdAt: string, updatedAt: string, sharedAt: string }, user: { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, photoUrl: string, role?: Role | null, status?: Status | null } }>, user: { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, photoUrl: string, role?: Role | null, status?: Status | null } } | null };
 
 export type PostponeNewsListMutationVariables = Exact<{
   input: PostponeNewsListInput;
 }>;
 
 
-export type PostponeNewsListMutation = { __typename?: 'Mutation', postponeNewsList?: Array<{ __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl?: string | null, isViewed: boolean, isImportant: boolean, createdAt: string, updatedAt: string, sharedAt: string } | null> | null };
+export type PostponeNewsListMutation = { __typename?: 'Mutation', postponeNewsList?: Array<{ __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl?: string | null, isViewed: boolean, isImportant: boolean, createdAt: string, updatedAt: string, sharedAt: string, likes: Array<{ __typename?: 'Like', id: bigint, isLiked: boolean, createdAt: string, updatedAt: string, news: { __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl?: string | null, isViewed: boolean, isImportant: boolean, createdAt: string, updatedAt: string, sharedAt: string }, user: { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, photoUrl: string, role?: Role | null, status?: Status | null } }>, user: { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, photoUrl: string, role?: Role | null, status?: Status | null } } | null> | null };
 
 export type UpdateNewsMutationVariables = Exact<{
   input: UpdateNewsInput;
@@ -528,9 +528,17 @@ export const DeleteNewsDocument = gql`
     mutation DeleteNews($input: DeleteNewsInput!) {
   deleteNews(input: $input) {
     ...NewsFragment
+    likes {
+      ...LikeFragment
+    }
+    user {
+      ...UserFragment
+    }
   }
 }
-    ${NewsFragmentFragmentDoc}`;
+    ${NewsFragmentFragmentDoc}
+${LikeFragmentFragmentDoc}
+${UserFragmentFragmentDoc}`;
 export type DeleteNewsMutationFn = Apollo.MutationFunction<DeleteNewsMutation, DeleteNewsMutationVariables>;
 
 /**
@@ -561,9 +569,17 @@ export const PostponeNewsListDocument = gql`
     mutation PostponeNewsList($input: PostponeNewsListInput!) {
   postponeNewsList(input: $input) {
     ...NewsFragment
+    likes {
+      ...LikeFragment
+    }
+    user {
+      ...UserFragment
+    }
   }
 }
-    ${NewsFragmentFragmentDoc}`;
+    ${NewsFragmentFragmentDoc}
+${LikeFragmentFragmentDoc}
+${UserFragmentFragmentDoc}`;
 export type PostponeNewsListMutationFn = Apollo.MutationFunction<PostponeNewsListMutation, PostponeNewsListMutationVariables>;
 
 /**

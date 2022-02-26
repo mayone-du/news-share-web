@@ -1,4 +1,6 @@
 import dayjs, { Dayjs } from "dayjs";
+import "dayjs/locale/ja";
+dayjs.locale("ja");
 
 // TODO: constantsでもいいな
 export const hyphenFormat = "YYYY-MM-DD";

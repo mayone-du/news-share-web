@@ -24,6 +24,7 @@ import { FaHeart } from "react-icons/fa";
 import dayjs from "dayjs";
 import { useRouter } from "next/router";
 import { InvalidIdError } from "src/errors";
+import { Tooltip } from "src/components/common/Tooltip";
 
 type FieldValues = {
   title: string;
@@ -110,10 +111,10 @@ export const NewsList: VFC<Props> = (props) => {
       if (!news.nodeId) throw InvalidIdError();
       if (isEditingNewsId(news.nodeId)) return e.preventDefault(); // 編集中の場合はリンクの機能を持たせない
       if (
-        (news.isViewed ||
-          !isStartedNewsShare(dayjs()) ||
-          myUserInfoData?.myUserInfo?.role === Role.User,
-        asPath !== "/")
+        news.isViewed ||
+        !isStartedNewsShare(dayjs()) ||
+        myUserInfoData?.myUserInfo?.role === Role.User ||
+        asPath !== "/"
       )
         return; // すでに閲覧済み、ニュースシェアが始まっていない、一般ユーザー、トップページ以外の場合は何もしない
       try {
@@ -240,16 +241,17 @@ export const NewsList: VFC<Props> = (props) => {
 
             {/* TODO: newsの型 最悪 as を使う */}
             {/* TODO: いいねしたときのanimation */}
-            <button
-              onClick={handleToggleLike(news.id, !isLikedNews(news))}
-              className="block absolute bottom-3 left-60 text-xs text-gray-400 outline-none"
-            >
-              {isLikedNews(news) ? (
-                <FaHeart className="w-6 h-6 text-red-500" />
-              ) : (
-                <FiHeart className="w-6 h-6" />
-              )}
-            </button>
+            <div className="absolute bottom-3 left-60 text-xs text-gray-400 outline-none">
+              <Tooltip tooltipText="いいねをすると後でマイページから見返すことができます">
+                <button className="block" onClick={handleToggleLike(news.id, !isLikedNews(news))}>
+                  {isLikedNews(news) ? (
+                    <FaHeart className="w-6 h-6 text-red-500" />
+                  ) : (
+                    <FiHeart className="w-6 h-6" />
+                  )}
+                </button>
+              </Tooltip>
+            </div>
 
             {news.isViewed && <BsCheck className="absolute left-1 top-3 w-6 h-6 text-green-400" />}
 
