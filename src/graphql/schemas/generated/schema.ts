@@ -158,7 +158,6 @@ export type Query = {
   newsList: Array<News>;
   searchNewsList: Array<News>;
   slackNotification?: Maybe<SlackNotification>;
-  test?: Maybe<Scalars['String']>;
   user?: Maybe<User>;
   users?: Maybe<UserConnection>;
 };
@@ -184,11 +183,6 @@ export type QueryNewsListArgs = {
 
 export type QuerySearchNewsListArgs = {
   input: SearchNewsListInput;
-};
-
-
-export type QueryTestArgs = {
-  customArg?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -355,13 +349,6 @@ export type SlackNotificationQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type SlackNotificationQuery = { __typename?: 'Query', slackNotification?: { __typename?: 'SlackNotification', id: bigint, isSent: boolean, createdAt: string, updatedAt: string } | null };
-
-export type TestQueryVariables = Exact<{
-  customArg: Scalars['String'];
-}>;
-
-
-export type TestQuery = { __typename?: 'Query', test?: string | null };
 
 export type AuthUserMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -793,39 +780,6 @@ export function useSlackNotificationLazyQuery(baseOptions?: Apollo.LazyQueryHook
 export type SlackNotificationQueryHookResult = ReturnType<typeof useSlackNotificationQuery>;
 export type SlackNotificationLazyQueryHookResult = ReturnType<typeof useSlackNotificationLazyQuery>;
 export type SlackNotificationQueryResult = Apollo.QueryResult<SlackNotificationQuery, SlackNotificationQueryVariables>;
-export const TestDocument = gql`
-    query Test($customArg: String!) {
-  test(customArg: $customArg)
-}
-    `;
-
-/**
- * __useTestQuery__
- *
- * To run a query within a React component, call `useTestQuery` and pass it any options that fit your needs.
- * When your component renders, `useTestQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useTestQuery({
- *   variables: {
- *      customArg: // value for 'customArg'
- *   },
- * });
- */
-export function useTestQuery(baseOptions: Apollo.QueryHookOptions<TestQuery, TestQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<TestQuery, TestQueryVariables>(TestDocument, options);
-      }
-export function useTestLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TestQuery, TestQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<TestQuery, TestQueryVariables>(TestDocument, options);
-        }
-export type TestQueryHookResult = ReturnType<typeof useTestQuery>;
-export type TestLazyQueryHookResult = ReturnType<typeof useTestLazyQuery>;
-export type TestQueryResult = Apollo.QueryResult<TestQuery, TestQueryVariables>;
 export const AuthUserDocument = gql`
     mutation AuthUser {
   authUser {

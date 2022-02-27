@@ -319,27 +319,22 @@ export const NewsList: VFC<Props> = (props) => {
                 </div>
 
                 {/* urlとfavicon */}
-                <p className="flex mb-4 gap-2 items-center">
+                <p className="flex gap-2 items-center mb-4">
                   {news.faviconUrl ? (
-                    <img
-                      src={news.faviconUrl}
-                      alt={news.title}
-                      className="block w-5 h-5"
-                      loading="lazy"
-                    />
+                    <img src={news.faviconUrl} alt={""} className="block w-5 h-5" loading="lazy" />
                   ) : (
                     <IoEarth className="w-5 h-5 text-gray-500" />
                   )}
                   {isEditingNewsId(news) ? (
                     <input
-                      className="block flex-1 outline-none text-gray-600 text-xs"
+                      className="block flex-1 text-xs text-gray-600 outline-none"
                       type="url"
                       required
                       placeholder="https://news.com/..."
                       {...register("url", { required: true })}
                     />
                   ) : (
-                    <div className="text-xs underline hover:no-underline text-blue-400">
+                    <div className="text-xs text-blue-400 underline hover:no-underline">
                       {news.url}
                     </div>
                   )}
