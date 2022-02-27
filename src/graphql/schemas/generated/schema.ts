@@ -129,7 +129,10 @@ export type NewsEdge = {
 };
 
 export type NewsListInput = {
-  sharedAt: Scalars['String'];
+  description?: InputMaybe<Scalars['String']>;
+  sharedAt?: InputMaybe<Scalars['String']>;
+  title?: InputMaybe<Scalars['String']>;
+  url?: InputMaybe<Scalars['String']>;
 };
 
 /** PageInfo cursor, as defined in https://facebook.github.io/relay/graphql/connections.htm#sec-undefined.PageInfo */
@@ -156,7 +159,6 @@ export type Query = {
   myUserInfo?: Maybe<User>;
   news?: Maybe<News>;
   newsList: Array<News>;
-  searchNewsList: Array<News>;
   slackNotification?: Maybe<SlackNotification>;
   user?: Maybe<User>;
   users?: Maybe<UserConnection>;
@@ -181,11 +183,6 @@ export type QueryNewsListArgs = {
 };
 
 
-export type QuerySearchNewsListArgs = {
-  input: SearchNewsListInput;
-};
-
-
 export type QueryUserArgs = {
   input: UserInput;
 };
@@ -203,12 +200,6 @@ export enum Role {
   Developer = 'DEVELOPER',
   User = 'USER'
 }
-
-export type SearchNewsListInput = {
-  description: Scalars['String'];
-  title: Scalars['String'];
-  url: Scalars['String'];
-};
 
 export type SlackNotification = {
   __typename?: 'SlackNotification';
@@ -332,13 +323,6 @@ export type NewsListQueryVariables = Exact<{
 
 
 export type NewsListQuery = { __typename?: 'Query', newsList: Array<{ __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl: string, faviconUrl: string, isViewed: boolean, isImportant: boolean, createdAt: string, updatedAt: string, sharedAt: string, likes: Array<{ __typename?: 'Like', id: bigint, isLiked: boolean, createdAt: string, updatedAt: string, news: { __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl: string, faviconUrl: string, isViewed: boolean, isImportant: boolean, createdAt: string, updatedAt: string, sharedAt: string }, user: { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, photoUrl: string, role?: Role | null, status?: Status | null } }>, user: { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, photoUrl: string, role?: Role | null, status?: Status | null } }> };
-
-export type SearchNewsListQueryVariables = Exact<{
-  input: SearchNewsListInput;
-}>;
-
-
-export type SearchNewsListQuery = { __typename?: 'Query', searchNewsList: Array<{ __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl: string, faviconUrl: string, isViewed: boolean, isImportant: boolean, createdAt: string, updatedAt: string, sharedAt: string, likes: Array<{ __typename?: 'Like', id: bigint, isLiked: boolean, createdAt: string, updatedAt: string, news: { __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl: string, faviconUrl: string, isViewed: boolean, isImportant: boolean, createdAt: string, updatedAt: string, sharedAt: string }, user: { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, photoUrl: string, role?: Role | null, status?: Status | null } }>, user: { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, photoUrl: string, role?: Role | null, status?: Status | null } }> };
 
 export type CreateSlackNotificationMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -671,49 +655,6 @@ export function useNewsListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<N
 export type NewsListQueryHookResult = ReturnType<typeof useNewsListQuery>;
 export type NewsListLazyQueryHookResult = ReturnType<typeof useNewsListLazyQuery>;
 export type NewsListQueryResult = Apollo.QueryResult<NewsListQuery, NewsListQueryVariables>;
-export const SearchNewsListDocument = gql`
-    query SearchNewsList($input: SearchNewsListInput!) {
-  searchNewsList(input: $input) {
-    ...NewsFragment
-    likes {
-      ...LikeFragment
-    }
-    user {
-      ...UserFragment
-    }
-  }
-}
-    ${NewsFragmentFragmentDoc}
-${LikeFragmentFragmentDoc}
-${UserFragmentFragmentDoc}`;
-
-/**
- * __useSearchNewsListQuery__
- *
- * To run a query within a React component, call `useSearchNewsListQuery` and pass it any options that fit your needs.
- * When your component renders, `useSearchNewsListQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useSearchNewsListQuery({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useSearchNewsListQuery(baseOptions: Apollo.QueryHookOptions<SearchNewsListQuery, SearchNewsListQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<SearchNewsListQuery, SearchNewsListQueryVariables>(SearchNewsListDocument, options);
-      }
-export function useSearchNewsListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SearchNewsListQuery, SearchNewsListQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<SearchNewsListQuery, SearchNewsListQueryVariables>(SearchNewsListDocument, options);
-        }
-export type SearchNewsListQueryHookResult = ReturnType<typeof useSearchNewsListQuery>;
-export type SearchNewsListLazyQueryHookResult = ReturnType<typeof useSearchNewsListLazyQuery>;
-export type SearchNewsListQueryResult = Apollo.QueryResult<SearchNewsListQuery, SearchNewsListQueryVariables>;
 export const CreateSlackNotificationDocument = gql`
     mutation CreateSlackNotification {
   createSlackNotification {

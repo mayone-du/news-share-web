@@ -334,9 +334,9 @@ export const NewsList: VFC<Props> = (props) => {
                       {...register("url", { required: true })}
                     />
                   ) : (
-                    <div className="text-xs text-blue-400 underline hover:no-underline">
+                    <span className="block text-xs text-blue-400 underline hover:no-underline">
                       {news.url}
-                    </div>
+                    </span>
                   )}
                 </p>
                 {/* 下のサブ情報 */}
