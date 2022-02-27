@@ -1,8 +1,7 @@
-import type { VFC } from "react";
-import Link from "next/link";
+import type { SyntheticEvent, VFC } from "react";
 import dayjs from "dayjs";
 import { Switch } from "@headlessui/react";
-import { useRef, useState } from "react";
+import { useRef, createRef, useState } from "react";
 import type { ChangeEvent } from "react";
 import { NewsListQueryVariables } from "src/graphql/schemas/generated/schema";
 import { hyphenFormat, YESTERDAY, TOMORROW } from "src/utils";
@@ -12,18 +11,20 @@ import type { NextRouter } from "next/router";
 import { GrPowerReset } from "react-icons/gr";
 import { Tooltip } from "src/components/common/Tooltip";
 
-type FieldValues = Required<Pick<NewsListQueryVariables["input"], "title" | "description" | "url">>;
+type FieldValues = Required<NewsListQueryVariables["input"]>;
 // TODO: 型を値にしたいけどこうするしか無い？
 const inputFields: FieldValues = {
   title: "",
   description: "",
   url: "",
+  sharedAt: "",
 } as const;
 
 export const SearchFormCard: VFC = () => {
   const router = useRouter();
   const [isTextSearch, setIsTextSearch] = useState(false);
   const searchDateInputRef = useRef<HTMLInputElement>(null);
+  // const inputRefs = useRef<{ [key in keyof typeof inputFields]: HTMLInputElement }>(null);
   const searchDateDebounced = useDebouncedCallback((val: string) => {
     router.query.sharedAt = val;
   }, 1000); // milli secound
@@ -56,8 +57,16 @@ export const SearchFormCard: VFC = () => {
     queryParamsDebounced(router);
   };
 
+  // TODO: textのinputのrefも作らなきゃいけなくなるから、rhfつかってもいいかも
+  const handleResetSearch = () => {
+    searchDateInputRef.current && (searchDateInputRef.current.value = "");
+    setIsTextSearch(false);
+    router.push("/", undefined, { shallow: true });
+  };
+  const handleDisableSubmit = (e: SyntheticEvent) => e.preventDefault();
+
   return (
-    <div className="border p-4 rounded">
+    <form className="border p-4 rounded" onSubmit={handleDisableSubmit}>
       <div>
         <div className="flex items-center justify-between mb-2">
           {/* TODO: ↓まだできてない */}
@@ -71,17 +80,17 @@ export const SearchFormCard: VFC = () => {
             </Switch>
           </Tooltip>
           <Tooltip tooltipText="検索条件をリセットする">
-            <Link href="/">
-              <a className="block p-2 rounded-full border shadow">
-                <GrPowerReset className="w-4 h-4" />
-              </a>
-            </Link>
+            <button className="block p-2 rounded-full border shadow" onClick={handleResetSearch}>
+              <GrPowerReset className="w-4 h-4" />
+            </button>
           </Tooltip>
         </div>
 
+        {/* TODO: keysに型がついていない */}
         {Object.keys(inputFields).map((name) => (
           <input
             key={name}
+            // ref={} TODO: refを渡したい
             type="text"
             name={name}
             className="block w-full border rounded py-2 px-4 mb-4 outline-none"
@@ -114,6 +123,6 @@ export const SearchFormCard: VFC = () => {
         className="block py-2 px-4 mb-4 w-full rounded border outline-none"
         onChange={handleChangeSearchDate}
       />
-    </div>
+    </form>
   );
 };

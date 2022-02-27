@@ -263,8 +263,11 @@ export const NewsList: VFC<Props> = (props) => {
             {/* TODO: いいねしたときのanimation */}
             <div className="absolute bottom-3 left-60 text-xs text-gray-400 outline-none">
               <Tooltip tooltipText="いいねをすると後でマイページから見返すことができます">
-                <button className="block" onClick={handleToggleLike(news.id, !isLikedNews(news))}>
-                  {isLikedNews(news) ? (
+                <button
+                  className="block"
+                  onClick={handleToggleLike(news.id, !isLikedNews(news as News))}
+                >
+                  {isLikedNews(news as News) ? (
                     <FaHeart className="w-6 h-6 text-red-500" />
                   ) : (
                     <FiHeart className="w-6 h-6" />
