@@ -25,6 +25,7 @@ module.exports = {
     GRAPHQL_API_URL: process.env.GRAPHQL_API_URL,
     SLACK_CLIENT_ID: process.env.SLACK_CLIENT_ID,
     SLACK_CLIENT_SECRET: process.env.SLACK_CLIENT_SECRET,
+    NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
   },
   pageExtensions: ["page.tsx", "page.ts"],
   swcMinify: true,
