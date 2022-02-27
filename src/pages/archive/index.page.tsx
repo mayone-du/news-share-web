@@ -19,7 +19,6 @@ const ArchiveIndexPage: CustomNextPage = () => {
     variables: { input: { sharedAt: searchDate } },
   });
 
-  console.log(searchDate);
   const debounced = useDebouncedCallback((val) => setSearchDate(val), 1000); // milli secound
   const handleChangeSearchDate = (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.value) return;
@@ -32,10 +31,10 @@ const ArchiveIndexPage: CustomNextPage = () => {
   return (
     <>
       <NextSeo title={ROUTE_LABELS.ARCHIVE} />
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex justify-between items-center mb-4">
         <button
           className={`block border rounded px-4 py-2 shadow hover:bg-gray-50 transition-colors ${
-            searchDate === YESTERDAY ? "bg-blue-50" : ""
+            searchDate === YESTERDAY ? "bg-blue-50 hover:bg-blue-50" : ""
           }`}
           onClick={handleChangeSearchYesterDay}
         >
@@ -43,7 +42,7 @@ const ArchiveIndexPage: CustomNextPage = () => {
         </button>
         <button
           className={`block border rounded px-4 py-2 shadow hover:bg-gray-50 transition-colors ${
-            searchDate === TOMORROW ? "bg-blue-50" : ""
+            searchDate === TOMORROW ? "bg-blue-50 hover:bg-blue-50" : ""
           }`}
           onClick={handleChangeSearchTomorrow}
         >
@@ -52,7 +51,7 @@ const ArchiveIndexPage: CustomNextPage = () => {
       </div>
       <input
         type="date"
-        className="block py-2 px-4 mb-4 w-full rounded border border-gray-500 outline-none"
+        className="block py-2 px-4 mb-4 w-full rounded border outline-none"
         onChange={handleChangeSearchDate}
         defaultValue={searchDate}
       />

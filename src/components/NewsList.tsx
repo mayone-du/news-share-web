@@ -6,6 +6,7 @@ import {
   useMyUserInfoQuery,
   useUpdateNewsMutation,
   useToggleLikeMutation,
+  UpdateNewsMutationVariables,
 } from "src/graphql/schemas/generated/schema";
 import type { NewsListQueryResult } from "src/graphql/schemas/generated/schema";
 import { calcFromNow, hyphenFormat, isStartedNewsShare } from "src/utils";
@@ -20,6 +21,7 @@ import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import { CgSpinner } from "react-icons/cg";
 import { FiHeart } from "react-icons/fi";
+import { IoEarth } from "react-icons/io5";
 import { FaHeart } from "react-icons/fa";
 import dayjs from "dayjs";
 import { useRouter } from "next/router";
@@ -27,10 +29,10 @@ import { InvalidIdError } from "src/errors";
 import { Tooltip } from "src/components/common/Tooltip";
 import { Reference } from "@apollo/client";
 
-type FieldValues = {
-  title: string;
-  description: string;
-};
+// TODO: NonNullableを適用したい。まだ型安全ではない
+type FieldValues = Required<
+  Pick<UpdateNewsMutationVariables["input"], "title" | "description" | "url">
+>;
 
 type Props = {
   newsListQueryResult: NewsListQueryResult;
@@ -47,7 +49,7 @@ export const NewsList: VFC<Props> = (props) => {
   const [toggleLike, { loading: isToggleLikeLoading }] = useToggleLikeMutation();
   const { register, setValue, handleSubmit } = useForm<FieldValues>();
   const [editingNewsNodeId, setEditingNewsNodeId] = useState("");
-  const isEditingNewsId = (newsId?: string | null) => newsId === editingNewsNodeId;
+  const isEditingNewsId = (news: Pick<News, "nodeId">) => news.nodeId === editingNewsNodeId;
   const isDisplayNewsMenu = (userId: bigint) =>
     myUserInfoData?.myUserInfo?.role === Role.Admin ||
     myUserInfoData?.myUserInfo?.role === Role.Developer ||
@@ -58,11 +60,15 @@ export const NewsList: VFC<Props> = (props) => {
     dayjs(sharedAt).format(hyphenFormat) === dayjs().format(hyphenFormat);
 
   const handleClickNewsEditMode =
-    (news: Pick<News, "nodeId" | "title" | "description">, handleClosePopover: VoidFunction) =>
+    (
+      news: Pick<News, "nodeId" | "title" | "description" | "url">,
+      handleClosePopover: VoidFunction,
+    ) =>
     () => {
       setEditingNewsNodeId(news.nodeId ?? "");
       setValue("title", news.title);
       setValue("description", news.description);
+      setValue("url", news.url);
       handleClosePopover();
     };
   const handleClickNewsEditCancel = () => setEditingNewsNodeId("");
@@ -123,7 +129,7 @@ export const NewsList: VFC<Props> = (props) => {
   const handleUpdateViewedNews =
     (news: Pick<News, "nodeId" | "isViewed">) => async (e: SyntheticEvent) => {
       if (!news.nodeId) throw InvalidIdError();
-      if (isEditingNewsId(news.nodeId)) return e.preventDefault(); // 編集中の場合はリンクの機能を持たせない
+      if (isEditingNewsId(news)) return e.preventDefault(); // 編集中の場合はリンクの機能を持たせない
       if (
         news.isViewed ||
         !isStartedNewsShare(dayjs()) ||
@@ -179,7 +185,7 @@ export const NewsList: VFC<Props> = (props) => {
           <li
             key={news.nodeId}
             className={`relative mb-4 rounded border ${
-              isEditingNewsId(news.nodeId) ? "ring-2 ring-blue-200" : ""
+              isEditingNewsId(news) ? "ring-2 ring-blue-200" : ""
             }`}
           >
             {/* UI的にはリンクの中だけど、要素的にはリンクの外に配置したい */}
@@ -192,7 +198,7 @@ export const NewsList: VFC<Props> = (props) => {
                       <Popover.Button
                         className={`items-center absolute top-2 right-2 justify-center p-1 rounded-full flex hover:bg-gray-200 border border-transparent hover:border-gray-50 ${
                           open && "bg-gray-200"
-                        } ${isEditingNewsId(news.nodeId) && "hidden"}`}
+                        } ${isEditingNewsId(news) && "hidden"}`}
                       >
                         <BiChevronDown className="w-6 h-6 text-gray-600" />
                       </Popover.Button>
@@ -272,15 +278,15 @@ export const NewsList: VFC<Props> = (props) => {
             {/* コンテンツ */}
             <a
               href={news.url}
-              className={`block py-3 px-8 hover:bg-gray-50 ${
-                isEditingNewsId(news.nodeId) ? "hover:bg-white cursor-default" : ""
+              className={`block py-3 px-8 rounded hover:bg-gray-50 ${
+                isEditingNewsId(news) ? "hover:bg-white cursor-default" : ""
               }`}
               target="_blank"
               rel="noopener noreferrer"
               onClick={handleUpdateViewedNews(news)}
             >
               <div>
-                {isEditingNewsId(news.nodeId) ? (
+                {isEditingNewsId(news) ? (
                   <input
                     className="block mb-2 w-full text-lg font-bold outline-none"
                     placeholder="ニュースのタイトル"
@@ -291,7 +297,7 @@ export const NewsList: VFC<Props> = (props) => {
                 )}
 
                 <div className="grid grid-cols-6 gap-6">
-                  {isEditingNewsId(news.nodeId) ? (
+                  {isEditingNewsId(news) ? (
                     <textarea
                       className="col-span-5 mb-2 text-sm text-gray-400 outline-none resize-none"
                       placeholder="ニュースの説明"
@@ -311,27 +317,57 @@ export const NewsList: VFC<Props> = (props) => {
                     />
                   ) : null}
                 </div>
-                <div className="flex items-center">
-                  {news.user.photoUrl ? (
+
+                {/* urlとfavicon */}
+                <p className="flex mb-4 gap-2 items-center">
+                  {news.faviconUrl ? (
                     <img
-                      src={news.user.photoUrl}
-                      alt={news.user.displayName}
-                      className="mr-1 w-6 h-6 rounded-full border border-gray-100"
+                      src={news.faviconUrl}
+                      alt={news.title}
+                      className="block w-5 h-5"
                       loading="lazy"
                     />
-                  ) : null}
-                  <span className="mr-4 text-sm font-bold text-gray-600">
-                    {news.user.displayName}
-                  </span>
-                  <span className="flex items-center mr-4 text-xs text-gray-400">
-                    <AiOutlineClockCircle className="mr-1 w-4 h-4" />
-                    {calcFromNow(news.createdAt)}
-                  </span>
+                  ) : (
+                    <IoEarth className="w-5 h-5 text-gray-500" />
+                  )}
+                  {isEditingNewsId(news) ? (
+                    <input
+                      className="block flex-1 outline-none text-gray-600 text-xs"
+                      type="url"
+                      required
+                      placeholder="https://news.com/..."
+                      {...register("url", { required: true })}
+                    />
+                  ) : (
+                    <div className="text-xs underline hover:no-underline text-blue-400">
+                      {news.url}
+                    </div>
+                  )}
+                </p>
+                {/* 下のサブ情報 */}
+                <div className="flex items-center">
+                  <div className="flex items-center">
+                    {news.user.photoUrl ? (
+                      <img
+                        src={news.user.photoUrl}
+                        alt={news.user.displayName}
+                        className="mr-1 w-6 h-6 rounded-full border border-gray-100"
+                        loading="lazy"
+                      />
+                    ) : null}
+                    <span className="mr-4 text-sm font-bold text-gray-600">
+                      {news.user.displayName}
+                    </span>
+                    <span className="flex items-center mr-4 text-xs text-gray-400">
+                      <AiOutlineClockCircle className="mr-1 w-4 h-4" />
+                      {calcFromNow(news.createdAt)}
+                    </span>
+                  </div>
                 </div>
               </div>
             </a>
             {/* 編集中の場合に更新、キャンセルボタンを表示 */}
-            {isEditingNewsId(news.nodeId) && (
+            {isEditingNewsId(news) && (
               <div className="flex gap-4 justify-end items-center px-4 pb-4 w-full">
                 <button
                   className="block py-1 px-2 bg-gray-50 rounded border"
