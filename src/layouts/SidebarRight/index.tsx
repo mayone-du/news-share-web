@@ -10,24 +10,17 @@ export const SidebarRight: VFC = () => {
 
       <SearchFormCard />
 
-      <p className="p-4 text-sm rounded border">
-        TODO:
-        カレンダーとか検索用UI表示して、検索用ページは削除する。クエリパラメーターつけてもいいかも
-      </p>
-
-      <p className="p-4 text-sm rounded border">
-        TODO:
-        拡張機能でDOM経由でoViceのチャットを拾い、このAPIに投げて複製、表示する。しまぶーさんのみリクエストできるようにする？API側でチャットのリクエストは拡張機能からしか受け付けないようにする。
-        懸念事項としては、メッセージが重複してしまうことや、チャット欄を閉じた状態でDOMにアクセスできるのか、などなど
-        拡張機能からoViceにどうにかリクエストなげてチャットを取得できるなら、それでフィルタリングするなどしてフロントのAPIルートで受け取るとかでもいいかも
-      </p>
-
-      <p className="p-4 text-sm rounded border">
-        明日シェア予定のニュースの件数を表示
-        アーカイブへのリンクも設置するのと、アーカイブはクエリパラメーターをつける
-      </p>
-
-      <div className="p-4 rounded border">延期済みのニュースを見れるようにする</div>
+      <ul className="list-disc rounded border text-sm text-gray-600 pl-8 py-4 pr-4">
+        <h4 className="font-bold text-sm text-gray-700">TODO:</h4>
+        <li>拡張機能でDOM経由でoViceのチャットを拾い、このAPIに投げて複製、表示</li>
+        <li>しまぶーさんのみ、拡張機能からリクエストできる。API側でもバリデーション</li>
+        <li>
+          懸念事項としては、メッセージが重複してしまうことや、チャット欄を閉じた状態でDOMにアクセスできるのか、などなど
+        </li>
+        <li>
+          拡張機能からoViceにどうにかリクエストなげてチャットを取得できるなら、それでフィルタリングするなどしてフロントのAPIルートで受け取るとかでもいいかも
+        </li>
+      </ul>
 
       <div className="p-4 rounded border">Twitterで探す→的な？</div>
     </aside>

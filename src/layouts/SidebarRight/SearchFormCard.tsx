@@ -1,4 +1,5 @@
 import type { VFC } from "react";
+import Link from "next/link";
 import dayjs from "dayjs";
 import { Switch } from "@headlessui/react";
 import { useRef, useState } from "react";
@@ -8,6 +9,8 @@ import { hyphenFormat, YESTERDAY, TOMORROW } from "src/utils";
 import { useDebouncedCallback } from "use-debounce";
 import { useRouter } from "next/router";
 import type { NextRouter } from "next/router";
+import { GrPowerReset } from "react-icons/gr";
+import { Tooltip } from "src/components/common/Tooltip";
 
 type FieldValues = Required<Pick<NewsListQueryVariables["input"], "title" | "description" | "url">>;
 // TODO: 型を値にしたいけどこうするしか無い？
@@ -56,9 +59,25 @@ export const SearchFormCard: VFC = () => {
   return (
     <div className="border p-4 rounded">
       <div>
-        <Switch checked={isTextSearch} onChange={setIsTextSearch}>
-          {isTextSearch ? "テキスト検索" : "日付検索"}
-        </Switch>
+        <div className="flex items-center justify-between mb-2">
+          {/* TODO: ↓まだできてない */}
+          <Tooltip tooltipText={"テキストか日付かのどちらかで検索することができます"}>
+            <Switch
+              checked={isTextSearch}
+              onChange={setIsTextSearch}
+              className="border rounded shadow text-sm py-1 px-2"
+            >
+              {isTextSearch ? "テキスト検索" : "日付検索"}
+            </Switch>
+          </Tooltip>
+          <Tooltip tooltipText="検索条件をリセットする">
+            <Link href="/">
+              <a className="block p-2 rounded-full border shadow">
+                <GrPowerReset className="w-4 h-4" />
+              </a>
+            </Link>
+          </Tooltip>
+        </div>
 
         {Object.keys(inputFields).map((name) => (
           <input
