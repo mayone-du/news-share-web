@@ -1,16 +1,27 @@
 import dayjs from "dayjs";
 import type { CustomNextPage } from "next";
 import { BreadcrumbJsonLd, NextSeo } from "next-seo";
+import { useRouter } from "next/router";
 import { NewsList } from "src/components/NewsList";
 import { ROUTE_LABELS } from "src/constants/labels";
-import { useNewsListQuery } from "src/graphql/schemas/generated/schema";
+import { NewsListQueryVariables, useNewsListQuery } from "src/graphql/schemas/generated/schema";
 import { Layout } from "src/layouts";
 import { hyphenFormat } from "src/utils";
 
+const today = dayjs().format(hyphenFormat);
+
 // TODO: pagesディレクトリをトップレベルにして、src以下はコンポーネントのみのpagesを定義する
 const IndexPage: CustomNextPage = () => {
+  const { query } = useRouter();
+  const queryPrams: NewsListQueryVariables["input"] = {
+    sharedAt: query.sharedAt?.toString() || today,
+    title: query.title?.toString(),
+    description: query.description?.toString(),
+    url: query.url?.toString(),
+  };
+
   const newsListQueryResult = useNewsListQuery({
-    variables: { input: { sharedAt: dayjs().format(hyphenFormat) } },
+    variables: { input: queryPrams },
     pollInterval: 1000 * 30, // milli secondなのでこの場合は30秒ごとにポーリング
   });
   return (
@@ -30,6 +41,6 @@ const IndexPage: CustomNextPage = () => {
   );
 };
 
-export default IndexPage;
-
 IndexPage.getLayout = Layout;
+
+export default IndexPage;

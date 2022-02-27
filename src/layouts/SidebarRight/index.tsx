@@ -1,33 +1,19 @@
-import dayjs from "dayjs";
-import { useEffect, useState, VFC } from "react";
-import { useNewsListQuery } from "src/graphql/schemas/generated/schema";
-import { hyphenFormat, isStartedNewsShare } from "src/utils";
+import type { VFC } from "react";
+import { DateTimeCard } from "src/layouts/SidebarRight/DateTimeCard";
+import { SearchFormCard } from "src/layouts/SidebarRight/SearchFormCard";
 
-// TODO: コンポーネント分割
+// TODO: 各コンポーネント自体には余白やborderをつけず、ここで配列に格納しmapでdivで多いながらスタイリングして出力
 export const SidebarRight: VFC = () => {
-  const { data, loading, error } = useNewsListQuery({
-    variables: { input: { sharedAt: dayjs().format(hyphenFormat) } },
-  });
-  const [state, setState] = useState(false);
-
-  // 1分毎に再レンダリングさせる
-  useEffect(() => {
-    setTimeout(() => setState(!state), 1000 * 60); // 60秒
-  }, [state]);
-
   return (
     <aside className="flex flex-col gap-4">
-      <div className="p-4 rounded border">
-        <p className="text-sm font-bold">{dayjs().format("MM/DD（ddd）")}</p>
-        <p
-          className={`font-bold text-3xl ${isStartedNewsShare(dayjs()) ? "text-emerald-400" : ""}`}
-        >
-          {dayjs().format("HH : mm")}
-        </p>
-        <p>
-          <span className="text-xl font-bold">{data?.newsList.length}</span>件のニュース
-        </p>
-      </div>
+      <DateTimeCard />
+
+      <SearchFormCard />
+
+      <p className="p-4 text-sm rounded border">
+        TODO:
+        カレンダーとか検索用UI表示して、検索用ページは削除する。クエリパラメーターつけてもいいかも
+      </p>
 
       <p className="p-4 text-sm rounded border">
         TODO:

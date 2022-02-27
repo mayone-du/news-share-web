@@ -2,7 +2,7 @@ import dayjs from "dayjs";
 import { Switch } from "@headlessui/react";
 import type { CustomNextPage } from "next";
 import { NextSeo } from "next-seo";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import type { ChangeEvent } from "react";
 import { NewsList } from "src/components/NewsList";
 import { ROUTE_LABELS } from "src/constants";
@@ -36,6 +36,7 @@ const ArchiveIndexPage: CustomNextPage = () => {
   });
   const searchDateDebounced = useDebouncedCallback((val) => setSearchDate(val), 1000); // milli secound
   const searchTextsDebounced = useDebouncedCallback((val) => setSearchTexts(val), 1000); // milli secound
+  const searchDateInputRef = useRef<HTMLInputElement>(null);
 
   const handleChangeSearchDate = (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.value) return;
@@ -45,8 +46,14 @@ const ArchiveIndexPage: CustomNextPage = () => {
     searchTextsDebounced({ ...searchTexts, [e.target.name]: e.target.value });
   };
 
-  const handleChangeSearchYesterDay = () => setSearchDate(YESTERDAY);
-  const handleChangeSearchTomorrow = () => setSearchDate(TOMORROW);
+  const handleChangeSearchYesterDay = () => {
+    setSearchDate(YESTERDAY);
+    searchDateInputRef?.current && (searchDateInputRef.current.value = YESTERDAY);
+  };
+  const handleChangeSearchTomorrow = () => {
+    setSearchDate(TOMORROW);
+    searchDateInputRef?.current && (searchDateInputRef.current.value = TOMORROW);
+  };
 
   return (
     <>
@@ -56,13 +63,16 @@ const ArchiveIndexPage: CustomNextPage = () => {
           {isTextSearch ? "テキスト検索" : "日付検索"}
         </Switch>
 
-        <input
-          type="text"
-          name="title"
-          className="block w-full border rounded py-2 px-4 mb-4 outline-none"
-          placeholder="title"
-          onChange={handleChangeTexts}
-        />
+        {Object.keys(searchTexts).map((name) => (
+          <input
+            key={name}
+            type="text"
+            name={name}
+            className="block w-full border rounded py-2 px-4 mb-4 outline-none"
+            placeholder={name}
+            onChange={handleChangeTexts}
+          />
+        ))}
       </div>
       <div className="flex justify-between items-center mb-4">
         <button
@@ -84,9 +94,10 @@ const ArchiveIndexPage: CustomNextPage = () => {
       </div>
       <input
         type="date"
+        ref={searchDateInputRef}
         className="block py-2 px-4 mb-4 w-full rounded border outline-none"
-        onChange={handleChangeSearchDate}
         defaultValue={searchDate}
+        onChange={handleChangeSearchDate}
       />
       <NewsList newsListQueryResult={newsListQueryResult} />
     </>

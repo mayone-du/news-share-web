@@ -5,6 +5,9 @@ dayjs.locale("ja");
 // TODO: constantsでもいいな
 export const hyphenFormat = "YYYY-MM-DD";
 
+export const YESTERDAY = dayjs().subtract(1, "day").format(hyphenFormat);
+export const TOMORROW = dayjs().add(1, "day").format(hyphenFormat);
+
 export const calcFromNow = (date: string) => {
   const target = dayjs(date);
   const now = dayjs();
