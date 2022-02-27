@@ -23,10 +23,8 @@
 module.exports = {
   env: {
     GRAPHQL_API_URL: process.env.GRAPHQL_API_URL,
-    // CLOUDINARY_URL: process.env.CLOUDINARY_URL,
-    // CONTACT_SLACK_WEBHOOK_URL: process.env.CONTACT_SLACK_WEBHOOK_URL,
-    GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
-    GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
+    SLACK_CLIENT_ID: process.env.SLACK_CLIENT_ID,
+    SLACK_CLIENT_SECRET: process.env.SLACK_CLIENT_SECRET,
   },
   pageExtensions: ["page.tsx", "page.ts"],
   swcMinify: true,
