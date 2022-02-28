@@ -28,6 +28,8 @@ import { useRouter } from "next/router";
 import { InvalidIdError } from "src/errors";
 import { Tooltip } from "src/components/common/Tooltip";
 import { Reference } from "@apollo/client";
+import { useSession } from "next-auth/react";
+import { useAuthModal } from "src/hooks/useAuthModal";
 
 // TODO: NonNullableを適用したい。まだ型安全ではない
 type FieldValues = Required<
@@ -40,6 +42,8 @@ type Props = {
 
 export const NewsList: VFC<Props> = (props) => {
   const { asPath } = useRouter();
+  const { status } = useSession();
+  const { handleToggleAuthModal } = useAuthModal();
   const {
     newsListQueryResult: { data: NewsListData, loading, error, refetch },
   } = props;
@@ -156,6 +160,7 @@ export const NewsList: VFC<Props> = (props) => {
       }
     };
   const handleToggleLike = (newsId: bigint, isLiked: boolean) => async () => {
+    if (status === "unauthenticated") return handleToggleAuthModal();
     try {
       await toggleLike({ variables: { input: { newsId, isLiked } } });
       await refetch();
@@ -266,6 +271,7 @@ export const NewsList: VFC<Props> = (props) => {
                 <button
                   className="block"
                   onClick={handleToggleLike(news.id, !isLikedNews(news as News))}
+                  disabled={isUpdateNewsLoading || isDeleteNewsLoading || isToggleLikeLoading}
                 >
                   {isLikedNews(news as News) ? (
                     <FaHeart className="w-6 h-6 text-red-500" />

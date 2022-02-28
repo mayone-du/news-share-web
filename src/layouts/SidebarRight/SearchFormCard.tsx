@@ -11,13 +11,12 @@ import type { NextRouter } from "next/router";
 import { GrPowerReset } from "react-icons/gr";
 import { Tooltip } from "src/components/common/Tooltip";
 
-type FieldValues = Required<NewsListQueryVariables["input"]>;
+type FieldValues = Required<Pick<NewsListQueryVariables["input"], "title" | "description" | "url">>;
 // TODO: 型を値にしたいけどこうするしか無い？
 const inputFields: FieldValues = {
   title: "",
   description: "",
   url: "",
-  sharedAt: "",
 } as const;
 
 export const SearchFormCard: VFC = () => {
@@ -69,7 +68,6 @@ export const SearchFormCard: VFC = () => {
     <form className="border p-4 rounded" onSubmit={handleDisableSubmit}>
       <div>
         <div className="flex items-center justify-between mb-2">
-          {/* TODO: ↓まだできてない */}
           <Tooltip tooltipText={"テキストか日付かのどちらかで検索することができます"}>
             <Switch
               checked={isTextSearch}
@@ -90,7 +88,6 @@ export const SearchFormCard: VFC = () => {
         {Object.keys(inputFields).map((name) => (
           <input
             key={name}
-            // ref={} TODO: refを渡したい
             type="text"
             name={name}
             className="block w-full border rounded py-2 px-4 mb-4 outline-none"
@@ -99,6 +96,13 @@ export const SearchFormCard: VFC = () => {
           />
         ))}
       </div>
+
+      <input
+        type="date"
+        ref={searchDateInputRef}
+        className="block py-2 px-4 mb-4 w-full rounded border outline-none"
+        onChange={handleChangeSearchDate}
+      />
       <div className="flex justify-between items-center mb-4">
         <button
           className={`block border rounded px-4 py-2 shadow hover:bg-gray-50 transition-colors ${
@@ -117,12 +121,6 @@ export const SearchFormCard: VFC = () => {
           明日
         </button>
       </div>
-      <input
-        type="date"
-        ref={searchDateInputRef}
-        className="block py-2 px-4 mb-4 w-full rounded border outline-none"
-        onChange={handleChangeSearchDate}
-      />
     </form>
   );
 };
