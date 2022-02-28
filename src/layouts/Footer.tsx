@@ -7,12 +7,12 @@ export const Footer: VFC = memo(() => {
   return (
     <footer className="mt-20">
       <nav className="px-64 bg-gray-100">
-        <ul className="flex">
+        <ul className="flex items-center gap-4 py-4">
           {FOOTER_MENUS.map((menu) => {
             return (
               <li key={menu.href}>
                 <Link href={menu.href}>
-                  <a className="block p-2 m-2 border">{menu.label}</a>
+                  <a className="block underline hover:no-underline">{menu.label}</a>
                 </Link>
               </li>
             );

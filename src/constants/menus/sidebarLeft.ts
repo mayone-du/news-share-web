@@ -1,6 +1,7 @@
 import { ROUTE_LABELS } from "src/constants/labels";
 import { STATIC_ROUTES } from "src/constants/routes";
-import { AiOutlineHome, AiOutlineSearch } from "react-icons/ai";
+import { AiOutlineHome } from "react-icons/ai";
+import { MdPeopleOutline } from "react-icons/md";
 import { FiMonitor } from "react-icons/fi";
 import { IconType } from "react-icons";
 
@@ -13,11 +14,6 @@ export const SIDEBAR_LEFT_MENUS: {
     href: STATIC_ROUTES.INDEX,
     label: ROUTE_LABELS.INDEX,
     Icon: AiOutlineHome,
-  },
-  {
-    href: STATIC_ROUTES.SEARTCH,
-    label: ROUTE_LABELS.SEARTCH,
-    Icon: AiOutlineSearch,
   },
   {
     href: STATIC_ROUTES.EVENT,

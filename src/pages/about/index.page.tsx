@@ -7,8 +7,14 @@ const AboutIndexPage: CustomNextPage = () => {
   return (
     <>
       <NextSeo title={ROUTE_LABELS.ABOUT} />
-      <div>
-        <h1 className="py-8 text-3xl font-bold text-center">このサービスについて</h1>
+      <div className="prose prose-slate">
+        <h1>このサービスについて</h1>
+        <p>このサービスは、IT_KINGDOMで使用しているニュースシェア専用アプリです。</p>
+
+        <h2>使い方</h2>
+        <p>使い方の説明</p>
+
+        <h2>注意事項、禁止事項等</h2>
       </div>
     </>
   );

@@ -21,12 +21,12 @@ const ContactIndexPage: CustomNextPage = () => {
   return (
     <>
       <NextSeo title={ROUTE_LABELS.CONTACT} />
-      <div>
+      <div className="prose">
         <h1>お問い合わせ</h1>
         <form onSubmit={handleSubmit(onSubmit)}>
           <input
             type="text"
-            className="block border"
+            className="block border rounded py-1 px-2 mb-4 w-full outline-none"
             placeholder="タイトル"
             {...register("title", { required: true, maxLength: 20 })}
           />
@@ -39,10 +39,10 @@ const ContactIndexPage: CustomNextPage = () => {
 
           <textarea
             placeholder="お問い合わせ内容"
-            className="border resize-none"
+            className="block border rounded py-1 px-2 mb-4 w-full outline-none resize-none"
             {...register("content", { required: true })}
           ></textarea>
-          <button type="submit" className="block text-center rounded-md border">
+          <button type="submit" className="block text-center rounded-md border py-2 px-4">
             送信
           </button>
         </form>
