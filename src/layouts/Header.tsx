@@ -5,7 +5,7 @@ import { useCallback } from "react";
 import { STATIC_ROUTES } from "src/constants/routes";
 import { useAuthModal } from "src/hooks/useAuthModal";
 import type { VFC } from "react";
-import { useMyUserInfoQuery } from "src/graphql/schemas/generated/schema";
+import { Role, useMyUserInfoQuery } from "src/graphql/schemas/generated/schema";
 
 export const Header: VFC = () => {
   const { data: session, status } = useSession();
@@ -13,13 +13,6 @@ export const Header: VFC = () => {
   const { handleToggleAuthModal } = useAuthModal();
 
   const handleSignOut = useCallback(() => signOut(), []);
-
-  const PROFILE_MENU_ITEMS = [
-    {
-      label: "いいねをしたニュース一覧",
-      href: "##",
-    },
-  ];
 
   return (
     <header className="py-2 border-b md:px-60 lg:px-72">
@@ -74,7 +67,11 @@ export const Header: VFC = () => {
                               <Popover.Button className="block w-full text-left">
                                 <Link href={`/user/${myUserInfoData?.myUserInfo?.oauthUserId}`}>
                                   <a className="block py-2 px-4 transition-colors duration-300 hover:bg-gray-200">
-                                    <span className="block">{session?.user?.name}</span>
+                                    <span className="block">
+                                      {myUserInfoData?.myUserInfo?.role === Role.Admin && "👑 "}
+                                      {myUserInfoData?.myUserInfo?.role === Role.Developer && "💻 "}
+                                      {session?.user?.name}
+                                    </span>
                                     <span className="block text-xs text-gray-400">
                                       @{myUserInfoData?.myUserInfo?.oauthUserId}
                                     </span>
@@ -82,20 +79,6 @@ export const Header: VFC = () => {
                                 </Link>
                               </Popover.Button>
                             </li>
-                            {/* メニューを表示 */}
-                            {PROFILE_MENU_ITEMS.map((item) => {
-                              return (
-                                <li key={item.href}>
-                                  <Popover.Button className="block w-full text-left">
-                                    <Link href={item.href}>
-                                      <a className="block py-2 px-4 border-t transition-colors duration-300 hover:bg-gray-200">
-                                        {item.label}
-                                      </a>
-                                    </Link>
-                                  </Popover.Button>
-                                </li>
-                              );
-                            })}
                             {/* サインアウト用 */}
                             <li>
                               <button

@@ -10,10 +10,14 @@ import { useRouter } from "next/router";
 import type { NextRouter } from "next/router";
 import { GrPowerReset } from "react-icons/gr";
 import { Tooltip } from "src/components/common/Tooltip";
+import { SEARCH_LABELS } from "src/constants";
 
-type FieldValues = Required<Pick<NewsListQueryVariables["input"], "title" | "description" | "url">>;
-// TODO: 型を値にしたいけどこうするしか無い？
-const inputFields: FieldValues = {
+export type SearchFieldValues = Required<
+  Pick<NewsListQueryVariables["input"], "title" | "description" | "url">
+>;
+// TODO: 型を値にしたいけどこうするしか無い？ もっといい方法ありそう。labelもふくめ
+// 配列でも良さそう
+const inputFields: SearchFieldValues = {
   title: "",
   description: "",
   url: "",
@@ -23,7 +27,6 @@ export const SearchFormCard: VFC = () => {
   const router = useRouter();
   const [isTextSearch, setIsTextSearch] = useState(false);
   const searchDateInputRef = useRef<HTMLInputElement>(null);
-  // const inputRefs = useRef<{ [key in keyof typeof inputFields]: HTMLInputElement }>(null);
   const searchDateDebounced = useDebouncedCallback((val: string) => {
     router.query.sharedAt = val;
   }, 1000); // milli secound
@@ -56,7 +59,6 @@ export const SearchFormCard: VFC = () => {
     queryParamsDebounced(router);
   };
 
-  // TODO: textのinputのrefも作らなきゃいけなくなるから、rhfつかってもいいかも
   const handleResetSearch = () => {
     searchDateInputRef.current && (searchDateInputRef.current.value = "");
     setIsTextSearch(false);
@@ -91,7 +93,7 @@ export const SearchFormCard: VFC = () => {
             type="text"
             name={name}
             className="block w-full border rounded py-2 px-4 mb-4 outline-none"
-            placeholder={name}
+            placeholder={SEARCH_LABELS[name as keyof typeof inputFields]} // TODO: as  をやめる
             onChange={handleChangeTexts}
           />
         ))}
