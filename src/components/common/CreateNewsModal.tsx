@@ -44,17 +44,6 @@ export const CreateNewsModal: VFC = () => {
               },
             },
           });
-
-          // DELETE
-          // cache.modify({
-          //   fields: {
-          //     newsList: (existingNewsListRefs: Reference[], { readField }) => {
-          //       return existingNewsListRefs.filter((news) => {
-          //         createNewsData.id !== readField("id", news);
-          //       });
-          //     },
-          //   },
-          // });
         },
       });
       handleCloseCreateNewsModal();
@@ -107,13 +96,16 @@ export const CreateNewsModal: VFC = () => {
                 onSubmit={handleSubmit(handleCreateNews)}
                 className="flex flex-col justify-between"
               >
-                <div className="mb-2">
-                  <input
-                    type="url"
-                    autoFocus
-                    className="block py-2 px-3 mx-auto mt-4 mb-2 w-full rounded border ring-blue-200 outline-none focus:ring-2"
-                    {...register("url", { required: true, maxLength: 255 })}
-                  />
+                <div className="pb-2">
+                  <label className="mt-6 mb-2">
+                    <span className="mb-1 text-sm text-gray-500">URLを入力</span>
+                    <input
+                      type="url"
+                      autoFocus
+                      className="block py-2 px-3 mx-auto mb-2 w-full rounded border ring-blue-200 outline-none focus:ring-2"
+                      {...register("url", { required: true, maxLength: 255 })}
+                    />
+                  </label>
                   {errors.url && (
                     <p className="mb-2 text-sm text-red-400">
                       {errors.url.type === "required" && "URLを入力してください"}

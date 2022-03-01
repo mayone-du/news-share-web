@@ -67,14 +67,14 @@ export const SearchFormCard: VFC = () => {
   const handleDisableSubmit = (e: SyntheticEvent) => e.preventDefault();
 
   return (
-    <form className="border p-4 rounded" onSubmit={handleDisableSubmit}>
+    <form className="p-4 rounded border" onSubmit={handleDisableSubmit}>
       <div>
-        <div className="flex items-center justify-between mb-2">
+        <div className="flex justify-between items-center mb-2">
           <Tooltip tooltipText={"テキストか日付かのどちらかで検索することができます"}>
             <Switch
               checked={isTextSearch}
               onChange={setIsTextSearch}
-              className="border rounded shadow text-sm py-1 px-2"
+              className="py-1 px-2 text-sm rounded border shadow"
             >
               {isTextSearch ? "テキスト検索" : "日付検索"}
             </Switch>
@@ -92,7 +92,7 @@ export const SearchFormCard: VFC = () => {
             key={name}
             type="text"
             name={name}
-            className="block w-full border rounded py-2 px-4 mb-4 outline-none"
+            className="block py-2 px-4 mb-4 w-full rounded border outline-none"
             placeholder={SEARCH_LABELS[name as keyof typeof inputFields]} // TODO: as  をやめる
             onChange={handleChangeTexts}
           />

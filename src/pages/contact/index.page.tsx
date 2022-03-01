@@ -26,7 +26,7 @@ const ContactIndexPage: CustomNextPage = () => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <input
             type="text"
-            className="block border rounded py-1 px-2 mb-4 w-full outline-none"
+            className="block py-1 px-2 mb-4 w-full rounded border outline-none"
             placeholder="タイトル"
             {...register("title", { required: true, maxLength: 20 })}
           />
@@ -39,10 +39,10 @@ const ContactIndexPage: CustomNextPage = () => {
 
           <textarea
             placeholder="お問い合わせ内容"
-            className="block border rounded py-1 px-2 mb-4 w-full outline-none resize-none"
+            className="block py-1 px-2 mb-4 w-full rounded border outline-none resize-none"
             {...register("content", { required: true })}
           ></textarea>
-          <button type="submit" className="block text-center rounded-md border py-2 px-4">
+          <button type="submit" className="block py-2 px-4 text-center rounded-md border">
             送信
           </button>
         </form>

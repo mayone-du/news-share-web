@@ -40,14 +40,14 @@ export const Layout = (page: NextPage) => {
       <AuthModal />
       <CreateNewsModal />
       <Header />
-      <div className="grid grid-cols-8 gap-4 px-10 pt-8 mx-auto lg:grid-cols-4 lg:gap-8 lg:px-44 max-w-[1680px] items-start">
-        <div className="col-span-1 sticky top-4">
+      <div className="grid grid-cols-8 gap-4 items-start px-10 pt-8 mx-auto lg:grid-cols-4 lg:gap-8 lg:px-44 max-w-[1680px]">
+        <div className="sticky top-4 col-span-1">
           <SidebarLeft />
         </div>
         <main className="col-span-6 lg:col-span-2">
           <LayoutErrorBoundary>{page}</LayoutErrorBoundary>
         </main>
-        <div className="col-span-1 sticky top-4">
+        <div className="sticky top-4 col-span-1">
           <SidebarRight />
         </div>
       </div>

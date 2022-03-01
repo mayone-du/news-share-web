@@ -37,8 +37,8 @@ https://api.slack.com/legacy/oauth
 - GitHub みたいに、ニュースを共有してくれた人を「ニュースコントリビューター」的な感じで表示するのいいかも。色々メリットありそう
 
 <!-- ```
-      <ul className="list-disc rounded border text-sm text-gray-600 pl-8 py-4 pr-4">
-        <h4 className="font-bold text-sm text-gray-700">TODO:</h4>
+      <ul className="py-4 pr-4 pl-8 text-sm list-disc text-gray-600 rounded border">
+        <h4 className="text-sm font-bold text-gray-700">TODO:</h4>
         <li>拡張機能でDOM経由でoViceのチャットを拾い、このAPIに投げて複製、表示</li>
         <li>しまぶーさんのみ、拡張機能からリクエストできる。API側でもバリデーション</li>
         <li>
