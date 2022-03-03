@@ -37,7 +37,13 @@ export const getStaticProps: GetStaticProps = async (context) => {
 const UserDetailPage: CustomNextPage<UserQuery> = (props) => {
   return (
     <div>
-      <h1 className="mb-4 text-2xl font-bold">{props.user?.displayName}</h1>
+      <div className="flex gap-10">
+        <img src={props.user?.photoUrl} alt="" className="block aspect-square w-28 rounded-full" />
+        <div>
+          <h1 className="mb-4 text-2xl font-bold">{props.user?.displayName}</h1>
+          <p className="text-gray-600">{props.user?.selfIntroduction}</p>
+        </div>
+      </div>
       <ul>
         {props.user?.likes.map((like) => (
           <li key={like.id.toString()}>{like.news.title}</li>

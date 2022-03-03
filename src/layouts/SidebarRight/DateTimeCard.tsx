@@ -5,6 +5,7 @@ import { hyphenFormat, isStartedNewsShare } from "src/utils";
 
 // TODO: コンポーネント分割
 export const DateTimeCard: VFC = () => {
+  // TODO: ニュースが取得できない場合のことなどもあるので、色々考える errorPolicyとか？
   const { data } = useNewsListQuery({
     variables: { input: { sharedAt: dayjs().format(hyphenFormat) } },
     fetchPolicy: "cache-only",
@@ -22,9 +23,16 @@ export const DateTimeCard: VFC = () => {
       <p className={`font-bold text-3xl ${isStartedNewsShare(dayjs()) ? "text-emerald-400" : ""}`}>
         {dayjs().format("HH : mm")}
       </p>
-      <p>
-        <span className="text-xl font-bold">{data?.newsList.length}</span>件のニュース
-      </p>
+      <div>
+        {data?.newsList.length ? (
+          <p>
+            <span className="text-xl font-bold">{data?.newsList.length}</span>
+            件のニュース
+          </p>
+        ) : (
+          ""
+        )}
+      </div>
     </div>
   );
 };

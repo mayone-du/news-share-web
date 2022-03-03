@@ -15,9 +15,9 @@ export const SIDEBAR_LEFT_MENUS: {
     label: ROUTE_LABELS.INDEX,
     Icon: AiOutlineHome,
   },
-  {
-    href: STATIC_ROUTES.EVENT,
-    label: ROUTE_LABELS.EVENT,
-    Icon: FiMonitor,
-  },
+  // {
+  //   href: STATIC_ROUTES.EVENT,
+  //   label: ROUTE_LABELS.EVENT,
+  //   Icon: FiMonitor,
+  // },
 ];

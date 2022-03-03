@@ -19,7 +19,6 @@ import { BsCalendar, BsCheck, BsCheck2 } from "react-icons/bs";
 import { IoMdReturnLeft } from "react-icons/io";
 import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
-import { CgSpinner } from "react-icons/cg";
 import { FiHeart } from "react-icons/fi";
 import { IoEarth } from "react-icons/io5";
 import { FaHeart } from "react-icons/fa";
@@ -171,9 +170,21 @@ export const NewsList: VFC<Props> = (props) => {
 
   if (loading)
     return (
-      <div>
-        <CgSpinner className="animate-spin" />
-      </div>
+      <ul className="flex flex-col gap-4">
+        <li className="border rounded py-3 px-8 w-full">
+          <div className="bg-gray-100 animate-pulse h-6 w-3/4 mb-4"></div>
+          <div className="bg-gray-100 animate-pluse h-4 mb-1 w-full"></div>
+          <div className="bg-gray-100 animate-pluse h-4 mb-4 w-full"></div>
+          <div className="flex items-center mb-4">
+            <div className="w-5 h-5 rounded-full bg-gray-100 animate-pulse mr-2"></div>
+            <div className="bg-gray-100 animate-pluse h-3 w-1/3"></div>
+          </div>
+          <div className="flex items-center">
+            <div className="w-6 h-6 rounded-full bg-gray-100 animate-pulse mr-1"></div>
+            <div className="bg-gray-100 animate-pulse h-4 w-20"></div>
+          </div>
+        </li>
+      </ul>
     );
   if (error)
     return (
@@ -181,7 +192,13 @@ export const NewsList: VFC<Props> = (props) => {
         <p className="text-red-500">ニュースの取得に失敗しました</p>
       </div>
     );
-  if (NewsListData?.newsList.length === 0) return <div>ニュースはまだありません</div>;
+
+  if (NewsListData?.newsList.length === 0)
+    return (
+      <div>
+        <p>ニュースはありません</p>
+      </div>
+    );
 
   return (
     <ul>
