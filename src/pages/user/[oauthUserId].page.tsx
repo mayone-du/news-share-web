@@ -52,18 +52,30 @@ const UserDetailPage: CustomNextPage<UserQuery> = (props) => {
           {props.user?.likes.map((like) => (
             <li key={like.id.toString()} className="p-2 border-b rounded">
               <a href={like.news.url} className="block">
-                <div className="flex items-center mb-2">
-                  <img
-                    src={like.news.user.photoUrl}
-                    className="block rounded-full w-8 h-8 mr-2"
-                    alt=""
-                  />
-                  <p className="font-bold">{like.news.user.displayName}</p>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="flex items-center mb-2">
+                      <img
+                        src={like.news.user.photoUrl}
+                        className="block rounded-full w-8 h-8 mr-2"
+                        alt=""
+                      />
+                      <p className="font-bold">{like.news.user.displayName}</p>
+                    </div>
+                    <div className="font-bold text-lg line-clamp-1">{like.news.title}</div>
+                    <span className="text-sm text-gray-400">
+                      {calcFromNow(like.news.createdAt)}に投稿
+                    </span>
+                  </div>
+
+                  {like.news.imageUrl ? (
+                    <img
+                      src={like.news.imageUrl}
+                      className="block aspect-square object-cover w-20 border"
+                      alt=""
+                    />
+                  ) : null}
                 </div>
-                <div className="font-bold text-lg line-clamp-1">{like.news.title}</div>
-                <span className="text-sm text-gray-400">
-                  {calcFromNow(like.news.createdAt)}に投稿
-                </span>
               </a>
             </li>
           ))}
