@@ -9,6 +9,7 @@ import {
   UsersQueryVariables,
 } from "src/graphql/schemas/generated/schema";
 import { Layout } from "src/layouts";
+import { calcFromNow } from "src/utils";
 
 // TODO: 型をもう少し良い感じにする
 export const getStaticPaths: GetStaticPaths = async (context) => {
@@ -37,18 +38,37 @@ export const getStaticProps: GetStaticProps = async (context) => {
 const UserDetailPage: CustomNextPage<UserQuery> = (props) => {
   return (
     <div>
-      <div className="flex gap-10">
+      <div className="flex gap-10 mb-8">
         <img src={props.user?.photoUrl} alt="" className="block aspect-square w-28 rounded-full" />
         <div>
           <h1 className="mb-4 text-2xl font-bold">{props.user?.displayName}</h1>
           <p className="text-gray-600">{props.user?.selfIntroduction}</p>
         </div>
       </div>
-      <ul>
-        {props.user?.likes.map((like) => (
-          <li key={like.id.toString()}>{like.news.title}</li>
-        ))}
-      </ul>
+
+      <div>
+        <h2 className="text-xl font-bold">いいねしたニュース一覧</h2>
+        <ul className="pt-4">
+          {props.user?.likes.map((like) => (
+            <li key={like.id.toString()} className="p-2 border-b rounded">
+              <a href={like.news.url} className="block">
+                <div className="flex items-center mb-2">
+                  <img
+                    src={like.news.user.photoUrl}
+                    className="block rounded-full w-8 h-8 mr-2"
+                    alt=""
+                  />
+                  <p className="font-bold">{like.news.user.displayName}</p>
+                </div>
+                <div className="font-bold text-lg line-clamp-1">{like.news.title}</div>
+                <span className="text-sm text-gray-400">
+                  {calcFromNow(like.news.createdAt)}に投稿
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };

@@ -5,8 +5,8 @@ fragment LikeFragment on Like {
   updatedAt
   news {
     ...NewsFragment
-  }
-  user {
-    ...UserFragment
+    user {
+      ...UserFragment
+    }
   }
 }
