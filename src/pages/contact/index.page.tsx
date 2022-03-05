@@ -40,8 +40,9 @@ const ContactIndexPage: CustomNextPage = () => {
           <textarea
             placeholder="お問い合わせ内容"
             className="block py-1 px-2 mb-4 w-full rounded border outline-none resize-none"
+            rows={4}
             {...register("content", { required: true })}
-          ></textarea>
+          />
           <button type="submit" className="block py-2 px-4 text-center rounded-md border">
             送信
           </button>

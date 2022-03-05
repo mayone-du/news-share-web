@@ -377,7 +377,7 @@ export const NewsList: VFC<Props> = (props) => {
                         loading="lazy"
                       />
                     ) : null}
-                    <span className="mr-4 text-sm font-bold text-gray-600">
+                    <span className="mr-4 text-sm font-bold text-gray-600 dark:text-zinc-100">
                       {news.user.displayName}
                     </span>
                     <span className="flex items-center mr-4 text-xs text-gray-400">
