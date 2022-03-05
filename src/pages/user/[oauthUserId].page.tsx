@@ -39,7 +39,7 @@ const UserDetailPage: CustomNextPage<UserQuery> = (props) => {
   return (
     <div>
       <div className="flex gap-10 mb-8">
-        <img src={props.user?.photoUrl} alt="" className="block aspect-square w-28 rounded-full" />
+        <img src={props.user?.photoUrl} alt="" className="block w-28 rounded-full aspect-square" />
         <div>
           <h1 className="mb-4 text-2xl font-bold">{props.user?.displayName}</h1>
           <p className="text-gray-600">{props.user?.selfIntroduction}</p>
@@ -50,19 +50,19 @@ const UserDetailPage: CustomNextPage<UserQuery> = (props) => {
         <h2 className="text-xl font-bold">いいねしたニュース一覧</h2>
         <ul className="pt-4">
           {props.user?.likes.map((like) => (
-            <li key={like.id.toString()} className="p-2 border-b rounded">
+            <li key={like.id.toString()} className="p-2 rounded border-b">
               <a href={like.news.url} className="block">
-                <div className="flex items-center justify-between">
+                <div className="flex justify-between items-center">
                   <div>
                     <div className="flex items-center mb-2">
                       <img
                         src={like.news.user.photoUrl}
-                        className="block rounded-full w-8 h-8 mr-2"
+                        className="block mr-2 w-8 h-8 rounded-full"
                         alt=""
                       />
                       <p className="font-bold">{like.news.user.displayName}</p>
                     </div>
-                    <div className="font-bold text-lg line-clamp-1">{like.news.title}</div>
+                    <div className="text-lg font-bold line-clamp-1">{like.news.title}</div>
                     <span className="text-sm text-gray-400">
                       {calcFromNow(like.news.createdAt)}に投稿
                     </span>
@@ -71,7 +71,7 @@ const UserDetailPage: CustomNextPage<UserQuery> = (props) => {
                   {like.news.imageUrl ? (
                     <img
                       src={like.news.imageUrl}
-                      className="block aspect-square object-cover w-20 border"
+                      className="block object-cover w-20 border aspect-square"
                       alt=""
                     />
                   ) : null}

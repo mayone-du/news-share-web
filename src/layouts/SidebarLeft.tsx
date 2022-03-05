@@ -17,12 +17,12 @@ export const SidebarLeft: VFC = () => {
             return (
               <li
                 key={menu.href}
-                className={`rounded overflow-hidden mb-2 hover:bg-gray-100 transition-all ${
-                  asPath === menu.href ? "bg-gray-100" : ""
+                className={`rounded overflow-hidden mb-2 hover:bg-gray-100 dark:bg-zinc-700 transition-all ${
+                  asPath === menu.href ? "bg-gray-100 dark:bg-zinc-600" : ""
                 }`}
               >
                 <Link href={menu.href}>
-                  <a className="flex items-center py-1 px-2 text-gray-900 lg:py-2 lg:px-4">
+                  <a className="flex items-center py-1 px-2 text-gray-900 lg:py-2 lg:px-4 dark:text-gray-50">
                     <menu.Icon className="block w-6 h-6 text-gray-500 lg:mr-2" />
                     <span className="hidden lg:inline">{menu.label}</span>
                   </a>
@@ -32,7 +32,7 @@ export const SidebarLeft: VFC = () => {
           })}
         </ul>
         <button
-          className="block py-2 px-4 rounded border shadow-sm transition-all hover:bg-gray-50 hover:shadow"
+          className="block py-2 px-4 rounded border shadow-sm transition-all hover:bg-gray-50 hover:shadow dark:bg-zinc-700 dark:hover:bg-zinc-600"
           onClick={handleOpenCreateNewsModal}
         >
           ニュース・記事を投稿する

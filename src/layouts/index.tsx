@@ -36,7 +36,7 @@ export const Layout = (page: NextPage) => {
   }, []);
 
   return (
-    <div>
+    <div className="dark:bg-zinc-800">
       <AuthModal />
       <CreateNewsModal />
       <Header />

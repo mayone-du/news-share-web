@@ -219,11 +219,11 @@ export const NewsList: VFC<Props> = (props) => {
                   return (
                     <div>
                       <Popover.Button
-                        className={`items-center absolute top-2 right-2 justify-center p-1 rounded-full flex hover:bg-gray-200 border border-transparent hover:border-gray-50 ${
+                        className={`items-center absolute top-2 right-2 justify-center p-1 rounded-full flex hover:bg-gray-200 border border-transparent hover:border-gray-50 dark:hover:bg-zinc-600 ${
                           open && "bg-gray-200"
                         } ${isEditingNewsId(news) && "hidden"}`}
                       >
-                        <BiChevronDown className="w-6 h-6 text-gray-600" />
+                        <BiChevronDown className="w-6 h-6 text-gray-600 dark:text-zinc-100" />
                       </Popover.Button>
                       <Popover.Panel className="absolute -right-4 top-10 z-10 mt-4 w-72 bg-white rounded border shadow-md transform dark:bg-black">
                         <ul>
@@ -305,7 +305,7 @@ export const NewsList: VFC<Props> = (props) => {
             {/* コンテンツ */}
             <a
               href={news.url}
-              className={`block py-3 px-8 rounded hover:bg-gray-50 ${
+              className={`block py-3 px-8 rounded hover:bg-gray-50 dark:bg-zinc-700 dark:hover:bg-zinc-600 ${
                 isEditingNewsId(news) ? "hover:bg-white cursor-default" : ""
               }`}
               target="_blank"

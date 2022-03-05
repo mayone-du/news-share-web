@@ -8,16 +8,16 @@ export const useKBarActions = () => {
   const actions: Action[] = [
     {
       id: "index",
-      name: "Back HOME",
+      name: "トップに戻る",
       shortcut: ["h"],
-      keywords: "back home",
+      keywords: "back home top",
       perform: () => push(STATIC_ROUTES.INDEX),
     },
     {
       id: "theme change",
-      name: "Change Theme",
+      name: "テーマ変更",
       shortcut: ["t"],
-      keywords: "theme toggle change",
+      keywords: "theme toggle change dark light",
       perform: () => {
         // useThemeが使えないため、自力で更新
         // TODO: Headless UIのみ更新されない
@@ -31,14 +31,14 @@ export const useKBarActions = () => {
     },
     {
       id: "contact",
-      name: "Contact",
+      name: "バグの報告・機能リクエスト",
       shortcut: ["c"],
-      keywords: "email",
+      keywords: "contact form bug request",
       perform: () => push(STATIC_ROUTES.CONTACT),
     },
     {
       id: "slack",
-      name: "Slack Post NewsList",
+      name: "Slack Post NewsList [develop]",
       shortcut: ["s"],
       keywords: "slack post newsList",
       perform: () => alert("developing..."),

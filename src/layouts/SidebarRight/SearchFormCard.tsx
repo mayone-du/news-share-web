@@ -27,6 +27,7 @@ const inputFields: SearchFieldValues = {
 
 // TODO: 検索の制御方法の大幅見直し
 // controlledなものにしてボタンをトリガにするのかや、rhfの使用を検討する
+// TODO: next/routerの使い方を見る。warnが出ているため修正 https://stackoverflow.com/questions/70318417/nextjs-router-push-unknown-key-passed-via-urlobject
 export const SearchFormCard: VFC = () => {
   const router = useRouter();
   const searchDateInputRef = useRef<HTMLInputElement>(null);
@@ -70,7 +71,7 @@ export const SearchFormCard: VFC = () => {
   const handleResetSearch = () => {
     searchDateInputRef.current && (searchDateInputRef.current.value = "");
     setSelectedIndex(0);
-    router.push("/", undefined, { shallow: true });
+    router.push({ pathname: "/" }, undefined, { shallow: true });
   };
   const handleDisableSubmit = (e: SyntheticEvent) => e.preventDefault();
 
@@ -78,7 +79,12 @@ export const SearchFormCard: VFC = () => {
     <form className="p-4 rounded border" onSubmit={handleDisableSubmit}>
       <div>
         <div className="flex justify-between items-center mb-2">
-          <h3>検索</h3>
+          <h3>
+            検索
+            <span className="inline-block px-2 ml-3 text-xs font-bold text-white bg-red-500 rounded">
+              Beta
+            </span>
+          </h3>
           <Tooltip tooltipText="検索条件をリセットする">
             <button className="block p-2 rounded-full border shadow" onClick={handleResetSearch}>
               <GrPowerReset className="w-4 h-4" />
@@ -86,7 +92,7 @@ export const SearchFormCard: VFC = () => {
           </Tooltip>
         </div>
         <Tab.Group selectedIndex={selectedIndex} onChange={setSelectedIndex}>
-          <Tab.List className="flex mb-4 items-center bg-gray-50 p-2 rounded gap-1 w-full ">
+          <Tab.List className="flex gap-1 items-center p-2 mb-4 w-full bg-gray-50 rounded">
             <Tab
               className={({ selected }) =>
                 `w-full rounded outline-none focus:ring-2 ring-blue-200 hover:bg-gray-200 py-1 px-2 ${

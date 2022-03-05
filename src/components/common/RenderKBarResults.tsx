@@ -38,8 +38,8 @@ const ResultItem = forwardRef<HTMLDivElement, ResultItemProps>(
     return (
       <div
         ref={ref}
-        className={`py-3 px-4 flex items-center justify-between border-l-2 border-transparent cursor-pointer shadow-xl ${
-          active ? "border-l-2 border-black bg-gray-100" : "bg-white"
+        className={`py-3 px-4 flex items-center justify-between border-l-2 border-transparent cursor-pointer shadow-xl dark:bg-gray-600 ${
+          active ? "border-l-2 border-black bg-gray-100 dark:bg-gray-700" : "bg-white"
         }`}
       >
         <div className="flex gap-2 items-center text-sm">
@@ -58,10 +58,11 @@ const ResultItem = forwardRef<HTMLDivElement, ResultItemProps>(
             {action.subtitle && <span className="text-sm">{action.subtitle}</span>}
           </div>
         </div>
+        {/* ショートカットキー */}
         {action.shortcut?.length ? (
           <div aria-hidden className="grid grid-flow-col gap-1">
             {action.shortcut.map((sc) => (
-              <kbd key={sc} className="py-1 px-2 text-sm bg-gray-400 rounded">
+              <kbd key={sc} className="py-1 px-2 text-sm bg-gray-300 rounded">
                 {sc}
               </kbd>
             ))}
