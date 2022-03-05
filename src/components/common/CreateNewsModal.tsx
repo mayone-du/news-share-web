@@ -103,6 +103,7 @@ export const CreateNewsModal: VFC = () => {
                       type="url"
                       autoFocus
                       className="block py-2 px-3 mx-auto mb-2 w-full rounded border ring-blue-200 outline-none focus:ring-2"
+                      placeholder="https://qin.news/..."
                       {...register("url", { required: true, maxLength: 255 })}
                     />
                   </label>

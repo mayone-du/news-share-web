@@ -59,6 +59,7 @@ export const NewsList: VFC<Props> = (props) => {
     myUserInfoData?.myUserInfo?.id === userId;
   const isLikedNews = (news: Pick<News, "likes">) =>
     news.likes.some((like) => like.user.id === myUserInfoData?.myUserInfo?.id && like.isLiked);
+
   const isTodaySharedAt = (sharedAt: string) =>
     dayjs(sharedAt).format(hyphenFormat) === dayjs().format(hyphenFormat);
 
@@ -360,7 +361,7 @@ export const NewsList: VFC<Props> = (props) => {
                       {...register("url", { required: true })}
                     />
                   ) : (
-                    <span className="block text-xs text-blue-400 underline hover:no-underline">
+                    <span className="block text-xs text-blue-400 underline hover:no-underline line-clamp-1">
                       {news.url}
                     </span>
                   )}

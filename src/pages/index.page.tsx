@@ -4,8 +4,9 @@ import { BreadcrumbJsonLd, NextSeo } from "next-seo";
 import { useRouter } from "next/router";
 import { NewsList } from "src/components/NewsList";
 import { ROUTE_LABELS } from "src/constants/labels";
-import { NewsListQueryVariables, useNewsListQuery } from "src/graphql/schemas/generated/schema";
+import { useNewsListQuery } from "src/graphql/schemas/generated/schema";
 import { Layout } from "src/layouts";
+import { QueryParams } from "src/types";
 import { hyphenFormat } from "src/utils";
 
 const today = dayjs().format(hyphenFormat);
@@ -14,17 +15,26 @@ const today = dayjs().format(hyphenFormat);
 // TODO: 日付とテキスト検索が同時に行えてしまうので、どちらを使うかのフラグをクエリパラメーターに追加する
 const IndexPage: CustomNextPage = () => {
   const { query } = useRouter();
-  const queryPrams: NewsListQueryVariables["input"] = {
+  const queryParams: QueryParams = {
     sharedAt: query.sharedAt?.toString() || today,
     title: query.title?.toString(),
     description: query.description?.toString(),
     url: query.url?.toString(),
+    searchFrag: query.searchFrag?.toString() === "text" ? "text" : "date", // クエリパラメーターが不正な場合や存在しない場合は日付検索
   };
 
   const newsListQueryResult = useNewsListQuery({
-    variables: { input: queryPrams },
+    variables: {
+      input: {
+        sharedAt: queryParams.searchFrag === "date" ? queryParams.sharedAt : undefined,
+        title: queryParams.searchFrag === "text" ? queryParams.title : undefined,
+        description: queryParams.searchFrag === "text" ? queryParams.description : undefined,
+        url: queryParams.searchFrag === "text" ? queryParams.url : undefined,
+      },
+    },
     pollInterval: 1000 * 30, // milli secondなのでこの場合は30秒ごとにポーリング
   });
+
   return (
     <>
       <NextSeo title={ROUTE_LABELS.INDEX} />

@@ -272,7 +272,7 @@ export type UserInput = {
   oauthUserId: Scalars['String'];
 };
 
-export type LikeFragmentFragment = { __typename?: 'Like', id: bigint, isLiked: boolean, createdAt: string, updatedAt: string, news: { __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl: string, faviconUrl: string, isViewed: boolean, isImportant: boolean, createdAt: string, updatedAt: string, sharedAt: string, user: { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, photoUrl: string, role?: Role | null, status?: Status | null } } };
+export type LikeFragmentFragment = { __typename?: 'Like', id: bigint, isLiked: boolean, createdAt: string, updatedAt: string };
 
 export type NewsFragmentFragment = { __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl: string, faviconUrl: string, isViewed: boolean, isImportant: boolean, createdAt: string, updatedAt: string, sharedAt: string };
 
@@ -287,14 +287,14 @@ export type ToggleLikeMutationVariables = Exact<{
 }>;
 
 
-export type ToggleLikeMutation = { __typename?: 'Mutation', toggleLike?: { __typename?: 'Like', id: bigint, isLiked: boolean, createdAt: string, updatedAt: string, news: { __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl: string, faviconUrl: string, isViewed: boolean, isImportant: boolean, createdAt: string, updatedAt: string, sharedAt: string, user: { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, photoUrl: string, role?: Role | null, status?: Status | null } } } | null };
+export type ToggleLikeMutation = { __typename?: 'Mutation', toggleLike?: { __typename?: 'Like', id: bigint, isLiked: boolean, createdAt: string, updatedAt: string } | null };
 
 export type CreateNewsMutationVariables = Exact<{
   input: CreateNewsInput;
 }>;
 
 
-export type CreateNewsMutation = { __typename?: 'Mutation', createNews?: { __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl: string, faviconUrl: string, isViewed: boolean, isImportant: boolean, createdAt: string, updatedAt: string, sharedAt: string, likes: Array<{ __typename?: 'Like', id: bigint, isLiked: boolean, createdAt: string, updatedAt: string, news: { __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl: string, faviconUrl: string, isViewed: boolean, isImportant: boolean, createdAt: string, updatedAt: string, sharedAt: string, user: { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, photoUrl: string, role?: Role | null, status?: Status | null } } }>, user: { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, photoUrl: string, role?: Role | null, status?: Status | null } } | null };
+export type CreateNewsMutation = { __typename?: 'Mutation', createNews?: { __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl: string, faviconUrl: string, isViewed: boolean, isImportant: boolean, createdAt: string, updatedAt: string, sharedAt: string, likes: Array<{ __typename?: 'Like', id: bigint, isLiked: boolean, createdAt: string, updatedAt: string }>, user: { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, photoUrl: string, role?: Role | null, status?: Status | null } } | null };
 
 export type DeleteNewsMutationVariables = Exact<{
   input: DeleteNewsInput;
@@ -308,21 +308,21 @@ export type PostponeNewsListMutationVariables = Exact<{
 }>;
 
 
-export type PostponeNewsListMutation = { __typename?: 'Mutation', postponeNewsList?: Array<{ __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl: string, faviconUrl: string, isViewed: boolean, isImportant: boolean, createdAt: string, updatedAt: string, sharedAt: string, likes: Array<{ __typename?: 'Like', id: bigint, isLiked: boolean, createdAt: string, updatedAt: string, news: { __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl: string, faviconUrl: string, isViewed: boolean, isImportant: boolean, createdAt: string, updatedAt: string, sharedAt: string, user: { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, photoUrl: string, role?: Role | null, status?: Status | null } } }>, user: { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, photoUrl: string, role?: Role | null, status?: Status | null } } | null> | null };
+export type PostponeNewsListMutation = { __typename?: 'Mutation', postponeNewsList?: Array<{ __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl: string, faviconUrl: string, isViewed: boolean, isImportant: boolean, createdAt: string, updatedAt: string, sharedAt: string, likes: Array<{ __typename?: 'Like', id: bigint, isLiked: boolean, createdAt: string, updatedAt: string }>, user: { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, photoUrl: string, role?: Role | null, status?: Status | null } } | null> | null };
 
 export type UpdateNewsMutationVariables = Exact<{
   input: UpdateNewsInput;
 }>;
 
 
-export type UpdateNewsMutation = { __typename?: 'Mutation', updateNews?: { __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl: string, faviconUrl: string, isViewed: boolean, isImportant: boolean, createdAt: string, updatedAt: string, sharedAt: string, likes: Array<{ __typename?: 'Like', id: bigint, isLiked: boolean, createdAt: string, updatedAt: string, news: { __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl: string, faviconUrl: string, isViewed: boolean, isImportant: boolean, createdAt: string, updatedAt: string, sharedAt: string, user: { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, photoUrl: string, role?: Role | null, status?: Status | null } } }>, user: { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, photoUrl: string, role?: Role | null, status?: Status | null } } | null };
+export type UpdateNewsMutation = { __typename?: 'Mutation', updateNews?: { __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl: string, faviconUrl: string, isViewed: boolean, isImportant: boolean, createdAt: string, updatedAt: string, sharedAt: string, likes: Array<{ __typename?: 'Like', id: bigint, isLiked: boolean, createdAt: string, updatedAt: string }>, user: { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, photoUrl: string, role?: Role | null, status?: Status | null } } | null };
 
 export type NewsListQueryVariables = Exact<{
   input: NewsListInput;
 }>;
 
 
-export type NewsListQuery = { __typename?: 'Query', newsList: Array<{ __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl: string, faviconUrl: string, isViewed: boolean, isImportant: boolean, createdAt: string, updatedAt: string, sharedAt: string, likes: Array<{ __typename?: 'Like', id: bigint, isLiked: boolean, createdAt: string, updatedAt: string, news: { __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl: string, faviconUrl: string, isViewed: boolean, isImportant: boolean, createdAt: string, updatedAt: string, sharedAt: string, user: { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, photoUrl: string, role?: Role | null, status?: Status | null } } }>, user: { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, photoUrl: string, role?: Role | null, status?: Status | null } }> };
+export type NewsListQuery = { __typename?: 'Query', newsList: Array<{ __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl: string, faviconUrl: string, isViewed: boolean, isImportant: boolean, createdAt: string, updatedAt: string, sharedAt: string, likes: Array<{ __typename?: 'Like', id: bigint, isLiked: boolean, createdAt: string, updatedAt: string, user: { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, photoUrl: string, role?: Role | null, status?: Status | null }, news: { __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl: string, faviconUrl: string, isViewed: boolean, isImportant: boolean, createdAt: string, updatedAt: string, sharedAt: string, user: { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, photoUrl: string, role?: Role | null, status?: Status | null } } }>, user: { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, photoUrl: string, role?: Role | null, status?: Status | null } }> };
 
 export type CreateSlackNotificationMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -356,7 +356,7 @@ export type UserQueryVariables = Exact<{
 }>;
 
 
-export type UserQuery = { __typename?: 'Query', user?: { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, photoUrl: string, role?: Role | null, status?: Status | null, likes: Array<{ __typename?: 'Like', id: bigint, isLiked: boolean, createdAt: string, updatedAt: string, news: { __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl: string, faviconUrl: string, isViewed: boolean, isImportant: boolean, createdAt: string, updatedAt: string, sharedAt: string, user: { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, photoUrl: string, role?: Role | null, status?: Status | null } } }>, newsList: Array<{ __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl: string, faviconUrl: string, isViewed: boolean, isImportant: boolean, createdAt: string, updatedAt: string, sharedAt: string }> } | null };
+export type UserQuery = { __typename?: 'Query', user?: { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, photoUrl: string, role?: Role | null, status?: Status | null, likes: Array<{ __typename?: 'Like', id: bigint, isLiked: boolean, createdAt: string, updatedAt: string, user: { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, photoUrl: string, role?: Role | null, status?: Status | null }, news: { __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl: string, faviconUrl: string, isViewed: boolean, isImportant: boolean, createdAt: string, updatedAt: string, sharedAt: string, user: { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, photoUrl: string, role?: Role | null, status?: Status | null } } }>, newsList: Array<{ __typename?: 'News', id: bigint, nodeId?: string | null, title: string, description: string, url: string, imageUrl: string, faviconUrl: string, isViewed: boolean, isImportant: boolean, createdAt: string, updatedAt: string, sharedAt: string }> } | null };
 
 export type UsersQueryVariables = Exact<{
   first?: InputMaybe<Scalars['Int']>;
@@ -365,6 +365,14 @@ export type UsersQueryVariables = Exact<{
 
 export type UsersQuery = { __typename?: 'Query', users?: { __typename?: 'UserConnection', edges?: Array<{ __typename?: 'UserEdge', cursor: string, node?: { __typename?: 'User', id: bigint, oauthUserId: string, displayName: string, selfIntroduction: string, photoUrl: string, role?: Role | null, status?: Status | null } | null } | null> | null, pageInfo: { __typename?: 'PageInfo', hasPreviousPage: boolean, hasNextPage: boolean, startCursor?: string | null, endCursor?: string | null } } | null };
 
+export const LikeFragmentFragmentDoc = gql`
+    fragment LikeFragment on Like {
+  id
+  isLiked
+  createdAt
+  updatedAt
+}
+    `;
 export const NewsFragmentFragmentDoc = gql`
     fragment NewsFragment on News {
   id
@@ -381,32 +389,6 @@ export const NewsFragmentFragmentDoc = gql`
   sharedAt
 }
     `;
-export const UserFragmentFragmentDoc = gql`
-    fragment UserFragment on User {
-  id
-  oauthUserId
-  displayName
-  selfIntroduction
-  photoUrl
-  role
-  status
-}
-    `;
-export const LikeFragmentFragmentDoc = gql`
-    fragment LikeFragment on Like {
-  id
-  isLiked
-  createdAt
-  updatedAt
-  news {
-    ...NewsFragment
-    user {
-      ...UserFragment
-    }
-  }
-}
-    ${NewsFragmentFragmentDoc}
-${UserFragmentFragmentDoc}`;
 export const PageInfoFragmentFragmentDoc = gql`
     fragment PageInfoFragment on PageInfo {
   hasPreviousPage
@@ -421,6 +403,17 @@ export const SlackNotificationFragmentFragmentDoc = gql`
   isSent
   createdAt
   updatedAt
+}
+    `;
+export const UserFragmentFragmentDoc = gql`
+    fragment UserFragment on User {
+  id
+  oauthUserId
+  displayName
+  selfIntroduction
+  photoUrl
+  role
+  status
 }
     `;
 export const ToggleLikeDocument = gql`
@@ -618,6 +611,15 @@ export const NewsListDocument = gql`
     ...NewsFragment
     likes {
       ...LikeFragment
+      user {
+        ...UserFragment
+      }
+      news {
+        ...NewsFragment
+        user {
+          ...UserFragment
+        }
+      }
     }
     user {
       ...UserFragment
@@ -826,6 +828,15 @@ export const UserDocument = gql`
     ...UserFragment
     likes {
       ...LikeFragment
+      user {
+        ...UserFragment
+      }
+      news {
+        ...NewsFragment
+        user {
+          ...UserFragment
+        }
+      }
     }
     newsList {
       ...NewsFragment

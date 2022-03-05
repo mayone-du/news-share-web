@@ -3,10 +3,4 @@ fragment LikeFragment on Like {
   isLiked
   createdAt
   updatedAt
-  news {
-    ...NewsFragment
-    user {
-      ...UserFragment
-    }
-  }
 }

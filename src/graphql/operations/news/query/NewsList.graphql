@@ -3,6 +3,15 @@ query NewsList($input: NewsListInput!) {
     ...NewsFragment
     likes {
       ...LikeFragment
+      user {
+        ...UserFragment
+      }
+      news {
+        ...NewsFragment
+        user {
+          ...UserFragment
+        }
+      }
     }
     user {
       ...UserFragment
