@@ -76,7 +76,7 @@ export const SearchFormCard: VFC = () => {
   const handleDisableSubmit = (e: SyntheticEvent) => e.preventDefault();
 
   return (
-    <form className="p-4 rounded border" onSubmit={handleDisableSubmit}>
+    <form onSubmit={handleDisableSubmit}>
       <div>
         <div className="flex justify-between items-center mb-2">
           <h3>
@@ -92,7 +92,7 @@ export const SearchFormCard: VFC = () => {
           </Tooltip>
         </div>
         <Tab.Group selectedIndex={selectedIndex} onChange={setSelectedIndex}>
-          <Tab.List className="flex gap-1 items-center p-2 mb-4 w-full bg-gray-50 rounded">
+          <Tab.List className="flex gap-2 items-center p-2 mb-4 w-full bg-gray-50 rounded">
             <Tab
               className={({ selected }) =>
                 `w-full rounded outline-none focus:ring-2 ring-blue-200 hover:bg-gray-200 py-1 px-2 ${

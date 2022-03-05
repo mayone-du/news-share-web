@@ -3,7 +3,6 @@ import { useEffect, useState, VFC } from "react";
 import { useNewsListQuery } from "src/graphql/schemas/generated/schema";
 import { hyphenFormat, isStartedNewsShare } from "src/utils";
 
-// TODO: コンポーネント分割
 export const DateTimeCard: VFC = () => {
   // TODO: ニュースが取得できない場合のことなどもあるので、色々考える errorPolicyとか？
   const { data } = useNewsListQuery({
@@ -18,7 +17,7 @@ export const DateTimeCard: VFC = () => {
   }, [state]);
 
   return (
-    <div className="p-4 rounded border">
+    <div>
       <p className="text-sm font-bold">{dayjs().format("MM/DD（ddd）")}</p>
       <p className={`font-bold text-3xl ${isStartedNewsShare(dayjs()) ? "text-emerald-400" : ""}`}>
         {dayjs().format("HH : mm")}

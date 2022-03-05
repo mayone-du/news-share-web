@@ -2,12 +2,18 @@ import type { VFC } from "react";
 import { DateTimeCard } from "src/layouts/SidebarRight/DateTimeCard";
 import { SearchFormCard } from "src/layouts/SidebarRight/SearchFormCard";
 
-// TODO: 各コンポーネント自体には余白やborderをつけず、ここで配列に格納しmapでdivで多いながらスタイリングして出力
+const SidebarRightContents = [DateTimeCard, SearchFormCard];
+
 export const SidebarRight: VFC = () => {
   return (
     <aside className="flex flex-col gap-4">
-      <DateTimeCard />
-      <SearchFormCard />
+      {SidebarRightContents.map((Component, i) => {
+        return (
+          <div className="p-4 border rounded dark:bg-zinc-700" key={i}>
+            <Component />
+          </div>
+        );
+      })}
     </aside>
   );
 };

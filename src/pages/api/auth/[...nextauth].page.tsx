@@ -18,6 +18,8 @@ export default NextAuth({
   callbacks: {
     // サインイン時の処理
     signIn: async (params) => {
+      try {
+
       // 初回サインイン時にDBにユーザーを登録し、二回目以降はユーザーが存在すればOKにする
       const apolloClient = initializeApollo(params.account.access_token);
       const { errors } = await apolloClient.mutate<AuthUserMutation, AuthUserMutationVariables>({
@@ -28,6 +30,10 @@ export default NextAuth({
         return false;
       }
       return true;
+      } catch (e) {
+        console.error(e);
+        return false;
+      }
     },
 
     // リダイレクト時の処理 普通にページ遷移した時に呼び出されるぽい？

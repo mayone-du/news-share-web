@@ -12,7 +12,6 @@ import { hyphenFormat } from "src/utils";
 const today = dayjs().format(hyphenFormat);
 
 // TODO: pagesディレクトリをトップレベルにして、src以下はコンポーネントのみのpagesを定義する
-// TODO: 日付とテキスト検索が同時に行えてしまうので、どちらを使うかのフラグをクエリパラメーターに追加する
 const IndexPage: CustomNextPage = () => {
   const { query } = useRouter();
   const queryParams: QueryParams = {
