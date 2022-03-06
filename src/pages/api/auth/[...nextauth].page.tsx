@@ -19,6 +19,7 @@ export default NextAuth({
     // サインイン時の処理
     signIn: async (params) => {
       try {
+        console.log("signIn", params);
         // 初回サインイン時にDBにユーザーを登録し、二回目以降はユーザーが存在すればOKにする
         const apolloClient = initializeApollo(params.account.access_token);
         const { errors } = await apolloClient.mutate<AuthUserMutation, AuthUserMutationVariables>({
