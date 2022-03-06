@@ -1,4 +1,5 @@
 import type { CustomNextPage, GetStaticPaths, GetStaticProps } from "next";
+import { useState } from "react";
 import { initializeApollo } from "src/graphql/apollo/client";
 import {
   UserDocument,
@@ -7,6 +8,7 @@ import {
   UsersDocument,
   UsersQuery,
   UsersQueryVariables,
+  useUpdateMyUserInfoMutation,
 } from "src/graphql/schemas/generated/schema";
 import { Layout } from "src/layouts";
 import { calcFromNow } from "src/utils";
@@ -36,12 +38,46 @@ export const getStaticProps: GetStaticProps = async (context) => {
 };
 
 const UserDetailPage: CustomNextPage<UserQuery> = (props) => {
+  const [updateMyUserInfo, { data, loading, error }] = useUpdateMyUserInfoMutation();
+  const [isEditMode, setIsEditMode] = useState(false);
+
+  const handleToggleEditMode = () => setIsEditMode((prev) => !prev);
+
   return (
     <div>
-      <div className="flex gap-10 mb-8">
+      <div className="flex w-full gap-10 mb-8">
         <img src={props.user?.photoUrl} alt="" className="block w-28 rounded-full aspect-square" />
-        <div>
-          <h1 className="mb-4 text-2xl font-bold">{props.user?.displayName}</h1>
+        <div className="flex-1">
+          {isEditMode ? (
+            <div className="flex items-center w-full justify-between mb-4">
+              <input
+                type="text"
+                className="block border p-1 rounded"
+                defaultValue={props.user?.displayName}
+              />
+              <div className="flex items-center">
+                <button className="block border p-1 rounded shadow" onClick={handleToggleEditMode}>
+                  キャンセル
+                </button>
+                <button
+                  className="block border p-1 rounded shadow"
+                  onClick={() => alert("ちょいまち")}
+                >
+                  保存する
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div className="flex items-center w-full justify-between mb-4">
+              <h1 className="text-2xl font-bold">{props.user?.displayName}</h1>
+              <button
+                className="rounded border shadow-sm hover:shadow py-1 px-2"
+                onClick={handleToggleEditMode}
+              >
+                プロフィールを編集する
+              </button>
+            </div>
+          )}
           <p className="text-gray-600">{props.user?.selfIntroduction}</p>
         </div>
       </div>

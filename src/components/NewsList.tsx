@@ -52,7 +52,7 @@ export const NewsList: VFC<Props> = (props) => {
   const [toggleLike, { loading: isToggleLikeLoading }] = useToggleLikeMutation();
   const { register, setValue, handleSubmit } = useForm<FieldValues>();
   const [editingNewsNodeId, setEditingNewsNodeId] = useState("");
-  const isEditingNewsId = (news: Pick<News, "nodeId">) => news.nodeId === editingNewsNodeId;
+  const isEditingNews = (news: Pick<News, "nodeId">) => news.nodeId === editingNewsNodeId;
   const isDisplayNewsMenu = (userId: bigint) =>
     myUserInfoData?.myUserInfo?.role === Role.Admin ||
     myUserInfoData?.myUserInfo?.role === Role.Developer ||
@@ -133,7 +133,7 @@ export const NewsList: VFC<Props> = (props) => {
   const handleUpdateViewedNews =
     (news: Pick<News, "nodeId" | "isViewed">) => async (e: SyntheticEvent) => {
       if (!news.nodeId) throw InvalidIdError();
-      if (isEditingNewsId(news)) return e.preventDefault(); // 編集中の場合はリンクの機能を持たせない
+      if (isEditingNews(news)) return e.preventDefault(); // 編集中の場合はリンクの機能を持たせない
       if (
         news.isViewed ||
         !isStartedNewsShare(dayjs()) ||
@@ -208,7 +208,7 @@ export const NewsList: VFC<Props> = (props) => {
           <li
             key={news.nodeId}
             className={`relative mb-4 rounded border ${
-              isEditingNewsId(news) ? "ring-2 ring-blue-200" : ""
+              isEditingNews(news) ? "ring-2 ring-blue-200" : ""
             }`}
           >
             {/* UI的にはリンクの中だけど、要素的にはリンクの外に配置したい */}
@@ -221,7 +221,7 @@ export const NewsList: VFC<Props> = (props) => {
                       <Popover.Button
                         className={`items-center absolute top-2 right-2 justify-center p-1 rounded-full flex hover:bg-gray-200 border border-transparent hover:border-gray-50 dark:hover:bg-zinc-600 ${
                           open && "bg-gray-200"
-                        } ${isEditingNewsId(news) && "hidden"}`}
+                        } ${isEditingNews(news) && "hidden"}`}
                       >
                         <BiChevronDown className="w-6 h-6 text-gray-600 dark:text-zinc-100" />
                       </Popover.Button>
@@ -284,7 +284,11 @@ export const NewsList: VFC<Props> = (props) => {
 
             {/* TODO: newsの型 最悪 as を使う */}
             {/* TODO: いいねしたときのanimation */}
-            <div className="absolute bottom-3 left-60 text-xs text-gray-400 outline-none">
+            <div
+              className={`absolute bottom-3 left-60 text-xs text-gray-400 outline-none ${
+                isEditingNews(news) ? "bottom-16" : ""
+              }`}
+            >
               <Tooltip tooltipText="いいねをすると後でマイページから見返すことができます">
                 <button
                   className="block"
@@ -306,14 +310,14 @@ export const NewsList: VFC<Props> = (props) => {
             <a
               href={news.url}
               className={`block py-3 px-8 rounded hover:bg-gray-50 dark:bg-zinc-700 dark:hover:bg-zinc-600 ${
-                isEditingNewsId(news) ? "hover:bg-white cursor-default" : ""
+                isEditingNews(news) ? "hover:bg-white cursor-default" : ""
               }`}
               target="_blank"
               rel="noopener noreferrer"
               onClick={handleUpdateViewedNews(news)}
             >
               <div>
-                {isEditingNewsId(news) ? (
+                {isEditingNews(news) ? (
                   <input
                     className="block mb-2 w-full text-lg font-bold outline-none"
                     placeholder="ニュースのタイトル"
@@ -324,7 +328,7 @@ export const NewsList: VFC<Props> = (props) => {
                 )}
 
                 <div className="grid grid-cols-6 gap-6">
-                  {isEditingNewsId(news) ? (
+                  {isEditingNews(news) ? (
                     <textarea
                       className="col-span-5 mb-2 text-sm text-gray-400 outline-none resize-none"
                       placeholder="ニュースの説明"
@@ -352,7 +356,7 @@ export const NewsList: VFC<Props> = (props) => {
                   ) : (
                     <IoEarth className="w-5 h-5 text-gray-500" />
                   )}
-                  {isEditingNewsId(news) ? (
+                  {isEditingNews(news) ? (
                     <input
                       className="block flex-1 text-xs text-gray-600 outline-none"
                       type="url"
@@ -389,7 +393,7 @@ export const NewsList: VFC<Props> = (props) => {
               </div>
             </a>
             {/* 編集中の場合に更新、キャンセルボタンを表示 */}
-            {isEditingNewsId(news) && (
+            {isEditingNews(news) && (
               <div className="flex gap-4 justify-end items-center px-4 pb-4 w-full">
                 <button
                   className="block py-1 px-2 bg-gray-50 rounded border"
