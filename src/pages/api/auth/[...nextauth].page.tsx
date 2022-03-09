@@ -32,6 +32,7 @@ export default NextAuth({
         return true;
       } catch (e) {
         console.error(e);
+        console.log("access_token: ", params.account.access_token);
         return false;
       }
     },

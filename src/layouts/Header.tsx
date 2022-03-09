@@ -6,6 +6,7 @@ import { STATIC_ROUTES } from "src/constants/routes";
 import { useAuthModal } from "src/hooks/useAuthModal";
 import type { VFC } from "react";
 import { Role, useMyUserInfoQuery } from "src/graphql/schemas/generated/schema";
+import { FiLogOut } from "react-icons/fi";
 
 export const Header: VFC = () => {
   const { data: session, status } = useSession();
@@ -83,8 +84,9 @@ export const Header: VFC = () => {
                             <li>
                               <button
                                 onClick={handleSignOut}
-                                className="block py-2 px-4 w-full text-left border-t transition-colors duration-300 hover:bg-gray-200"
+                                className="flex items-center text-gray-600 py-2 px-4 w-full text-left border-t transition-colors duration-300 hover:bg-gray-200"
                               >
+                                <FiLogOut className="mr-2" />
                                 サインアウト
                               </button>
                             </li>
