@@ -1,5 +1,6 @@
 import type { CustomNextPage, GetStaticPaths, GetStaticProps } from "next";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { initializeApollo } from "src/graphql/apollo/client";
 import {
   useMyUserInfoQuery,
@@ -38,11 +39,22 @@ export const getStaticProps: GetStaticProps = async (context) => {
   return { props: data, revalidate: 60 * 60 * 12 }; // 半日ごと
 };
 
+type FieldValues = {
+  displayName: string;
+  selfIntroduction: string;
+};
+
 const UserDetailPage: CustomNextPage<UserQuery> = (props) => {
   const [updateMyUserInfo, { data, loading, error }] = useUpdateMyUserInfoMutation();
   const { data: myUserInfoData, loading: isMyUserInfoLoading } = useMyUserInfoQuery();
   const [isEditMode, setIsEditMode] = useState(false);
   const isMyUserPage = myUserInfoData?.myUserInfo?.oauthUserId === props.user?.oauthUserId;
+  const { register } = useForm<FieldValues>({
+    defaultValues: {
+      displayName: myUserInfoData?.myUserInfo?.displayName,
+      selfIntroduction: myUserInfoData?.myUserInfo?.selfIntroduction,
+    },
+  });
 
   const handleToggleEditMode = () => setIsEditMode((prev) => !prev);
 
@@ -60,8 +72,8 @@ const UserDetailPage: CustomNextPage<UserQuery> = (props) => {
               <div className="flex items-center w-full justify-between mb-4">
                 <input
                   type="text"
-                  className="block border p-1 rounded"
-                  defaultValue={props.user?.displayName}
+                  className="block font-bold text-2xl"
+                  {...register("displayName", { required: true })}
                 />
                 <div className="flex items-center">
                   <button
