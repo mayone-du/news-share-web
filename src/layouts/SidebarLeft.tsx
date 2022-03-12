@@ -12,12 +12,12 @@ export const SidebarLeft: VFC = () => {
   return (
     <aside>
       <nav>
-        <ul>
+        <ul className="flex flex-col gap-2">
           {SIDEBAR_LEFT_MENUS.map((menu) => {
             return (
               <li
                 key={menu.href}
-                className={`rounded overflow-hidden mb-2 hover:bg-gray-100 dark:bg-zinc-700 transition-all ${
+                className={`rounded overflow-hidden hover:bg-gray-100 dark:bg-zinc-700 transition-all ${
                   asPath === menu.href ? "bg-gray-100 dark:bg-zinc-600" : ""
                 }`}
               >
@@ -32,7 +32,7 @@ export const SidebarLeft: VFC = () => {
           })}
         </ul>
         <button
-          className="block py-2 px-4 rounded border shadow-sm transition-all hover:bg-gray-50 hover:shadow dark:bg-zinc-700 dark:hover:bg-zinc-600"
+          className="block py-2 mt-4 px-4 rounded border shadow-sm transition-all hover:bg-gray-50 hover:shadow dark:bg-zinc-700 dark:hover:bg-zinc-600"
           onClick={handleOpenCreateNewsModal}
         >
           ニュース・記事を投稿する
