@@ -64,26 +64,26 @@ const UserDetailPage: CustomNextPage<UserQuery> = (props) => {
 
   return (
     <div>
-      <div className="flex w-full gap-10 mb-8">
+      <div className="flex gap-10 mb-8 w-full">
         <img src={props.user?.photoUrl} alt="" className="block w-28 rounded-full aspect-square" />
         {isMyUserPage && (
           <div className="flex-1">
             {isEditMode ? (
-              <div className="flex items-center w-full justify-between mb-4">
+              <div className="flex justify-between items-center mb-4 w-full">
                 <input
                   type="text"
-                  className="block font-bold text-2xl"
+                  className="block text-2xl font-bold"
                   {...register("displayName", { required: true })}
                 />
                 <div className="flex items-center">
                   <button
-                    className="block border p-1 rounded shadow"
+                    className="block p-1 rounded border shadow"
                     onClick={handleToggleEditMode}
                   >
                     キャンセル
                   </button>
                   <button
-                    className="block border p-1 rounded shadow"
+                    className="block p-1 rounded border shadow"
                     onClick={() => alert("ちょいまち")}
                   >
                     保存する
@@ -91,10 +91,10 @@ const UserDetailPage: CustomNextPage<UserQuery> = (props) => {
                 </div>
               </div>
             ) : (
-              <div className="flex items-center w-full justify-between mb-4">
+              <div className="flex justify-between items-center mb-4 w-full">
                 <h1 className="text-2xl font-bold">{props.user?.displayName}</h1>
                 <button
-                  className="rounded border shadow-sm hover:shadow py-1 px-2"
+                  className="py-1 px-2 rounded border shadow-sm hover:shadow"
                   onClick={handleToggleEditMode}
                 >
                   プロフィールを編集する
