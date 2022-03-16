@@ -43,7 +43,18 @@ export const AuthModal: VFC = () => {
                 Qinニュースシェア
               </Dialog.Title>
 
-              <p className="mt-6 text-sm text-gray-500">コンセプト</p>
+              <p className="mt-6 text-sm text-gray-500">
+                このアプリは
+                <a
+                  className="underline transition-colors hover:text-blue-500 hover:no-underline mx-1"
+                  href="https://it-kingdom.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  IT_KINGDOM
+                </a>
+                で開催されているニュースシェア専用アプリです。Qin国民のみログイン可能ですので、ご注意ください。
+              </p>
 
               <div className="my-6">
                 <button
@@ -57,24 +68,12 @@ export const AuthModal: VFC = () => {
               </div>
 
               <p className="text-sm text-gray-500">
-                <Link href={STATIC_ROUTES.TERM}>
-                  <a
-                    // onClick={handleCloseModal}
-                    className="underline transition-colors hover:text-blue-500 hover:no-underline"
-                  >
-                    利用規約
+                <Link href={STATIC_ROUTES.ABOUT}>
+                  <a className="underline transition-colors hover:text-blue-500 hover:no-underline mr-1">
+                    注意事項
                   </a>
                 </Link>
-                、
-                <Link href={STATIC_ROUTES.PRIVACY_POLICY}>
-                  <a
-                    // onClick={handleCloseModal}
-                    className="underline transition-colors hover:text-blue-500 hover:no-underline"
-                  >
-                    プライバシー・ポリシー
-                  </a>
-                </Link>
-                に同意したうえでログインしてください
+                を読み、同意したうえでログインしてください
               </p>
             </div>
           </Transition.Child>
