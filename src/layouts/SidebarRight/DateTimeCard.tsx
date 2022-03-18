@@ -2,6 +2,9 @@ import dayjs from "dayjs";
 import { useEffect, useState, VFC } from "react";
 import { useNewsListQuery } from "src/graphql/schemas/generated/schema";
 import { hyphenFormat, isStartedNewsShare } from "src/utils";
+// TODO: Tooltipで時間の説明
+import { AiOutlineQuestionCircle } from "react-icons/ai";
+// import { ToolTip } from "components/common/Tooltip";
 
 export const DateTimeCard: VFC = () => {
   // TODO: ニュースが取得できない場合のことなどもあるので、色々考える errorPolicyとか？

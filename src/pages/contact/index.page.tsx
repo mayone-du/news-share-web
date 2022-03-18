@@ -15,22 +15,21 @@ const ContactIndexPage: CustomNextPage = () => {
     formState: { errors },
     handleSubmit,
   } = useForm<ContactInputs>();
-  const onSubmit = (formData: ContactInputs) => {
-    alert(JSON.stringify(formData));
-  };
+  const onSubmit = handleSubmit((formData) => {
+    alert("開発中です");
+  });
   return (
     <>
       <NextSeo title={ROUTE_LABELS.CONTACT} />
       <div className="prose">
         <h1>お問い合わせ</h1>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={onSubmit}>
           <input
             type="text"
-            className="block py-1 px-2 mb-4 w-full rounded border outline-none"
+            className="block py-1 px-2 mb-2 w-full rounded border outline-none"
             placeholder="タイトル"
             {...register("title", { required: true, maxLength: 20 })}
           />
-          {/* タイトルのエラーハンドリング */}
           {errors.title && (
             <p className="pb-4 text-sm text-gray-500">
               {errors.title.type === "required" ? "必須です。" : "20文字までです。"}
