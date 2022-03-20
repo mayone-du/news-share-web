@@ -46,7 +46,7 @@ export const AuthModal: VFC = () => {
               <p className="mt-6 text-sm text-gray-500">
                 このアプリは
                 <a
-                  className="underline transition-colors hover:text-blue-500 hover:no-underline mx-1"
+                  className="mx-1 underline transition-colors hover:text-blue-500 hover:no-underline"
                   href="https://it-kingdom.com/"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -69,7 +69,7 @@ export const AuthModal: VFC = () => {
 
               <p className="text-sm text-gray-500">
                 <Link href={STATIC_ROUTES.ABOUT}>
-                  <a className="underline transition-colors hover:text-blue-500 hover:no-underline mr-1">
+                  <a className="mr-1 underline transition-colors hover:text-blue-500 hover:no-underline">
                     注意事項
                   </a>
                 </Link>

@@ -85,7 +85,7 @@ export const PostSlackButton: VFC = () => {
             className="flex gap-3 items-center py-2 px-4 mt-4 rounded border shadow-sm transition-all hover:bg-gray-50 hover:shadow disabled:bg-gray-300"
             onClick={handleOpenDialog}
           >
-            <FiSend className="text-gray-500 w-5 h-5" />
+            <FiSend className="w-5 h-5 text-gray-500" />
             Slackへ送信する
           </button>
           <Transition appear show={isOpenDialog} as="div">

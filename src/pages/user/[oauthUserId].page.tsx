@@ -75,25 +75,25 @@ const UserDetailPage: CustomNextPage<UserQuery> = (props) => {
 
   return (
     <div>
-      <div className="flex gap-10 mb-8 w-full items-start">
+      <div className="flex gap-10 items-start mb-8 w-full">
         <img src={props.user?.photoUrl} alt="" className="block w-28 rounded-full aspect-square" />
         {isMyUserPage && (
           <div className="flex-1">
             {isEditMode ? (
-              <div className="flex justify-between mb-4 w-full items-start">
+              <div className="flex justify-between items-start mb-4 w-full">
                 <div className="w-2/3">
                   <input
                     type="text"
-                    className="block text-2xl font-bold  outline-none"
+                    className="block text-2xl font-bold outline-none"
                     {...register("displayName", { required: true, maxLength: 20 })}
                   />
                   <textarea
-                    className="block resize-none outline-none w-full whitespace-pre"
+                    className="block w-full whitespace-pre outline-none resize-none"
                     {...register("selfIntroduction", { required: false, maxLength: 100 })}
                   />
                 </div>
 
-                <div className="w-1/3 flex items-center">
+                <div className="flex items-center w-1/3">
                   <button
                     className="block p-1 rounded border shadow"
                     onClick={handleToggleEditMode}
@@ -106,7 +106,7 @@ const UserDetailPage: CustomNextPage<UserQuery> = (props) => {
                 </div>
               </div>
             ) : (
-              <div className="flex justify-between mb-4 w-full items-start">
+              <div className="flex justify-between items-start mb-4 w-full">
                 {/* プロフィール情報 名前と自己紹介文 */}
                 <div className="w-2/3">
                   <h1 className="text-2xl font-bold">

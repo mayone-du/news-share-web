@@ -33,7 +33,7 @@ export const SidebarLeft: VFC = () => {
           })}
         </ul>
         <button
-          className="flex items-center gap-2 py-2 mt-4 px-4 rounded border shadow-sm transition-all hover:bg-gray-50 hover:shadow dark:bg-zinc-700 dark:hover:bg-zinc-600 text-gray-900"
+          className="flex gap-2 items-center py-2 px-4 mt-4 text-gray-900 rounded border shadow-sm transition-all hover:bg-gray-50 hover:shadow dark:bg-zinc-700 dark:hover:bg-zinc-600"
           onClick={handleOpenCreateNewsModal}
         >
           <IoMdAddCircleOutline className="block w-6 h-6 text-gray-500" />
