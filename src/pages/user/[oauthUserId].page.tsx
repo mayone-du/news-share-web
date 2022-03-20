@@ -1,6 +1,7 @@
 import type { CustomNextPage, GetStaticPaths, GetStaticProps } from "next";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import { initializeApollo } from "src/graphql/apollo/client";
 import {
   useMyUserInfoQuery,
@@ -49,14 +50,24 @@ const UserDetailPage: CustomNextPage<UserQuery> = (props) => {
   const { data: myUserInfoData, loading: isMyUserInfoLoading } = useMyUserInfoQuery();
   const [isEditMode, setIsEditMode] = useState(false);
   const isMyUserPage = myUserInfoData?.myUserInfo?.oauthUserId === props.user?.oauthUserId;
-  const { register } = useForm<FieldValues>({
+  const { register, handleSubmit } = useForm<FieldValues>({
     defaultValues: {
-      displayName: myUserInfoData?.myUserInfo?.displayName,
-      selfIntroduction: myUserInfoData?.myUserInfo?.selfIntroduction,
+      displayName: props.user?.displayName,
+      selfIntroduction: props.user?.selfIntroduction,
     },
   });
 
   const handleToggleEditMode = () => setIsEditMode((prev) => !prev);
+  const handleSave = handleSubmit(async (formData) => {
+    const toastId = toast.loading("保存中...");
+    const { errors } = await updateMyUserInfo({ variables: { input: { ...formData } } });
+    if (error || errors) {
+      toast.error("保存に失敗しました", { id: toastId });
+    } else {
+      toast.success("保存しました", { id: toastId });
+    }
+    handleToggleEditMode();
+  });
 
   if (isMyUserInfoLoading) {
     return <p>Loading...</p>;
@@ -64,44 +75,61 @@ const UserDetailPage: CustomNextPage<UserQuery> = (props) => {
 
   return (
     <div>
-      <div className="flex gap-10 mb-8 w-full">
+      <div className="flex gap-10 mb-8 w-full items-start">
         <img src={props.user?.photoUrl} alt="" className="block w-28 rounded-full aspect-square" />
         {isMyUserPage && (
           <div className="flex-1">
             {isEditMode ? (
-              <div className="flex justify-between items-center mb-4 w-full">
-                <input
-                  type="text"
-                  className="block text-2xl font-bold"
-                  {...register("displayName", { required: true })}
-                />
-                <div className="flex items-center">
+              <div className="flex justify-between mb-4 w-full items-start">
+                <div className="w-2/3">
+                  <input
+                    type="text"
+                    className="block text-2xl font-bold  outline-none"
+                    {...register("displayName", { required: true, maxLength: 20 })}
+                  />
+                  <textarea
+                    className="block resize-none outline-none w-full whitespace-pre"
+                    {...register("selfIntroduction", { required: false, maxLength: 100 })}
+                  />
+                </div>
+
+                <div className="w-1/3 flex items-center">
                   <button
                     className="block p-1 rounded border shadow"
                     onClick={handleToggleEditMode}
                   >
                     キャンセル
                   </button>
-                  <button
-                    className="block p-1 rounded border shadow"
-                    onClick={() => alert("ちょいまち")}
-                  >
+                  <button className="block p-1 rounded border shadow" onClick={handleSave}>
                     保存する
                   </button>
                 </div>
               </div>
             ) : (
-              <div className="flex justify-between items-center mb-4 w-full">
-                <h1 className="text-2xl font-bold">{props.user?.displayName}</h1>
+              <div className="flex justify-between mb-4 w-full items-start">
+                {/* プロフィール情報 名前と自己紹介文 */}
+                <div className="w-2/3">
+                  <h1 className="text-2xl font-bold">
+                    {/* 更新後のデータが有ればそれを表示し、なければSSGしてあるデータを表示 */}
+                    {/* TODO: オンデマンドISRを試してみる（更新時にリビルドさせる） */}
+                    {data?.updateMyUserInfo?.displayName
+                      ? data.updateMyUserInfo.displayName
+                      : props.user?.displayName}
+                  </h1>
+                  <p className="text-gray-600">
+                    {data?.updateMyUserInfo?.selfIntroduction
+                      ? data.updateMyUserInfo.selfIntroduction
+                      : props.user?.selfIntroduction}
+                  </p>
+                </div>
                 <button
-                  className="py-1 px-2 rounded border shadow-sm hover:shadow"
+                  className="py-1 px-2 w-1/3 rounded border shadow-sm hover:shadow"
                   onClick={handleToggleEditMode}
                 >
                   プロフィールを編集する
                 </button>
               </div>
             )}
-            <p className="text-gray-600">{props.user?.selfIntroduction}</p>
           </div>
         )}
       </div>
