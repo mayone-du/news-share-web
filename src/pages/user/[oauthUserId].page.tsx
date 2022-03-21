@@ -88,7 +88,7 @@ const UserDetailPage: CustomNextPage<UserQuery> = (props) => {
                     {...register("displayName", { required: true, maxLength: 20 })}
                   />
                   <textarea
-                    className="block w-full whitespace-pre outline-none resize-none"
+                    className="block w-full outline-none resize-none"
                     {...register("selfIntroduction", { required: false, maxLength: 100 })}
                   />
                 </div>
@@ -116,18 +116,20 @@ const UserDetailPage: CustomNextPage<UserQuery> = (props) => {
                       ? data.updateMyUserInfo.displayName
                       : props.user?.displayName}
                   </h1>
-                  <p className="text-gray-600">
+                  <p className="text-gray-600 whitespace-pre">
                     {data?.updateMyUserInfo?.selfIntroduction
                       ? data.updateMyUserInfo.selfIntroduction
                       : props.user?.selfIntroduction}
                   </p>
                 </div>
-                <button
-                  className="py-1 px-2 w-1/3 rounded border shadow-sm hover:shadow"
-                  onClick={handleToggleEditMode}
-                >
-                  プロフィールを編集する
-                </button>
+                <div className="w-1/3">
+                  <button
+                    className="block py-1 px-2 ml-auto rounded border shadow-sm hover:shadow"
+                    onClick={handleToggleEditMode}
+                  >
+                    編集する
+                  </button>
+                </div>
               </div>
             )}
           </div>
