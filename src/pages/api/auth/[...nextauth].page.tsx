@@ -21,7 +21,7 @@ export default NextAuth({
       try {
         console.log("signIn", params);
         // 初回サインイン時にDBにユーザーを登録し、二回目以降はユーザーが存在すればOKにする
-        const apolloClient = initializeApollo(params.account.access_token);
+        const apolloClient = initializeApollo(params.account.id_token);
         const { errors } = await apolloClient.mutate<AuthUserMutation, AuthUserMutationVariables>({
           mutation: AuthUserDocument,
         });
@@ -32,7 +32,6 @@ export default NextAuth({
         return true;
       } catch (e) {
         console.error(e);
-        console.log("access_token: ", params.account.access_token);
         return false;
       }
     },
@@ -44,14 +43,14 @@ export default NextAuth({
 
     jwt: async (params) => {
       if (params.account) {
-        params.token.access_token = params.account.access_token;
+        params.token.id_token = params.account.id_token;
       }
       return params.token;
     },
 
     session: async (params) => {
       // useSession時にsession.access_tokenでaccess_tokenを取得できるようにする
-      return { ...params.session, access_token: params.token.access_token };
+      return { ...params.session, id_token: params.token.id_token };
     },
   },
 });

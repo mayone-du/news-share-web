@@ -11,7 +11,8 @@ let apolloClient: ApolloClient<NormalizedCacheObject> | undefined;
 
 const authLink = setContext(async (request, previousContext) => {
   const session = await getSession();
-  const token = session?.access_token;
+  // TODO: ここらへんの型が安全じゃないからなにか出来ないか調べる。next auth側の方とかないのかな
+  const token = session?.id_token;
   // initializeApolloでtokenを渡した場合に空文字で上書きさせないようにしている
   if (token) return { headers: { authorization: `Bearer ${token}` } };
   return { headers: previousContext.headers };
