@@ -7,6 +7,7 @@ import { useAuthModal } from "src/hooks/useAuthModal";
 import type { VFC } from "react";
 import { Role, useMyUserInfoQuery } from "src/graphql/schemas/generated/schema";
 import { FiLogOut } from "react-icons/fi";
+import { Button } from "@mantine/core";
 
 export const Header: VFC = () => {
   const { data: session, status } = useSession();
@@ -32,12 +33,7 @@ export const Header: VFC = () => {
           {status === "unauthenticated" && (
             <li className="ml-2">
               <div>
-                <button
-                  onClick={handleToggleAuthModal}
-                  className="block py-2 px-4 rounded border shadow-sm transition-all hover:bg-gray-50 hover:shadow"
-                >
-                  SignIn
-                </button>
+                <Button onClick={handleToggleAuthModal}>SignIn</Button>
               </div>
             </li>
           )}

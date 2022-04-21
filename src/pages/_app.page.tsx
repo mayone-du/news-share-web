@@ -1,4 +1,5 @@
-import "tailwindcss/tailwind.css";
+import "src/styles/app.css";
+// import "tailwindcss/tailwind.css"; // リセットCSSがMantineのButtonを消してしまう
 import "nprogress/nprogress.css";
 
 import { ApolloProvider } from "@apollo/client";
@@ -14,6 +15,7 @@ import { Toaster } from "react-hot-toast";
 import { initializeApollo } from "src/graphql/apollo/client";
 import { KBarProvider, KBarPortal, KBarPositioner, KBarAnimator, KBarSearch } from "kbar";
 import { RenderKBarResults } from "src/components/common/RenderKBarResults";
+import { MantineProvider } from "@mantine/core";
 import { useKBarActions } from "src/hooks/useKBarActions";
 
 NProgress.configure({ showSpinner: false, speed: 400, minimum: 0.25 });
@@ -50,20 +52,29 @@ const App: VFC<CustomAppProps> = memo((props) => {
       <SessionProvider session={props.pageProps.session}>
         <ApolloProvider client={apolloClient}>
           <ThemeProvider attribute="class" defaultTheme="light">
-            <DefaultSeo
-              title={"Template"}
-              titleTemplate={"%s | サイトの名前"}
-              description="Template Repo"
-              additionalMetaTags={[{ property: "", content: "" }]}
-              additionalLinkTags={[
-                {
-                  rel: "manifest",
-                  href: "/pwa/manifest.json",
-                },
-              ]}
-            />
-            {getLayout(<props.Component {...props.pageProps} />)}
-            <Toaster toastOptions={{ duration: 2500 }} />
+            <MantineProvider
+              // withGlobalStyles
+              // withNormalizeCSS
+              theme={{
+                colorScheme: "light",
+                primaryColor: "cyan",
+              }}
+            >
+              <DefaultSeo
+                title={"Template"}
+                titleTemplate={"%s | サイトの名前"}
+                description="Template Repo"
+                additionalMetaTags={[{ property: "", content: "" }]}
+                additionalLinkTags={[
+                  {
+                    rel: "manifest",
+                    href: "/pwa/manifest.json",
+                  },
+                ]}
+              />
+              {getLayout(<props.Component {...props.pageProps} />)}
+              <Toaster toastOptions={{ duration: 2500 }} />
+            </MantineProvider>
           </ThemeProvider>
         </ApolloProvider>
       </SessionProvider>
