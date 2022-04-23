@@ -1,12 +1,17 @@
-import { Modal, Title } from "@mantine/core";
+import { Modal, Title, LoadingOverlay } from "@mantine/core";
 import Link from "next/link";
 import type { VFC } from "react";
 import { STATIC_ROUTES } from "src/constants/routes";
 import { useAuthModal } from "src/hooks/useAuthModal";
 
 export const AuthModal: VFC = () => {
-  const { isOpenAuthModal, handleCloseAuthModal, handleOpenAuthModal, handleClickAuth } =
-    useAuthModal();
+  const {
+    isOpenAuthModal,
+    isRedirecting,
+    handleCloseAuthModal,
+    handleOpenAuthModal,
+    handleClickAuth,
+  } = useAuthModal();
   return (
     <Modal
       opened={isOpenAuthModal}
@@ -18,6 +23,8 @@ export const AuthModal: VFC = () => {
         </Title>
       }
     >
+      <LoadingOverlay visible={isRedirecting} />
+
       <p className="mt-6 text-sm text-gray-500">
         このアプリは
         <a
