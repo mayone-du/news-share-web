@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import { getSession } from "next-auth/react";
-import { useEffect } from "react";
+import { useEffect, VFC } from "react";
 import { CreateNewsModal } from "src/components/common";
 import { AuthModal } from "src/components/common";
 import { initializeApollo } from "src/graphql/apollo/client";
@@ -16,7 +16,7 @@ import { SidebarLeft } from "src/layouts/SidebarLeft";
 import { SidebarRight } from "src/layouts/SidebarRight";
 
 // pagesのgetLayoutで指定されたページで呼ばれる。ページのリロード時に呼ばれ、ページ遷移時には呼ばれない。
-export const Layout = (page: NextPage) => {
+export const Layout: VFC<NextPage> = (props) => {
   // 初回マウント時にユーザー情報を取得し、ReactiveVariablesでグローバル管理して、_appで値を参照する
   useEffect(() => {
     (async () => {
@@ -45,7 +45,7 @@ export const Layout = (page: NextPage) => {
           <SidebarLeft />
         </div>
         <main className="col-span-6 lg:col-span-2">
-          <LayoutErrorBoundary>{page}</LayoutErrorBoundary>
+          <LayoutErrorBoundary>{props}</LayoutErrorBoundary>
         </main>
         <div className="sticky top-4 col-span-1">
           <SidebarRight />
