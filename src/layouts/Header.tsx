@@ -71,7 +71,7 @@ export const Header: VFC = () => {
                                     <span className="block">
                                       {myUserInfoData?.myUserInfo?.role === Role.Admin && "👑 "}
                                       {myUserInfoData?.myUserInfo?.role === Role.Developer && "💻 "}
-                                      {session?.user?.name}
+                                      {myUserInfoData?.myUserInfo?.displayName}
                                     </span>
                                     <span className="block text-xs text-gray-400">
                                       @{myUserInfoData?.myUserInfo?.oauthUserId}
