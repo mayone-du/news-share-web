@@ -1,3 +1,4 @@
+import { Console } from "console";
 import type { CustomNextPage, GetStaticPaths, GetStaticProps } from "next";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -16,6 +17,7 @@ import {
 import { Layout } from "src/layouts";
 import { calcFromNow } from "src/utils";
 
+// TODO: Fragmentの型定義つかうとか
 // TODO: 型をもう少し良い感じにする
 export const getStaticPaths: GetStaticPaths = async (context) => {
   const apolloClient = initializeApollo();
