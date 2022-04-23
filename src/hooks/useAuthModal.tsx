@@ -7,18 +7,22 @@ export const useAuthModal = () => {
   const isOpenAuthModal = useReactiveVar(isOpenAuthModalVar);
 
   // 認証モーダルの開閉
-  const handleToggleAuthModal = useCallback(() => {
-    isOpenAuthModalVar(!isOpenAuthModal);
-  }, [isOpenAuthModal]);
+  const handleOpenAuthModal = useCallback(() => {
+    isOpenAuthModalVar(true);
+  }, []);
+  const handleCloseAuthModal = useCallback(() => {
+    isOpenAuthModalVar(false);
+  }, []);
 
   // モーダルの中身のボタンをクリックした時
   const handleClickAuth = useCallback(async () => {
     await handleSignIn();
-    handleToggleAuthModal();
+    handleCloseAuthModal();
   }, []);
 
   return {
-    handleToggleAuthModal,
+    handleOpenAuthModal,
+    handleCloseAuthModal,
     handleClickAuth,
     isOpenAuthModal,
   };

@@ -1,7 +1,3 @@
-@tailwind components;
-@tailwind utilities;
-
-/* @tailwind base; */
 /* NOTE: Normalize.css is conflict with Mantine Button Component.
   https://unpkg.com/tailwindcss@3.0.23/src/css/preflight.css
  */
@@ -398,5 +394,7 @@ Ensure the default browser behavior of the `hidden` attribute.
 [hidden] {
   display: none;
 }
+
+@tailwind base;
 @tailwind components;
 @tailwind utilities;

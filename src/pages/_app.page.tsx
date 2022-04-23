@@ -13,10 +13,7 @@ import { memo } from "react";
 import type { VFC } from "react";
 import { Toaster } from "react-hot-toast";
 import { initializeApollo } from "src/graphql/apollo/client";
-import { KBarProvider, KBarPortal, KBarPositioner, KBarAnimator, KBarSearch } from "kbar";
-import { RenderKBarResults } from "src/components/common/RenderKBarResults";
 import { MantineProvider } from "@mantine/core";
-import { useKBarActions } from "src/hooks/useKBarActions";
 
 NProgress.configure({ showSpinner: false, speed: 400, minimum: 0.25 });
 Router.events.on("routeChangeStart", () => {
@@ -31,7 +28,6 @@ Router.events.on("routeChangeError", () => {
 
 const App: VFC<CustomAppProps> = memo((props) => {
   const apolloClient = initializeApollo();
-  const { actions } = useKBarActions();
 
   const getLayout =
     props.Component.getLayout ||
@@ -40,45 +36,35 @@ const App: VFC<CustomAppProps> = memo((props) => {
     });
 
   return (
-    <KBarProvider actions={actions}>
-      <KBarPortal>
-        <KBarPositioner>
-          <KBarAnimator className="shadow-2xl">
-            <KBarSearch className="py-3 px-4 w-96 rounded-t-md shadow-2xl outline-none shadow-black" />
-            <RenderKBarResults />
-          </KBarAnimator>
-        </KBarPositioner>
-      </KBarPortal>
-      <SessionProvider session={props.pageProps.session}>
-        <ApolloProvider client={apolloClient}>
-          <ThemeProvider attribute="class" defaultTheme="light">
-            <MantineProvider
-              // withGlobalStyles
-              // withNormalizeCSS
-              theme={{
-                colorScheme: "light",
-                primaryColor: "cyan",
-              }}
-            >
-              <DefaultSeo
-                title={"Template"}
-                titleTemplate={"%s | サイトの名前"}
-                description="Template Repo"
-                additionalMetaTags={[{ property: "", content: "" }]}
-                additionalLinkTags={[
-                  {
-                    rel: "manifest",
-                    href: "/pwa/manifest.json",
-                  },
-                ]}
-              />
-              {getLayout(<props.Component {...props.pageProps} />)}
-              <Toaster toastOptions={{ duration: 2500 }} />
-            </MantineProvider>
-          </ThemeProvider>
-        </ApolloProvider>
-      </SessionProvider>
-    </KBarProvider>
+    <SessionProvider session={props.pageProps.session}>
+      <ApolloProvider client={apolloClient}>
+        <ThemeProvider attribute="class" defaultTheme="light">
+          <MantineProvider
+            withGlobalStyles
+            withNormalizeCSS
+            theme={{
+              colorScheme: "light",
+              primaryColor: "cyan",
+            }}
+          >
+            <DefaultSeo
+              title={"Template"}
+              titleTemplate={"%s | サイトの名前"}
+              description="Template Repo"
+              additionalMetaTags={[{ property: "", content: "" }]}
+              additionalLinkTags={[
+                {
+                  rel: "manifest",
+                  href: "/pwa/manifest.json",
+                },
+              ]}
+            />
+            {getLayout(<props.Component {...props.pageProps} />)}
+            <Toaster toastOptions={{ duration: 2500 }} />
+          </MantineProvider>
+        </ThemeProvider>
+      </ApolloProvider>
+    </SessionProvider>
   );
 });
 

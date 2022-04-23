@@ -5,11 +5,11 @@ import { useAuthModal } from "src/hooks/useAuthModal";
 
 export const useCreateNewsModal = () => {
   const { status } = useSession();
-  const { handleToggleAuthModal } = useAuthModal();
+  const { handleOpenAuthModal } = useAuthModal();
 
   const handleOpenCreateNewsModal = useCallback(() => {
     if (status === "loading") return;
-    if (status === "unauthenticated") return handleToggleAuthModal();
+    if (status === "unauthenticated") return handleOpenAuthModal();
     isOpenCreateNewsModalVar(true);
   }, [status]);
 

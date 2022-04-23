@@ -12,7 +12,7 @@ import { Button } from "@mantine/core";
 export const Header: VFC = () => {
   const { data: session, status } = useSession();
   const { data: myUserInfoData } = useMyUserInfoQuery({ fetchPolicy: "cache-only" });
-  const { handleToggleAuthModal } = useAuthModal();
+  const { handleOpenAuthModal } = useAuthModal();
 
   const handleSignOut = useCallback(() => signOut(), []);
 
@@ -33,7 +33,7 @@ export const Header: VFC = () => {
           {status === "unauthenticated" && (
             <li className="ml-2">
               <div>
-                <Button onClick={handleToggleAuthModal}>SignIn</Button>
+                <Button onClick={handleOpenAuthModal}>SignIn</Button>
               </div>
             </li>
           )}
