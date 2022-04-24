@@ -13,7 +13,7 @@ import { Footer } from "src/layouts/AppFooter";
 import { LayoutErrorBoundary } from "src/layouts/LayoutErrorBoundary";
 import { SidebarLeft } from "src/layouts/SidebarLeft";
 import { SidebarRight } from "src/layouts/SidebarRight";
-import { AppShell } from "@mantine/core";
+import { AppShell, Box, Grid } from "@mantine/core";
 import { AppHeader } from "src/layouts/AppHeader";
 import { AppNavbar } from "src/layouts/AppNavbar";
 
@@ -51,7 +51,10 @@ export const Layout: VFC<NextPage> = (page) => {
     >
       <AuthModal />
       <CreateNewsModal />
-      {page}
+      <Grid>
+        <Grid.Col span={9}>{page}</Grid.Col>
+        <Grid.Col span={3}>hoge</Grid.Col>
+      </Grid>
     </AppShell>
   );
 };

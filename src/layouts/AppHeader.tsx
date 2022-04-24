@@ -7,8 +7,15 @@ import { useAuthModal } from "src/hooks/useAuthModal";
 import type { VFC } from "react";
 import { Role, useMyUserInfoQuery } from "src/graphql/schemas/generated/schema";
 import { FiLogOut } from "react-icons/fi";
-import { Avatar, Box, Button, Group, UnstyledButton } from "@mantine/core";
-import { Header, ActionIcon, useMantineColorScheme, Popover, Menu } from "@mantine/core";
+import {
+  Avatar,
+  Button,
+  UnstyledButton,
+  Header,
+  ActionIcon,
+  useMantineColorScheme,
+  Menu,
+} from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 
 export const AppHeader: VFC = () => {
@@ -49,8 +56,12 @@ export const AppHeader: VFC = () => {
           }
         >
           <Menu.Label>Application</Menu.Label>
-          <Menu.Item onClick={handleSignOut} icon={<FiLogOut size={14} />}>
-            SignOut
+          <Menu.Item
+            onClick={handleSignOut}
+            icon={<FiLogOut size={14} />}
+            className="hover:bg-gray-100"
+          >
+            ログアウト
           </Menu.Item>
         </Menu>
       )}
