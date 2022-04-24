@@ -17,7 +17,7 @@ export const AuthModal: VFC = () => {
         </Title>
       }
     >
-      <LoadingOverlay visible={isRedirecting} />
+      <LoadingOverlay visible={isRedirecting} className="rounded-sm" />
 
       <p className="mt-6 text-sm text-gray-500">
         このアプリは
