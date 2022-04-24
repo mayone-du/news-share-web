@@ -42,7 +42,7 @@ type Props = {
 export const NewsList: VFC<Props> = (props) => {
   const { asPath } = useRouter();
   const { status } = useSession();
-  const { handleToggleAuthModal } = useAuthModal();
+  const { handleOpenAuthModal } = useAuthModal();
   const {
     newsListQueryResult: { data: NewsListData, loading, error, refetch },
   } = props;
@@ -160,7 +160,7 @@ export const NewsList: VFC<Props> = (props) => {
       }
     };
   const handleToggleLike = (newsId: bigint, isLiked: boolean) => async () => {
-    if (status === "unauthenticated") return handleToggleAuthModal();
+    if (status === "unauthenticated") return handleOpenAuthModal();
     try {
       await toggleLike({ variables: { input: { newsId, isLiked } } });
       await refetch();

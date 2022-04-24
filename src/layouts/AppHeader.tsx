@@ -1,4 +1,5 @@
 import { Popover } from "@headlessui/react";
+import { BiSun, BiMoon } from "react-icons/bi";
 import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
 import { useCallback } from "react";
@@ -8,8 +9,19 @@ import type { VFC } from "react";
 import { Role, useMyUserInfoQuery } from "src/graphql/schemas/generated/schema";
 import { FiLogOut } from "react-icons/fi";
 import { Button } from "@mantine/core";
+import {
+  AppShell,
+  Navbar,
+  Header,
+  UnstyledButton,
+  Avatar,
+  Group,
+  Text,
+  ActionIcon,
+  useMantineColorScheme,
+} from "@mantine/core";
 
-export const Header: VFC = () => {
+export const Header1: VFC = () => {
   const { data: session, status } = useSession();
   const { data: myUserInfoData } = useMyUserInfoQuery({ fetchPolicy: "cache-only" });
   const { handleOpenAuthModal } = useAuthModal();
@@ -98,5 +110,18 @@ export const Header: VFC = () => {
         </ul>
       </nav>
     </header>
+  );
+};
+
+export const AppHeader: VFC = () => {
+  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+  const handleToggleColorScheme = () => toggleColorScheme();
+  const isDark = colorScheme === "dark";
+  return (
+    <Header height={60} p="xs" className="flex items-center justify-end">
+      <ActionIcon variant="outline" onClick={handleToggleColorScheme} title="テーマカラーを変更">
+        {isDark ? <BiSun size={18} /> : <BiMoon size={18} />}
+      </ActionIcon>
+    </Header>
   );
 };

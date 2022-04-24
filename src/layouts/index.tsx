@@ -9,14 +9,16 @@ import {
   MyUserInfoQuery,
   MyUserInfoQueryVariables,
 } from "src/graphql/schemas/generated/schema";
-import { Footer } from "src/layouts/Footer";
-import { Header } from "src/layouts/Header";
+import { Footer } from "src/layouts/AppFooter";
 import { LayoutErrorBoundary } from "src/layouts/LayoutErrorBoundary";
 import { SidebarLeft } from "src/layouts/SidebarLeft";
 import { SidebarRight } from "src/layouts/SidebarRight";
+import { AppShell } from "@mantine/core";
+import { AppHeader } from "src/layouts/AppHeader";
+import { AppNavbar } from "src/layouts/AppNavbar";
 
 // pagesのgetLayoutで指定されたページで呼ばれる。ページのリロード時に呼ばれ、ページ遷移時には呼ばれない。
-export const Layout: VFC<NextPage> = (props) => {
+export const Layout: VFC<NextPage> = (page) => {
   // 初回マウント時にユーザー情報を取得し、ReactiveVariablesでグローバル管理して、_appで値を参照する
   useEffect(() => {
     (async () => {
@@ -36,22 +38,20 @@ export const Layout: VFC<NextPage> = (props) => {
   }, []);
 
   return (
-    <div className="dark:bg-zinc-800">
+    <AppShell
+      padding="md"
+      navbar={<AppNavbar />}
+      header={<AppHeader />}
+      styles={(theme) => ({
+        main: {
+          backgroundColor:
+            theme.colorScheme === "dark" ? theme.colors.dark[8] : theme.colors.gray[0],
+        },
+      })}
+    >
       <AuthModal />
       <CreateNewsModal />
-      <Header />
-      <div className="grid grid-cols-8 gap-4 items-start px-10 pt-8 mx-auto lg:grid-cols-4 lg:gap-8 lg:px-44 max-w-[1680px]">
-        <div className="sticky top-4 col-span-1">
-          <SidebarLeft />
-        </div>
-        <main className="col-span-6 lg:col-span-2">
-          <LayoutErrorBoundary>{props}</LayoutErrorBoundary>
-        </main>
-        <div className="sticky top-4 col-span-1">
-          <SidebarRight />
-        </div>
-      </div>
-      <Footer />
-    </div>
+      {page}
+    </AppShell>
   );
 };

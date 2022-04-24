@@ -5,13 +5,7 @@ import { STATIC_ROUTES } from "src/constants/routes";
 import { useAuthModal } from "src/hooks/useAuthModal";
 
 export const AuthModal: VFC = () => {
-  const {
-    isOpenAuthModal,
-    isRedirecting,
-    handleCloseAuthModal,
-    handleOpenAuthModal,
-    handleClickAuth,
-  } = useAuthModal();
+  const { isOpenAuthModal, isRedirecting, handleCloseAuthModal, handleClickAuth } = useAuthModal();
   return (
     <Modal
       opened={isOpenAuthModal}
