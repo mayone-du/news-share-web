@@ -1,6 +1,5 @@
 import { STATIC_ROUTES } from "src/constants/routes";
 import { News } from "src/graphql/schemas/generated/schema";
-import { SearchFieldValues } from "src/layouts/SidebarRight/SearchFormCard";
 
 // TODO: 構造化されてるものができてない
 export const ROUTE_LABELS: Record<keyof typeof STATIC_ROUTES | 404, string> = {
