@@ -15,8 +15,11 @@ import {
   ActionIcon,
   useMantineColorScheme,
   Menu,
+  Divider,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
+import { MdAccountCircle } from "react-icons/md";
+import NextLink from "next/link";
 
 export const AppHeader: VFC = () => {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
@@ -55,10 +58,20 @@ export const AppHeader: VFC = () => {
             </UnstyledButton>
           }
         >
-          <Menu.Label>Application</Menu.Label>
+          <Menu.Label>@{myUserInfoData.myUserInfo.oauthUserId}</Menu.Label>
+          <NextLink href={"/"} passHref>
+            <Menu.Item
+              component="a"
+              icon={<MdAccountCircle size={16} />}
+              className="hover:bg-gray-100"
+            >
+              マイページ
+            </Menu.Item>
+          </NextLink>
+          <Divider />
           <Menu.Item
             onClick={handleSignOut}
-            icon={<FiLogOut size={14} />}
+            icon={<FiLogOut size={16} />}
             className="hover:bg-gray-100"
           >
             ログアウト

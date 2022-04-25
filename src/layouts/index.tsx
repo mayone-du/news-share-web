@@ -9,7 +9,7 @@ import {
   MyUserInfoQuery,
   MyUserInfoQueryVariables,
 } from "src/graphql/schemas/generated/schema";
-import { Footer } from "src/layouts/AppFooter";
+import { AppFooter } from "src/layouts/AppFooter";
 import { LayoutErrorBoundary } from "src/layouts/LayoutErrorBoundary";
 import { SidebarLeft } from "src/layouts/SidebarLeft";
 import { SidebarRight } from "src/layouts/SidebarRight";
@@ -39,9 +39,10 @@ export const Layout: VFC<NextPage> = (page) => {
 
   return (
     <AppShell
-      padding="md"
+      padding="lg"
       navbar={<AppNavbar />}
       header={<AppHeader />}
+      footer={<AppFooter />}
       styles={(theme) => ({
         main: {
           backgroundColor:
@@ -51,9 +52,11 @@ export const Layout: VFC<NextPage> = (page) => {
     >
       <AuthModal />
       <CreateNewsModal />
-      <Grid>
-        <Grid.Col span={9}>{page}</Grid.Col>
-        <Grid.Col span={3}>hoge</Grid.Col>
+      <Grid gutter="lg">
+        <Grid.Col span={8}>{page}</Grid.Col>
+        <Grid.Col span={3}>
+          <SidebarRight />
+        </Grid.Col>
       </Grid>
     </AppShell>
   );

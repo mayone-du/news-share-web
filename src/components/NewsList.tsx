@@ -24,11 +24,10 @@ import { FaHeart } from "react-icons/fa";
 import dayjs from "dayjs";
 import { useRouter } from "next/router";
 import { InvalidIdError } from "src/errors";
-import { Tooltip } from "src/components/common/Tooltip";
 import { Reference } from "@apollo/client";
 import { useSession } from "next-auth/react";
 import { useAuthModal } from "src/hooks/useAuthModal";
-import { TextInput, Box, Divider, Menu, UnstyledButton } from "@mantine/core";
+import { TextInput, Box, Divider, Menu, UnstyledButton, Avatar, Tooltip } from "@mantine/core";
 
 // TODO: NonNullableを適用したい。まだ型安全ではない
 type FieldValues = {
@@ -217,7 +216,7 @@ export const NewsList: VFC<Props> = (props) => {
         return (
           <li
             key={news.nodeId}
-            className={`relative mb-4 rounded border ${
+            className={`relative mb-4 rounded border bg-white ${
               isEditingNews(news) ? "ring-2 ring-blue-200" : ""
             }`}
           >
@@ -249,22 +248,25 @@ export const NewsList: VFC<Props> = (props) => {
                       明日に延期する
                     </Menu.Item>
                   )}
-                  <Menu.Item
-                    className="hover:bg-gray-100"
-                    icon={<BsCheck2 />}
-                    onClick={handleToggleViewedNews(news)}
-                    disabled={isUpdateNewsLoading || isDeleteNewsLoading}
-                  >
-                    シェア済みにする
-                  </Menu.Item>
-                  <Menu.Item
-                    className="hover:bg-gray-100"
-                    icon={<IoMdReturnLeft />}
-                    onClick={handleToggleViewedNews(news)}
-                    disabled={isUpdateNewsLoading || isDeleteNewsLoading}
-                  >
-                    シェアしていない状態に戻す
-                  </Menu.Item>
+                  {news.isViewed ? (
+                    <Menu.Item
+                      className="hover:bg-gray-100"
+                      icon={<IoMdReturnLeft />}
+                      onClick={handleToggleViewedNews(news)}
+                      disabled={isUpdateNewsLoading || isDeleteNewsLoading}
+                    >
+                      シェアしていない状態に戻す
+                    </Menu.Item>
+                  ) : (
+                    <Menu.Item
+                      className="hover:bg-gray-100"
+                      icon={<BsCheck2 />}
+                      onClick={handleToggleViewedNews(news)}
+                      disabled={isUpdateNewsLoading || isDeleteNewsLoading}
+                    >
+                      シェア済みにする
+                    </Menu.Item>
+                  )}
 
                   <Menu.Item
                     className="hover:bg-gray-100"
@@ -295,7 +297,7 @@ export const NewsList: VFC<Props> = (props) => {
                 isEditingNews(news) ? "bottom-16" : ""
               }`}
             >
-              <Tooltip tooltipText="いいねをすると後でマイページから見返すことができます">
+              <Tooltip label="いいねをすると後でマイページから見返すことができます">
                 <button
                   className="block"
                   onClick={handleToggleLike(news.id, !isLikedNews(news as News))}
@@ -381,11 +383,12 @@ export const NewsList: VFC<Props> = (props) => {
                 <div className="flex items-center">
                   <div className="flex items-center">
                     {news.user.photoUrl ? (
-                      <img
+                      <Avatar
                         src={news.user.photoUrl}
                         alt={news.user.displayName}
-                        className="mr-1 w-6 h-6 rounded-full border border-gray-100"
-                        loading="lazy"
+                        radius="xl"
+                        size="sm"
+                        className="mr-1"
                       />
                     ) : null}
                     <span className="mr-4 text-sm font-bold text-gray-600">
