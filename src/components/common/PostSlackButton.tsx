@@ -1,5 +1,4 @@
 import { useCallback, useState } from "react";
-import { Dialog, Transition } from "@headlessui/react";
 import type { VFC } from "react";
 import {
   Role,
@@ -14,6 +13,7 @@ import { hyphenFormat } from "src/utils";
 import dayjs from "dayjs";
 import { useRouter } from "next/router";
 import { FiSend } from "react-icons/fi";
+import { Modal, Title } from "@mantine/core";
 
 export const PostSlackButton: VFC = () => {
   const { asPath } = useRouter();
@@ -32,9 +32,9 @@ export const PostSlackButton: VFC = () => {
   ] = useCreateSlackNotificationMutation();
   const [postponeNewsList, { error: postponeNewsListError, loading: isPostponeNewsListLoading }] =
     usePostponeNewsListMutation();
-  const [isOpenDialog, setIsOpenDialog] = useState(false);
-  const handleCloseDialog = useCallback(() => setIsOpenDialog(false), []);
-  const handleOpenDialog = useCallback(() => setIsOpenDialog(true), []);
+  const [isOpenModal, setIsOpenModal] = useState(false);
+  const handleCloseDialog = useCallback(() => setIsOpenModal(false), []);
+  const handleOpenDialog = useCallback(() => setIsOpenModal(true), []);
   const handleEndNewsShare = async () => {
     // シェアしていないもの(見ていないもの)は延期する
     const willPostponeNewsIds = (newsListData?.newsList
@@ -88,56 +88,31 @@ export const PostSlackButton: VFC = () => {
             <FiSend className="w-5 h-5 text-gray-500" />
             Slackへ送信する
           </button>
-          <Transition appear show={isOpenDialog} as="div">
-            <Dialog
-              as="div"
-              className="overflow-y-auto fixed inset-0 z-10 bg-gray-400 bg-opacity-40"
-              onClose={handleCloseDialog}
-            >
-              <div className="flex justify-center items-center px-4 min-h-screen">
-                <Transition.Child
-                  as="div"
-                  enter="ease-out duration-50"
-                  enterFrom="opacity-0"
-                  enterTo="opacity-100"
-                  leave="ease-in duration-50"
-                  leaveFrom="opacity-100"
-                  leaveTo="opacity-0"
-                >
-                  <Dialog.Overlay className="fixed inset-0" />
-                </Transition.Child>
+          <Modal
+            opened={isOpenModal}
+            onClose={handleCloseDialog}
+            title={
+              <Title order={3} className="text-xl font-bold text-center text-gray-900">
+                今日のニュースシェアを終了する
+              </Title>
+            }
+          >
+            <div className="flex justify-center items-center px-4 min-h-screen">
+              <div className="overflow-hidden p-8 m-auto w-80 bg-white rounded-lg shadow-xl transition-all transform sm:w-96">
+                <ul className="flex flex-col gap-1 px-4 mt-4 list-disc text-gray-600">
+                  <li>既にシェアしたニュースをSlackへ送信</li>
+                  <li>シェアしていないニュースを明日へ延期</li>
+                </ul>
+                <p className="mt-2 text-sm text-gray-500">以上の2つを行います</p>
 
-                <span className="inline-block h-screen align-middle" aria-hidden="true">
-                  &#8203;
-                </span>
-                <Transition.Child
-                  as="div"
-                  enter="ease-out duration-100"
-                  enterFrom="opacity-0 scale-95"
-                  enterTo="opacity-100 scale-100"
-                  leave="ease-in duration-50"
-                  leaveFrom="opacity-100 scale-100"
-                  leaveTo="opacity-0 scale-95"
-                >
-                  <div className="overflow-hidden p-8 m-auto w-80 bg-white rounded-lg shadow-xl transition-all transform sm:w-96">
-                    <Dialog.Title as="h3" className="text-xl font-bold text-center text-gray-900">
-                      今日のニュースシェアを終了する
-                    </Dialog.Title>
+                {slackNotificationData?.slackNotification?.isSent && (
+                  <p className="mt-6 text-sm text-red-500">
+                    今日はすでにSlackに送信しているようです。本当にもう一度送信しますか？
+                  </p>
+                )}
 
-                    <ul className="flex flex-col gap-1 px-4 mt-4 list-disc text-gray-600">
-                      <li>既にシェアしたニュースをSlackへ送信</li>
-                      <li>シェアしていないニュースを明日へ延期</li>
-                    </ul>
-                    <p className="mt-2 text-sm text-gray-500">以上の2つを行います</p>
-
-                    {slackNotificationData?.slackNotification?.isSent && (
-                      <p className="mt-6 text-sm text-red-500">
-                        今日はすでにSlackに送信しているようです。本当にもう一度送信しますか？
-                      </p>
-                    )}
-
-                    {/* TODO: プレビュー表示？ */}
-                    {/* {newsListData?.newsList.map((news) => {
+                {/* TODO: プレビュー表示？ */}
+                {/* {newsListData?.newsList.map((news) => {
                       return (
                         <div key={news.nodeId} className="text-sm text-gray-600 line-clamp-1">
                           {news.title}
@@ -145,25 +120,23 @@ export const PostSlackButton: VFC = () => {
                       );
                     })} */}
 
-                    <div className="mt-6">
-                      <button
-                        type="button"
-                        className="flex items-center py-2 px-6 mx-auto bg-gray-50 rounded border border-gray-200 ring-blue-200 shadow transition-all outline-none hover:bg-gray-100 hover:shadow-md focus-visible:ring-2 focus-visible:ring-blue-300 active:ring-2"
-                        onClick={handleEndNewsShare}
-                        disabled={
-                          isSlackNotificationLoading ||
-                          isCreateSlackNotificationLoading ||
-                          isPostponeNewsListLoading
-                        }
-                      >
-                        実行する
-                      </button>
-                    </div>
-                  </div>
-                </Transition.Child>
+                <div className="mt-6">
+                  <button
+                    type="button"
+                    className="flex items-center py-2 px-6 mx-auto bg-gray-50 rounded border border-gray-200 ring-blue-200 shadow transition-all outline-none hover:bg-gray-100 hover:shadow-md focus-visible:ring-2 focus-visible:ring-blue-300 active:ring-2"
+                    onClick={handleEndNewsShare}
+                    disabled={
+                      isSlackNotificationLoading ||
+                      isCreateSlackNotificationLoading ||
+                      isPostponeNewsListLoading
+                    }
+                  >
+                    実行する
+                  </button>
+                </div>
               </div>
-            </Dialog>
-          </Transition>
+            </div>
+          </Modal>
         </div>
       )}
     </div>
