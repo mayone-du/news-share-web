@@ -5,16 +5,12 @@ import "dayjs/locale/ja";
 
 export const SearchFormCard: VFC = () => {
   const [value, setValue] = useState(new Date());
+  const handleChangeDate = (value: Date) => {
+    setValue(value);
+  };
   return (
     <Box>
-      <Calendar
-        value={value}
-        onChange={(value) => {
-          setValue(value);
-        }}
-        className="mx-auto"
-        locale="ja"
-      />
+      <Calendar value={value} onChange={handleChangeDate} className="mx-auto" locale="ja" />
     </Box>
   );
 };

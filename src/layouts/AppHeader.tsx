@@ -58,8 +58,12 @@ export const AppHeader: VFC = () => {
             </UnstyledButton>
           }
         >
-          <Menu.Label>@{myUserInfoData.myUserInfo.oauthUserId}</Menu.Label>
-          <NextLink href={"/"} passHref>
+          <Menu.Label>
+            {myUserInfoData.myUserInfo.role === Role.Admin && "👑"}
+            {myUserInfoData.myUserInfo.role === Role.Developer && "💻"}
+            {myUserInfoData.myUserInfo.displayName}
+          </Menu.Label>
+          <NextLink href={`user/${myUserInfoData.myUserInfo.oauthUserId}`} passHref>
             <Menu.Item
               component="a"
               icon={<MdAccountCircle size={16} />}

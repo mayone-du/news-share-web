@@ -1,5 +1,5 @@
 import { useCallback, useState, VFC } from "react";
-import { Navbar, UnstyledButton, Avatar, Group, Text, Modal, Title } from "@mantine/core";
+import { Navbar, UnstyledButton, Avatar, Group, Text, Modal, Title, Button } from "@mantine/core";
 import { AiOutlineHome } from "react-icons/ai";
 import NextLink from "next/link";
 import { IoMdAddCircleOutline } from "react-icons/io";
@@ -129,13 +129,14 @@ export const AppNavbar: VFC = () => {
         <Modal
           opened={isOpenModal}
           onClose={handleCloseDialog}
+          centered
           title={
             <Title order={3} className="text-xl font-bold text-center text-gray-900">
               今日のニュースシェアを終了する
             </Title>
           }
         >
-          <div className="overflow-hidden p-8 m-auto w-80 bg-white rounded-lg transition-all transform sm:w-96">
+          <div className="overflow-hidden px-4 pb-4 m-auto w-80 bg-white rounded-lg transition-all transform sm:w-96">
             <ul className="flex flex-col gap-1 px-4 mt-4 list-disc text-gray-600">
               <li>既にシェアしたニュースをSlackへ送信</li>
               <li>シェアしていないニュースを明日へ延期</li>
@@ -157,10 +158,8 @@ export const AppNavbar: VFC = () => {
                       );
                     })} */}
 
-            <div className="mt-6">
-              <button
-                type="button"
-                className="flex items-center py-2 px-6 mx-auto bg-gray-50 rounded border border-gray-200 ring-blue-200 shadow transition-all outline-none hover:bg-gray-100 hover:shadow-md focus-visible:ring-2 focus-visible:ring-blue-300 active:ring-2"
+            <div className="mt-6 text-center">
+              <Button
                 onClick={handleEndNewsShare}
                 disabled={
                   isSlackNotificationLoading ||
@@ -169,7 +168,7 @@ export const AppNavbar: VFC = () => {
                 }
               >
                 実行する
-              </button>
+              </Button>
             </div>
           </div>
         </Modal>

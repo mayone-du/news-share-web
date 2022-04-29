@@ -20,10 +20,7 @@ export const CreateNewsModal: VFC = () => {
   const { handleCloseCreateNewsModal } = useCreateNewsModal();
   const [createNews, { loading, error }] = useCreateNewsMutation();
   const { onSubmit, reset, getInputProps } = useForm<FieldValues>({
-    initialValues: {
-      url: "",
-    },
-
+    initialValues: { url: "" },
     validate: {
       url: (value) => {
         if (!value) return "URLを入力してください";
@@ -65,6 +62,7 @@ export const CreateNewsModal: VFC = () => {
       opened={isOpenCreateNewsModal}
       onClose={handleCloseCreateNewsModal}
       title={<Title order={6}>新しいニュースを投稿する</Title>}
+      centered
     >
       <form onSubmit={onSubmit(handleCreateNews)}>
         <TextInput required label="URLを入力" {...getInputProps("url")} data-autofocus />
