@@ -24,6 +24,7 @@ export const CreateNewsModal: VFC = () => {
     validate: {
       url: (value) => {
         if (!value) return "URLを入力してください";
+        if (!value.match(/^https?:\/\/.+/)) return "URLが不正です";
       },
     },
   });
@@ -65,7 +66,14 @@ export const CreateNewsModal: VFC = () => {
       centered
     >
       <form onSubmit={onSubmit(handleCreateNews)}>
-        <TextInput required label="URLを入力" {...getInputProps("url")} data-autofocus />
+        <TextInput
+          required
+          label="URLを入力"
+          {...getInputProps("url")}
+          data-autofocus
+          mb={"sm"}
+          placeholder="https://qin.news/~"
+        />
         <Button type="submit" loading={loading} className="bg-blue-500">
           {loading ? "投稿中..." : "投稿する"}
         </Button>

@@ -161,6 +161,7 @@ export const AppNavbar: VFC = () => {
             <div className="mt-6 text-center">
               <Button
                 onClick={handleEndNewsShare}
+                className="bg-blue-500"
                 disabled={
                   isSlackNotificationLoading ||
                   isCreateSlackNotificationLoading ||
