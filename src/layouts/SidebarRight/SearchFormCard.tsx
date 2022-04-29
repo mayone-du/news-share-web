@@ -1,4 +1,4 @@
-import { Box } from "@mantine/core";
+import { Box, Stack, Title } from "@mantine/core";
 import { useState, VFC } from "react";
 import { Calendar } from "@mantine/dates";
 import "dayjs/locale/ja";
@@ -10,7 +10,10 @@ export const SearchFormCard: VFC = () => {
   };
   return (
     <Box>
-      <Calendar value={value} onChange={handleChangeDate} className="mx-auto" locale="ja" />
+      <Stack spacing={"sm"}>
+        <Title order={5}>ニュースを検索</Title>
+        <Calendar value={value} onChange={handleChangeDate} className="mx-auto" locale="ja" />
+      </Stack>
     </Box>
   );
 };

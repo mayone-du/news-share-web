@@ -298,8 +298,7 @@ export const NewsList: VFC<Props> = (props) => {
               }`}
             >
               <Tooltip label="いいねをすると後でマイページから見返すことができます">
-                <button
-                  className="block"
+                <UnstyledButton
                   onClick={handleToggleLike(news.id, !isLikedNews(news as News))}
                   disabled={isUpdateNewsLoading || isDeleteNewsLoading || isToggleLikeLoading}
                 >
@@ -308,7 +307,7 @@ export const NewsList: VFC<Props> = (props) => {
                   ) : (
                     <FiHeart className="w-6 h-6" />
                   )}
-                </button>
+                </UnstyledButton>
               </Tooltip>
             </div>
 
@@ -327,7 +326,7 @@ export const NewsList: VFC<Props> = (props) => {
               <div>
                 {isEditingNews(news) ? (
                   <TextInput
-                    className="block mb-2 w-full text-lg font-bold outline-none"
+                    classNames={{ input: "mb-2 text-lg font-bold" }}
                     placeholder="ニュースのタイトル"
                     {...getInputProps("title")}
                   />

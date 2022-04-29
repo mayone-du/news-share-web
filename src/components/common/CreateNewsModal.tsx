@@ -1,7 +1,7 @@
 import type { Reference } from "@apollo/client";
-import { Modal, Title, LoadingOverlay, TextInput, Button } from "@mantine/core";
+import { Modal, Title, LoadingOverlay, TextInput, Button, Tooltip, Box } from "@mantine/core";
 import { useReactiveVar } from "@apollo/client";
-import type { VFC } from "react";
+import { VFC } from "react";
 import { isOpenCreateNewsModalVar } from "src/global/state";
 import {
   NewsFragmentFragmentDoc,
@@ -15,10 +15,11 @@ type FieldValues = {
   url: string;
 };
 
+// TODO: クリップボード読んでURLだったらTooltipで表示する
 export const CreateNewsModal: VFC = () => {
   const isOpenCreateNewsModal = useReactiveVar(isOpenCreateNewsModalVar);
   const { handleCloseCreateNewsModal } = useCreateNewsModal();
-  const [createNews, { loading, error }] = useCreateNewsMutation();
+  const [createNews, { loading }] = useCreateNewsMutation();
   const { onSubmit, reset, getInputProps } = useForm<FieldValues>({
     initialValues: { url: "" },
     validate: {
@@ -62,11 +63,12 @@ export const CreateNewsModal: VFC = () => {
     <Modal
       opened={isOpenCreateNewsModal}
       onClose={handleCloseCreateNewsModal}
-      title={<Title order={6}>新しいニュースを投稿する</Title>}
+      title={<Title order={3}>新しいニュースを投稿する</Title>}
       centered
     >
       <form onSubmit={onSubmit(handleCreateNews)}>
         <TextInput
+          size="md"
           required
           label="URLを入力"
           {...getInputProps("url")}
@@ -74,7 +76,7 @@ export const CreateNewsModal: VFC = () => {
           mb={"sm"}
           placeholder="https://qin.news/~"
         />
-        <Button type="submit" loading={loading} className="bg-blue-500">
+        <Button type="submit" loading={loading}>
           {loading ? "投稿中..." : "投稿する"}
         </Button>
       </form>

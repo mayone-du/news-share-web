@@ -395,6 +395,6 @@ Ensure the default browser behavior of the `hidden` attribute.
   display: none;
 }
 
-@tailwind base;
+/* @tailwind base; */
 @tailwind components;
 @tailwind utilities;
