@@ -27,7 +27,16 @@ import { InvalidIdError } from "src/errors";
 import { Reference } from "@apollo/client";
 import { useSession } from "next-auth/react";
 import { useAuthModal } from "src/hooks/useAuthModal";
-import { TextInput, Box, Divider, Menu, UnstyledButton, Avatar, Tooltip } from "@mantine/core";
+import {
+  TextInput,
+  Box,
+  Divider,
+  Menu,
+  UnstyledButton,
+  Avatar,
+  Tooltip,
+  Button,
+} from "@mantine/core";
 
 // TODO: NonNullableを適用したい。まだ型安全ではない
 type FieldValues = {
@@ -404,19 +413,12 @@ export const NewsList: VFC<Props> = (props) => {
             {/* 編集中の場合に更新、キャンセルボタンを表示 */}
             {isEditingNews(news) && (
               <div className="flex gap-4 justify-end items-center px-4 pb-4 w-full">
-                <button
-                  className="block py-1 px-2 bg-gray-50 rounded border"
-                  onClick={onSubmit(handleUpdateNews)}
-                  disabled={isUpdateNewsLoading}
-                >
-                  更新する
-                </button>
-                <button
-                  className="block py-1 px-2 bg-gray-50 rounded border"
-                  onClick={handleClickNewsEditCancel}
-                >
+                <Button variant="subtle" onClick={handleClickNewsEditCancel}>
                   キャンセル
-                </button>
+                </Button>
+                <Button onClick={onSubmit(handleUpdateNews)} disabled={isUpdateNewsLoading}>
+                  更新する
+                </Button>
               </div>
             )}
           </li>

@@ -1,7 +1,7 @@
-import { Console } from "console";
+import { Button, Textarea, TextInput } from "@mantine/core";
+import { useForm } from "@mantine/form";
 import type { CustomNextPage, GetStaticPaths, GetStaticProps } from "next";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { initializeApollo } from "src/graphql/apollo/client";
 import {
@@ -52,15 +52,15 @@ const UserDetailPage: CustomNextPage<UserQuery> = (props) => {
   const { data: myUserInfoData, loading: isMyUserInfoLoading } = useMyUserInfoQuery();
   const [isEditMode, setIsEditMode] = useState(false);
   const isMyUserPage = myUserInfoData?.myUserInfo?.oauthUserId === props.user?.oauthUserId;
-  const { register, handleSubmit } = useForm<FieldValues>({
-    defaultValues: {
-      displayName: props.user?.displayName,
-      selfIntroduction: props.user?.selfIntroduction,
+  const { onSubmit, getInputProps } = useForm<FieldValues>({
+    initialValues: {
+      displayName: props.user?.displayName ?? "",
+      selfIntroduction: props.user?.selfIntroduction ?? "",
     },
   });
 
   const handleToggleEditMode = () => setIsEditMode((prev) => !prev);
-  const handleSave = handleSubmit(async (formData) => {
+  const handleSave = onSubmit(async (formData) => {
     const toastId = toast.loading("保存中...");
     const { errors } = await updateMyUserInfo({ variables: { input: { ...formData } } });
     if (error || errors) {
@@ -84,27 +84,21 @@ const UserDetailPage: CustomNextPage<UserQuery> = (props) => {
             {isEditMode ? (
               <div className="flex justify-between items-start mb-4 w-full">
                 <div className="w-2/3">
-                  <input
-                    type="text"
-                    className="block text-2xl font-bold outline-none"
-                    {...register("displayName", { required: true, maxLength: 20 })}
-                  />
-                  <textarea
-                    className="block w-full outline-none resize-none"
-                    {...register("selfIntroduction", { required: false, maxLength: 100 })}
-                  />
+                  <TextInput type="text" {...getInputProps("displayName")} />
+                  <Textarea {...getInputProps("selfIntroduction")} />
                 </div>
 
                 <div className="flex items-center w-1/3">
-                  <button
+                  <Button
+                    variant="subtle"
                     className="block p-1 rounded border shadow"
                     onClick={handleToggleEditMode}
                   >
                     キャンセル
-                  </button>
-                  <button className="block p-1 rounded border shadow" onClick={handleSave}>
+                  </Button>
+                  <Button className="block p-1 rounded border shadow" onClick={handleSave}>
                     保存する
-                  </button>
+                  </Button>
                 </div>
               </div>
             ) : (
@@ -125,12 +119,12 @@ const UserDetailPage: CustomNextPage<UserQuery> = (props) => {
                   </p>
                 </div>
                 <div className="w-1/3">
-                  <button
+                  <Button
                     className="block py-1 px-2 ml-auto rounded border shadow-sm hover:shadow"
                     onClick={handleToggleEditMode}
                   >
                     編集する
-                  </button>
+                  </Button>
                 </div>
               </div>
             )}
