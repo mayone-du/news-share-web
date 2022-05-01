@@ -11,7 +11,6 @@ import {
 } from "src/graphql/schemas/generated/schema";
 import { AppFooter } from "src/layouts/AppFooter";
 import { LayoutErrorBoundary } from "src/layouts/LayoutErrorBoundary";
-import { SidebarLeft } from "src/layouts/SidebarLeft";
 import { SidebarRight } from "src/layouts/SidebarRight";
 import { AppShell, Box, Grid } from "@mantine/core";
 import { AppHeader } from "src/layouts/AppHeader";
@@ -50,14 +49,16 @@ export const Layout: VFC<NextPage> = (page) => {
         },
       })}
     >
-      <AuthModal />
-      <CreateNewsModal />
-      <Grid gutter="lg">
-        <Grid.Col span={8}>{page}</Grid.Col>
-        <Grid.Col span={3}>
-          <SidebarRight />
-        </Grid.Col>
-      </Grid>
+      <LayoutErrorBoundary>
+        <AuthModal />
+        <CreateNewsModal />
+        <Grid gutter="lg">
+          <Grid.Col span={8}>{page}</Grid.Col>
+          <Grid.Col span={3}>
+            <SidebarRight />
+          </Grid.Col>
+        </Grid>
+      </LayoutErrorBoundary>
     </AppShell>
   );
 };
