@@ -1,4 +1,4 @@
-import { Button, Textarea, TextInput } from "@mantine/core";
+import { Button, Divider, Textarea, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import type { CustomNextPage, GetStaticPaths, GetStaticProps } from "next";
 import { useState } from "react";
@@ -52,14 +52,19 @@ const UserDetailPage: CustomNextPage<UserQuery> = (props) => {
   const { data: myUserInfoData, loading: isMyUserInfoLoading } = useMyUserInfoQuery();
   const [isEditMode, setIsEditMode] = useState(false);
   const isMyUserPage = myUserInfoData?.myUserInfo?.oauthUserId === props.user?.oauthUserId;
-  const { onSubmit, getInputProps } = useForm<FieldValues>({
+  const { onSubmit, getInputProps, reset, setValues } = useForm<FieldValues>({
     initialValues: {
-      displayName: props.user?.displayName ?? "",
-      selfIntroduction: props.user?.selfIntroduction ?? "",
+      displayName: data?.updateMyUserInfo?.displayName ?? props.user?.displayName ?? "",
+      selfIntroduction:
+        data?.updateMyUserInfo?.selfIntroduction ?? props.user?.selfIntroduction ?? "",
     },
   });
 
-  const handleToggleEditMode = () => setIsEditMode((prev) => !prev);
+  const handleCancel = () => {
+    setIsEditMode(false);
+    data?.updateMyUserInfo ? setValues({ ...data.updateMyUserInfo }) : reset();
+  };
+  const handleClickEditMode = () => setIsEditMode(true);
   const handleSave = onSubmit(async (formData) => {
     const toastId = toast.loading("保存中...");
     const { errors } = await updateMyUserInfo({ variables: { input: { ...formData } } });
@@ -68,7 +73,7 @@ const UserDetailPage: CustomNextPage<UserQuery> = (props) => {
     } else {
       toast.success("保存しました", { id: toastId });
     }
-    handleToggleEditMode();
+    handleCancel();
   });
 
   if (isMyUserInfoLoading) {
@@ -82,17 +87,31 @@ const UserDetailPage: CustomNextPage<UserQuery> = (props) => {
         {isMyUserPage && (
           <div className="flex-1">
             {isEditMode ? (
-              <div className="flex justify-between items-start mb-4 w-full">
+              <div className="flex justify-between items-start w-full">
                 <div className="w-2/3">
-                  <TextInput type="text" {...getInputProps("displayName")} />
-                  <Textarea {...getInputProps("selfIntroduction")} />
+                  <TextInput
+                    type="text"
+                    classNames={{
+                      input: "font-bold text-2xl p-0 border-0 min-h-0 h-auto",
+                    }}
+                    {...getInputProps("displayName")}
+                  />
+                  <Divider />
+                  <Textarea
+                    minRows={3}
+                    classNames={{
+                      input: "text-gray-600 text-base p-0 border-0 min-h-0 h-auto",
+                    }}
+                    maxRows={4}
+                    {...getInputProps("selfIntroduction")}
+                  />
                 </div>
 
-                <div className="flex items-center w-1/3">
+                <div className="flex gap-2 items-center">
                   <Button
-                    variant="subtle"
+                    variant="outline"
                     className="block p-1 rounded border shadow"
-                    onClick={handleToggleEditMode}
+                    onClick={handleCancel}
                   >
                     キャンセル
                   </Button>
@@ -105,14 +124,14 @@ const UserDetailPage: CustomNextPage<UserQuery> = (props) => {
               <div className="flex justify-between items-start mb-4 w-full">
                 {/* プロフィール情報 名前と自己紹介文 */}
                 <div className="w-2/3">
-                  <h1 className="text-2xl font-bold">
+                  <h1 className="text-2xl font-bold border-b-[1px] border-transparent">
                     {/* 更新後のデータが有ればそれを表示し、なければSSGしてあるデータを表示 */}
                     {/* TODO: オンデマンドISRを試してみる（更新時にリビルドさせる） */}
                     {data?.updateMyUserInfo?.displayName
                       ? data.updateMyUserInfo.displayName
                       : props.user?.displayName}
                   </h1>
-                  <p className="text-gray-600 whitespace-pre">
+                  <p className="text-gray-600 text-base whitespace-pre">
                     {data?.updateMyUserInfo?.selfIntroduction
                       ? data.updateMyUserInfo.selfIntroduction
                       : props.user?.selfIntroduction}
@@ -121,7 +140,7 @@ const UserDetailPage: CustomNextPage<UserQuery> = (props) => {
                 <div className="w-1/3">
                   <Button
                     className="block py-1 px-2 ml-auto rounded border shadow-sm hover:shadow"
-                    onClick={handleToggleEditMode}
+                    onClick={handleClickEditMode}
                   >
                     編集する
                   </Button>

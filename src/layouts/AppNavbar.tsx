@@ -16,13 +16,10 @@ import {
 import toast from "react-hot-toast";
 import { hyphenFormat } from "src/utils";
 import dayjs from "dayjs";
-import { useRouter } from "next/router";
 
 export const AppNavbar: VFC = () => {
   const { handleOpenCreateNewsModal } = useCreateNewsModal();
 
-  const { asPath } = useRouter();
-  if (asPath !== "/") return null;
   const { data: myUserInfoData } = useMyUserInfoQuery({ fetchPolicy: "cache-only" });
   const { data: newsListData } = useNewsListQuery({
     variables: { input: { sharedAt: dayjs().format(hyphenFormat) } },

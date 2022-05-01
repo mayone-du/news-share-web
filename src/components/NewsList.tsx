@@ -212,13 +212,6 @@ export const NewsList: VFC<Props> = (props) => {
       </div>
     );
 
-  if (NewsListData?.newsList.length === 0)
-    return (
-      <div>
-        <p>ニュースはありません</p>
-      </div>
-    );
-
   return (
     <ul>
       {NewsListData?.newsList.map((news) => {
@@ -413,7 +406,7 @@ export const NewsList: VFC<Props> = (props) => {
             {/* 編集中の場合に更新、キャンセルボタンを表示 */}
             {isEditingNews(news) && (
               <div className="flex gap-4 justify-end items-center px-4 pb-4 w-full">
-                <Button variant="subtle" onClick={handleClickNewsEditCancel}>
+                <Button variant="outline" onClick={handleClickNewsEditCancel}>
                   キャンセル
                 </Button>
                 <Button onClick={onSubmit(handleUpdateNews)} disabled={isUpdateNewsLoading}>

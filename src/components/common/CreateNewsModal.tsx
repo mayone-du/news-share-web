@@ -10,6 +10,7 @@ import {
 import toast from "react-hot-toast";
 import { useCreateNewsModal } from "src/hooks/useCreateNewsModal";
 import { useForm } from "@mantine/form";
+import { showNotification, updateNotification } from "@mantine/notifications";
 
 type FieldValues = {
   url: string;
@@ -31,7 +32,10 @@ export const CreateNewsModal: VFC = () => {
   });
 
   const handleCreateNews = async (data: FieldValues) => {
-    const toastId = toast.loading("投稿中...");
+    showNotification({
+      id: "createNews",
+      message: "投稿中...",
+    });
     try {
       await createNews({
         variables: { input: { url: data.url } },
@@ -52,10 +56,16 @@ export const CreateNewsModal: VFC = () => {
       });
       handleCloseCreateNewsModal();
       reset();
-      toast.success("投稿しました", { id: toastId });
+      updateNotification({
+        id: "createNews",
+        message: "投稿しました",
+      });
     } catch (e) {
       console.error(e);
-      toast.error("投稿に失敗しました", { id: toastId });
+      updateNotification({
+        id: "createNews",
+        message: "エラーが発生しました",
+      });
     }
   };
 

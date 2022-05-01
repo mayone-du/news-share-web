@@ -14,6 +14,7 @@ import { Toaster } from "react-hot-toast";
 import { initializeApollo } from "src/graphql/apollo/client";
 import { MantineProvider, ColorSchemeProvider, ColorScheme } from "@mantine/core";
 import { useHotkeys, useLocalStorage } from "@mantine/hooks";
+import { NotificationsProvider } from "@mantine/notifications";
 
 NProgress.configure({ showSpinner: false, speed: 400, minimum: 0.25 });
 Router.events.on("routeChangeStart", () => {
@@ -50,20 +51,22 @@ const App: VFC<CustomAppProps> = memo((props) => {
       <ApolloProvider client={apolloClient}>
         <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
           <MantineProvider withGlobalStyles withNormalizeCSS theme={{ colorScheme }}>
-            <DefaultSeo
-              title={"Template"}
-              titleTemplate={"%s | サイトの名前"}
-              description="Template Repo"
-              additionalMetaTags={[{ property: "", content: "" }]}
-              additionalLinkTags={[
-                {
-                  rel: "manifest",
-                  href: "/pwa/manifest.json",
-                },
-              ]}
-            />
-            {getLayout(<props.Component {...props.pageProps} />)}
-            <Toaster toastOptions={{ duration: 2500 }} />
+            <NotificationsProvider>
+              <DefaultSeo
+                title={"Template"}
+                titleTemplate={"%s | サイトの名前"}
+                description="Template Repo"
+                additionalMetaTags={[{ property: "", content: "" }]}
+                additionalLinkTags={[
+                  {
+                    rel: "manifest",
+                    href: "/pwa/manifest.json",
+                  },
+                ]}
+              />
+              {getLayout(<props.Component {...props.pageProps} />)}
+              <Toaster toastOptions={{ duration: 2500 }} />
+            </NotificationsProvider>
           </MantineProvider>
         </ColorSchemeProvider>
       </ApolloProvider>

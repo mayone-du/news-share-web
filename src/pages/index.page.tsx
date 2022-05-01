@@ -1,3 +1,4 @@
+import { Title } from "@mantine/core";
 import dayjs from "dayjs";
 import type { CustomNextPage } from "next";
 import { BreadcrumbJsonLd, NextSeo } from "next-seo";
@@ -33,10 +34,13 @@ const IndexPage: CustomNextPage = () => {
     },
     pollInterval: 1000 * 30, // milli secondなのでこの場合は30秒ごとにポーリング
   });
+  const title = `${dayjs().format("M月D日（dd）")}のニュース ${
+    newsListQueryResult?.data?.newsList?.length ?? 0
+  }件`;
 
   return (
     <>
-      <NextSeo title={ROUTE_LABELS.INDEX} />
+      <NextSeo title={title} />
       <BreadcrumbJsonLd
         itemListElements={[
           {
@@ -46,6 +50,9 @@ const IndexPage: CustomNextPage = () => {
           },
         ]}
       />
+      <Title order={1} mb="md">
+        {title}
+      </Title>
       <NewsList newsListQueryResult={newsListQueryResult} />
     </>
   );
