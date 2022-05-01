@@ -7,10 +7,10 @@ import {
   NewsFragmentFragmentDoc,
   useCreateNewsMutation,
 } from "src/graphql/schemas/generated/schema";
-import toast from "react-hot-toast";
 import { useCreateNewsModal } from "src/hooks/useCreateNewsModal";
 import { useForm } from "@mantine/form";
 import { showNotification, updateNotification } from "@mantine/notifications";
+import { genId } from "src/utils/genId";
 
 type FieldValues = {
   url: string;
@@ -32,8 +32,9 @@ export const CreateNewsModal: VFC = () => {
   });
 
   const handleCreateNews = async (data: FieldValues) => {
+    const notificationId = genId();
     showNotification({
-      id: "createNews",
+      id: notificationId,
       message: "投稿中...",
     });
     try {
@@ -57,13 +58,13 @@ export const CreateNewsModal: VFC = () => {
       handleCloseCreateNewsModal();
       reset();
       updateNotification({
-        id: "createNews",
+        id: notificationId,
         message: "投稿しました",
       });
     } catch (e) {
       console.error(e);
       updateNotification({
-        id: "createNews",
+        id: notificationId,
         message: "エラーが発生しました",
       });
     }

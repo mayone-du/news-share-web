@@ -13,9 +13,10 @@ import {
   usePostponeNewsListMutation,
   useSlackNotificationQuery,
 } from "src/graphql/schemas/generated/schema";
-import toast from "react-hot-toast";
 import { hyphenFormat } from "src/utils";
 import dayjs from "dayjs";
+import { showNotification, updateNotification } from "@mantine/notifications";
+import { genId } from "src/utils/genId";
 
 export const AppNavbar: VFC = () => {
   const { handleOpenCreateNewsModal } = useCreateNewsModal();
@@ -42,11 +43,13 @@ export const AppNavbar: VFC = () => {
     const willPostponeNewsIds = (newsListData?.newsList
       .map((news) => (news.isViewed ? null : news.nodeId))
       .filter(Boolean) ?? []) as string[]; // filterでfalsyな値を削除しているため
-    const toastId = toast.loading(
-      willPostponeNewsIds?.length
+    const notificationId = genId();
+    showNotification({
+      id: notificationId,
+      message: willPostponeNewsIds?.length
         ? "Slackへ送信とニュースの延期をしています..."
         : "Slackへ送信しています...",
-    );
+    });
     // 延期するニュースがある場合
     if (willPostponeNewsIds?.length) {
       try {
@@ -59,19 +62,31 @@ export const AppNavbar: VFC = () => {
             },
           },
         });
-        toast.success("ニュースの延期とSlackへ送信が完了しました", { id: toastId });
+        updateNotification({
+          id: notificationId,
+          message: "ニュースの延期とSlackへ送信が完了しました",
+        });
       } catch (e) {
         console.error(e);
         if (createSalckNotificationError)
-          return toast.error("Slack通知とニュースの延期に失敗しました", { id: toastId });
-        toast.error("ニュースの延期に失敗しました", { id: toastId });
+          return updateNotification({
+            id: notificationId,
+            message: "Slack通知とニュースの延期に失敗しました",
+          });
+        updateNotification({
+          id: notificationId,
+          message: "ニュースの延期に失敗しました",
+        });
       }
     } else {
       try {
         await createSlackNotification();
       } catch (e) {
         console.error(e);
-        toast.error("Slack通知の送信に失敗しました", { id: toastId });
+        updateNotification({
+          id: notificationId,
+          message: "Slack通知の送信に失敗しました",
+        });
       }
     }
     handleCloseDialog();

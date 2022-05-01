@@ -16,7 +16,6 @@ import { HiOutlinePencil } from "react-icons/hi";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { BsCalendar, BsCheck, BsCheck2 } from "react-icons/bs";
 import { IoMdReturnLeft } from "react-icons/io";
-import toast from "react-hot-toast";
 import { useForm } from "@mantine/form";
 import { FiHeart } from "react-icons/fi";
 import { IoEarth } from "react-icons/io5";
@@ -37,6 +36,8 @@ import {
   Tooltip,
   Button,
 } from "@mantine/core";
+import { genId } from "src/utils/genId";
+import { showNotification, updateNotification } from "@mantine/notifications";
 
 // TODO: NonNullableを適用したい。まだ型安全ではない
 type FieldValues = {
@@ -99,7 +100,11 @@ export const NewsList: VFC<Props> = (props) => {
   const handleDeleteNews =
     (nodeId: string | null | undefined, handleClosePopover: VoidFunction) => async () => {
       if (!nodeId) throw InvalidIdError();
-      const toastId = toast.loading("ニュースを削除しています...");
+      const notificationId = genId();
+      showNotification({
+        id: notificationId,
+        message: "ニュースを削除しています...",
+      });
       try {
         handleClosePopover();
         await deleteNews({
@@ -117,37 +122,63 @@ export const NewsList: VFC<Props> = (props) => {
             });
           },
         });
-        toast.success("ニュースを削除しました", { id: toastId });
+        updateNotification({
+          id: notificationId,
+          message: "ニュースを削除しました",
+        });
       } catch (e) {
         console.error(e);
-        toast.error("ニュースの削除に失敗しました", { id: toastId });
+        updateNotification({
+          id: notificationId,
+          message: "ニュースを削除に失敗しました",
+        });
       }
     };
   const handleUpdateNews = async (values: FieldValues) => {
-    const toastId = toast.loading("ニュースを更新しています...");
+    const notificationId = genId();
+    showNotification({
+      id: notificationId,
+      message: "ニュースを更新しています...",
+    });
     try {
       await updateNews({ variables: { input: { nodeId: editingNewsNodeId, ...values } } });
       setEditingNewsNodeId("");
-      toast.success("ニュースを更新しました", { id: toastId });
+      updateNotification({
+        id: notificationId,
+        message: "ニュースを更新しました",
+      });
     } catch (e) {
       console.error(e);
-      toast.error("ニュースの更新に失敗しました", { id: toastId });
+      updateNotification({
+        id: notificationId,
+        message: "ニュースを更新に失敗しました",
+      });
     }
   };
   const handlePostponeNews =
     (nodeId: string | null | undefined, handleClosePopover: VoidFunction) => async () => {
       if (!nodeId) throw InvalidIdError();
-      const toastId = toast.loading("ニュースを延期しています...");
+      const notificationId = genId();
+      showNotification({
+        id: notificationId,
+        message: "ニュースを延期しています...",
+      });
       try {
         handleClosePopover();
         await updateNews({
           variables: { input: { nodeId, sharedAt: dayjs().add(1, "day").format(hyphenFormat) } },
         });
         await refetch();
-        toast.success("ニュースを延期しました", { id: toastId });
+        updateNotification({
+          id: notificationId,
+          message: "ニュースを延期しました",
+        });
       } catch (e) {
         console.error(e);
-        toast.error("ニュースの延期に失敗しました", { id: toastId });
+        updateNotification({
+          id: notificationId,
+          message: "ニュースの延期に失敗しました",
+        });
       }
     };
   const handleUpdateViewedNews =
@@ -420,140 +451,3 @@ export const NewsList: VFC<Props> = (props) => {
     </ul>
   );
 };
-
-// export const NewsList2: VFC<Props> = ({ newsListQueryResult }) => {
-//   const { asPath } = useRouter();
-//   const { status } = useSession();
-//   const { handleOpenAuthModal } = useAuthModal();
-//   const {
-//     newsListQueryResult: { data: NewsListData, loading, error, refetch },
-//   } = props;
-//   const { data: myUserInfoData } = useMyUserInfoQuery({ fetchPolicy: "cache-only" }); // layoutで取得してるのでcache-onlyでネットワークリクエストを抑える
-//   const [updateNews, { loading: isUpdateNewsLoading }] = useUpdateNewsMutation();
-//   const [deleteNews, { loading: isDeleteNewsLoading }] = useDeleteNewsMutation();
-//   const [toggleLike, { loading: isToggleLikeLoading }] = useToggleLikeMutation();
-//   const { getInputProps, setValue, handleSubmit } = useForm<FieldValues>();
-//   const [editingNewsNodeId, setEditingNewsNodeId] = useState("");
-//   const isEditingNews = (news: Pick<News, "nodeId">) => news.nodeId === editingNewsNodeId;
-//   const isDisplayNewsMenu = (userId: bigint) =>
-//     myUserInfoData?.myUserInfo?.role === Role.Admin ||
-//     myUserInfoData?.myUserInfo?.role === Role.Developer ||
-//     myUserInfoData?.myUserInfo?.id === userId;
-//   const isLikedNews = (news: Pick<News, "likes">) =>
-//     news.likes.some((like) => like.user.id === myUserInfoData?.myUserInfo?.id && like.isLiked);
-
-//   const isTodaySharedAt = (sharedAt: string) =>
-//     dayjs(sharedAt).format(hyphenFormat) === dayjs().format(hyphenFormat);
-
-//   const handleClickNewsEditMode =
-//     (
-//       news: Pick<News, "nodeId" | "title" | "description" | "url">,
-//       handleClosePopover: VoidFunction,
-//     ) =>
-//     () => {
-//       setEditingNewsNodeId(news.nodeId ?? "");
-//       setValue("title", news.title);
-//       setValue("description", news.description);
-//       setValue("url", news.url);
-//       handleClosePopover();
-//     };
-//   const handleClickNewsEditCancel = () => setEditingNewsNodeId("");
-//   const handleDeleteNews =
-//     (nodeId: string | null | undefined, handleClosePopover: VoidFunction) => async () => {
-//       if (!nodeId) throw InvalidIdError();
-//       const toastId = toast.loading("ニュースを削除しています...");
-//       try {
-//         handleClosePopover();
-//         await deleteNews({
-//           variables: { input: { nodeId } },
-//           update: (cache, { data }) => {
-//             if (!data?.deleteNews) return;
-//             cache.modify({
-//               fields: {
-//                 newsList: (existingNewsListRefs: Reference[], { readField }) => {
-//                   return existingNewsListRefs.filter(
-//                     (newsListRef) => readField("nodeId", newsListRef) !== data.deleteNews?.nodeId,
-//                   );
-//                 },
-//               },
-//             });
-//           },
-//         });
-//         toast.success("ニュースを削除しました", { id: toastId });
-//       } catch (e) {
-//         console.error(e);
-//         toast.error("ニュースの削除に失敗しました", { id: toastId });
-//       }
-//     };
-//   const handleUpdateNews = async (values: FieldValues) => {
-//     const toastId = toast.loading("ニュースを更新しています...");
-//     try {
-//       await updateNews({ variables: { input: { nodeId: editingNewsNodeId, ...values } } });
-//       setEditingNewsNodeId("");
-//       toast.success("ニュースを更新しました", { id: toastId });
-//     } catch (e) {
-//       console.error(e);
-//       toast.error("ニュースの更新に失敗しました", { id: toastId });
-//     }
-//   };
-//   const handlePostponeNews =
-//     (nodeId: string | null | undefined, handleClosePopover: VoidFunction) => async () => {
-//       if (!nodeId) throw InvalidIdError();
-//       const toastId = toast.loading("ニュースを延期しています...");
-//       try {
-//         handleClosePopover();
-//         await updateNews({
-//           variables: { input: { nodeId, sharedAt: dayjs().add(1, "day").format(hyphenFormat) } },
-//         });
-//         await refetch();
-//         toast.success("ニュースを延期しました", { id: toastId });
-//       } catch (e) {
-//         console.error(e);
-//         toast.error("ニュースの延期に失敗しました", { id: toastId });
-//       }
-//     };
-//   const handleUpdateViewedNews =
-//     (news: Pick<News, "nodeId" | "isViewed">) => async (e: SyntheticEvent) => {
-//       if (!news.nodeId) throw InvalidIdError();
-//       if (isEditingNews(news)) return e.preventDefault(); // 編集中の場合はリンクの機能を持たせない
-//       if (
-//         news.isViewed ||
-//         !isStartedNewsShare(dayjs()) ||
-//         myUserInfoData?.myUserInfo?.role === Role.User ||
-//         asPath !== "/"
-//       )
-//         return; // すでに閲覧済み、ニュースシェアが始まっていない、一般ユーザー、トップページ以外の場合は何もしない
-//       try {
-//         await updateNews({ variables: { input: { nodeId: news.nodeId, isViewed: true } } });
-//       } catch (e) {
-//         console.error(e);
-//       }
-//     };
-//   const handleToggleViewedNews =
-//     (news: Pick<News, "nodeId" | "isViewed">, handleClosePopover: VoidFunction) => async () => {
-//       if (!news.nodeId) throw InvalidIdError();
-//       try {
-//         handleClosePopover();
-//         await updateNews({
-//           variables: { input: { nodeId: news.nodeId, isViewed: !news.isViewed } },
-//         });
-//       } catch (e) {
-//         console.error(e);
-//       }
-//     };
-//   const handleToggleLike = (newsId: bigint, isLiked: boolean) => async () => {
-//     if (status === "unauthenticated") return handleOpenAuthModal();
-//     try {
-//       await toggleLike({ variables: { input: { newsId, isLiked } } });
-//       await refetch();
-//     } catch (e) {
-//       console.error(e);
-//     }
-//   };
-
-//   return <ul>
-//     <Box>
-
-//     </Box>
-//   </ul>;
-// };
