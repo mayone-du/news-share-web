@@ -1,13 +1,21 @@
 import { Box, Stack, Title } from "@mantine/core";
-import { useState, VFC } from "react";
+import { useCallback, useState, VFC } from "react";
 import { Calendar } from "@mantine/dates";
 import "dayjs/locale/ja";
+import { useRouter } from "next/router";
+import dayjs from "dayjs";
+import { hyphenFormat } from "src/utils";
 
 export const SearchFormCard: VFC = () => {
+  const { query, push } = useRouter();
   const [value, setValue] = useState(new Date());
-  const handleChangeDate = (value: Date) => {
+
+  const handleChangeDate = useCallback((value: Date) => {
     setValue(value);
-  };
+    query["date"] = dayjs(value).format(hyphenFormat);
+    push({ query });
+  }, []);
+
   return (
     <Box>
       <Stack spacing={"sm"}>
