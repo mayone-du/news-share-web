@@ -16,16 +16,16 @@ const today = dayjs().format(hyphenFormat);
 const IndexPage: CustomNextPage = () => {
   const { query } = useRouter();
   const queryParams: QueryParams = {
-    date: query.date?.toString() || today,
+    sharedAt: query.sharedAt?.toString() || today,
   };
 
   const newsListQueryResult = useNewsListQuery({
     variables: {
-      input: { sharedAt: queryParams.date },
+      input: { sharedAt: queryParams.sharedAt },
     },
     pollInterval: 1000 * 30, // milli secondなのでこの場合は30秒ごとにポーリング
   });
-  const title = `${dayjs(queryParams.date).format("M月D日（dd）")}のニュース ${
+  const title = `${dayjs(queryParams.sharedAt).format("M月D日（dd）")}のニュース ${
     newsListQueryResult?.data?.newsList?.length ?? 0
   }件`;
 
