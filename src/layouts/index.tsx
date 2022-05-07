@@ -53,8 +53,8 @@ export const Layout: VFC<NextPage> = (page) => {
         <AuthModal />
         <CreateNewsModal />
         <Grid gutter="lg">
-          <Grid.Col span={8}>{page}</Grid.Col>
-          <Grid.Col span={3}>
+          <Grid.Col lg={8}>{page}</Grid.Col>
+          <Grid.Col lg={3}>
             <SidebarRight />
           </Grid.Col>
         </Grid>

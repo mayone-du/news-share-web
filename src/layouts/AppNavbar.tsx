@@ -102,7 +102,7 @@ export const AppNavbar: VFC = () => {
             <Avatar size={32} className="m-1">
               <AiOutlineHome size={20} />
             </Avatar>
-            <Text size="xs" color="gray">
+            <Text size="xs" color="gray" className="md:block hidden">
               ホーム
             </Text>
           </Group>
@@ -117,7 +117,7 @@ export const AppNavbar: VFC = () => {
           <Avatar size={32} className="m-1">
             <IoMdAddCircleOutline size={20} />
           </Avatar>
-          <Text size="xs" color="gray">
+          <Text size="xs" color="gray" className="md:block hidden">
             ニュース・記事を投稿する
           </Text>
         </Group>
@@ -131,7 +131,7 @@ export const AppNavbar: VFC = () => {
           <Avatar size={32} className="m-1">
             <FiSend size={20} />
           </Avatar>
-          <Text size="xs" color="gray">
+          <Text size="xs" color="gray" className="md:block hidden">
             Slackへ送信する
           </Text>
         </Group>
