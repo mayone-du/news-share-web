@@ -92,17 +92,15 @@ export const AppNavbar: VFC = () => {
     handleCloseDialog();
   };
 
-  if (!myUserInfoData?.myUserInfo) return null;
-
   return (
     <Navbar width={{ base: 300 }} height={500} p="xs">
       <NextLink href="/" passHref>
-        <UnstyledButton component="a" className="rounded hover:bg-gray-200 transition-colors">
+        <UnstyledButton component="a" className="rounded transition-colors hover:bg-gray-200">
           <Group>
             <Avatar size={32} className="m-1">
               <AiOutlineHome size={20} />
             </Avatar>
-            <Text size="xs" color="gray" className="md:block hidden">
+            <Text size="xs" color="gray" className="hidden md:block">
               ホーム
             </Text>
           </Group>
@@ -110,34 +108,34 @@ export const AppNavbar: VFC = () => {
       </NextLink>
 
       <UnstyledButton
-        className="rounded hover:bg-gray-200 transition-colors"
+        className="rounded transition-colors hover:bg-gray-200"
         onClick={handleOpenCreateNewsModal}
       >
         <Group>
           <Avatar size={32} className="m-1">
             <IoMdAddCircleOutline size={20} />
           </Avatar>
-          <Text size="xs" color="gray" className="md:block hidden">
+          <Text size="xs" color="gray" className="hidden md:block">
             ニュース・記事を投稿する
           </Text>
         </Group>
       </UnstyledButton>
 
       <UnstyledButton
-        className="rounded hover:bg-gray-200 transition-colors"
+        className="rounded transition-colors hover:bg-gray-200"
         onClick={handleOpenDialog}
       >
         <Group>
           <Avatar size={32} className="m-1">
             <FiSend size={20} />
           </Avatar>
-          <Text size="xs" color="gray" className="md:block hidden">
+          <Text size="xs" color="gray" className="hidden md:block">
             Slackへ送信する
           </Text>
         </Group>
       </UnstyledButton>
 
-      {myUserInfoData.myUserInfo.role !== Role.User && (
+      {myUserInfoData?.myUserInfo && myUserInfoData.myUserInfo.role == Role.User && (
         <Modal
           opened={isOpenModal}
           onClose={handleCloseDialog}

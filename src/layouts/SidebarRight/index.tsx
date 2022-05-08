@@ -10,7 +10,7 @@ export const SidebarRight: VFC = () => {
     <Box className="flex flex-col gap-4">
       {SidebarRightContents.map((Component, i) => {
         return (
-          <Box className="p-4 rounded border bg-white" key={i}>
+          <Box className="p-4 bg-white rounded border" key={i}>
             <Component />
           </Box>
         );

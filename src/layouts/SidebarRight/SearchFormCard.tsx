@@ -1,4 +1,4 @@
-import { Button, Select, Box, Stack, TextInput, Title } from "@mantine/core";
+import { Button, Select, Box, Stack, TextInput, Title, ActionIcon } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { News } from "src/graphql/schemas/generated/schema";
 import { useCallback, useState, VFC } from "react";
@@ -7,8 +7,8 @@ import { useRouter } from "next/router";
 import dayjs from "dayjs";
 import { hyphenFormat } from "src/utils";
 import "dayjs/locale/ja";
-import { QueryParams } from "src/types";
 import { QUERY_PARAM_LABELS } from "src/constants";
+import { IoReload } from "react-icons/io5";
 
 type FieldValues = { keyword: string };
 
@@ -19,7 +19,7 @@ export const SearchFormCard: VFC = () => {
     : new Date();
   const [searchDate, setSearchDate] = useState(defaultDate);
   const [searchField, setSearchField] = useState<keyof typeof QUERY_PARAM_LABELS>("title");
-  const { onSubmit, getInputProps, clearErrors } = useForm<FieldValues>({
+  const { onSubmit, getInputProps } = useForm<FieldValues>({
     initialValues: { keyword: "" },
     validate: {
       keyword: (value) => {
@@ -36,13 +36,14 @@ export const SearchFormCard: VFC = () => {
     setSearchField(value);
   }, []);
 
+  const handleReset = useCallback(() => push("/"), []);
+
   const removeQueryParams = (ignoreParam: keyof typeof QUERY_PARAM_LABELS) => {
     Object.keys(QUERY_PARAM_LABELS).forEach((key) => {
       if (key !== ignoreParam) delete query[key];
     });
   };
 
-  // TODO:
   const handleSubmit = onSubmit(async (data) => {
     removeQueryParams(searchField);
     if (searchField === "sharedAt") {
@@ -57,18 +58,23 @@ export const SearchFormCard: VFC = () => {
   return (
     <form onSubmit={handleSubmit}>
       <Stack spacing={"sm"}>
-        <div className="flex items-center gap-1">
-          <Select
-            value={searchField}
-            onChange={handleChangeSelect}
-            className="w-2/5"
-            data={Object.entries(QUERY_PARAM_LABELS).map(([key, value]) => ({
-              value: key,
-              label: value,
-            }))}
-            placeholder="検索する条件"
-          />
-          <Title order={5}>で検索</Title>
+        <div className="flex items-center">
+          <div className="flex gap-1 items-center">
+            <Select
+              value={searchField}
+              onChange={handleChangeSelect}
+              className="w-2/5"
+              data={Object.entries(QUERY_PARAM_LABELS).map(([key, value]) => ({
+                value: key,
+                label: value,
+              }))}
+              placeholder="検索する条件"
+            />
+            <Title order={5}>で検索</Title>
+          </div>
+          <ActionIcon className="rounded-full" onClick={handleReset}>
+            <IoReload />
+          </ActionIcon>
         </div>
         {searchField === "sharedAt" ? (
           <Calendar

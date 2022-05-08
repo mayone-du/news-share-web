@@ -124,14 +124,14 @@ const UserDetailPage: CustomNextPage<UserQuery> = (props) => {
               <div className="flex justify-between items-start mb-4 w-full">
                 {/* プロフィール情報 名前と自己紹介文 */}
                 <div className="w-2/3">
-                  <h1 className="text-2xl font-bold border-b-[1px] border-transparent">
+                  <h1 className="text-2xl font-bold border-transparent border-b-[1px]">
                     {/* 更新後のデータが有ればそれを表示し、なければSSGしてあるデータを表示 */}
                     {/* TODO: オンデマンドISRを試してみる（更新時にリビルドさせる） */}
                     {data?.updateMyUserInfo?.displayName
                       ? data.updateMyUserInfo.displayName
                       : props.user?.displayName}
                   </h1>
-                  <p className="text-gray-600 text-base whitespace-pre">
+                  <p className="text-base text-gray-600 whitespace-pre">
                     {data?.updateMyUserInfo?.selfIntroduction
                       ? data.updateMyUserInfo.selfIntroduction
                       : props.user?.selfIntroduction}

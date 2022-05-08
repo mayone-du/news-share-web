@@ -34,7 +34,7 @@ export const AppHeader: VFC = () => {
 
   const handleSignOut = useCallback(() => signOut(), []);
   return (
-    <Header height={60} px="xl" py="xs" className="flex items-center justify-end gap-6">
+    <Header height={60} px="xl" py="xs" className="flex gap-6 justify-end items-center">
       {status === "loading" && (
         <div className="ml-2 w-10 h-10 bg-gray-300 rounded-full animate-pulse"></div>
       )}
