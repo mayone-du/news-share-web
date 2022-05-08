@@ -1,3 +1,3 @@
-import type { NewsListQueryVariables } from "src/graphql/schemas/generated/schema";
+import type { NewsListInput } from "src/graphql/schemas/generated/schema";
 
-export type QueryParams = NewsListQueryVariables["input"];
+export type QueryParams = NewsListInput;

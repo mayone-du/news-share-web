@@ -8,6 +8,7 @@ import dayjs from "dayjs";
 import { hyphenFormat } from "src/utils";
 import "dayjs/locale/ja";
 
+// TODO: searchlabels to kabutteru
 const SEARCHABLE_FIELDS: Record<
   keyof Pick<News, "url" | "title" | "description" | "sharedAt">,
   string
@@ -44,7 +45,15 @@ export const SearchFormCard: VFC = () => {
     setSearchField(value);
   }, []);
 
+  const removeQueryParams = (ignoreParam: keyof typeof SEARCHABLE_FIELDS) => {
+    Object.keys(SEARCHABLE_FIELDS).forEach((key) => {
+      if (key !== ignoreParam) delete query[key];
+    });
+  };
+
+  // TODO:
   const handleSubmit = onSubmit(async (data) => {
+    removeQueryParams(searchField);
     if (searchField === "sharedAt") {
       query[searchField] = dayjs(searchDate).format(hyphenFormat);
       push({ pathname: "/", query });

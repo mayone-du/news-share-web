@@ -3,31 +3,39 @@ import dayjs from "dayjs";
 import type { CustomNextPage } from "next";
 import { BreadcrumbJsonLd, NextSeo } from "next-seo";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 import { NewsList } from "src/components/NewsList";
-import { ROUTE_LABELS } from "src/constants/labels";
+import { ROUTE_LABELS, SEARCH_LABELS } from "src/constants/labels";
 import { useNewsListQuery } from "src/graphql/schemas/generated/schema";
 import { Layout } from "src/layouts";
 import { QueryParams } from "src/types";
 import { hyphenFormat } from "src/utils";
 
-const today = dayjs().format(hyphenFormat);
+const today = dayjs();
 
 // TODO: pagesディレクトリをトップレベルにして、src以下はコンポーネントのみのpagesを定義する
 const IndexPage: CustomNextPage = () => {
   const { query } = useRouter();
   const queryParams: QueryParams = {
-    sharedAt: query.sharedAt?.toString() || today,
+    sharedAt: query.sharedAt?.toString(),
+    url: query.url?.toString(),
+    title: query.title?.toString(),
+    description: query.description?.toString(),
   };
 
+  // TODO: 不正なクエリパラメーターが指定された場合のハンドリング
+  // useEffect(() => {
+  //   if (Object.entries(queryParams).map(([_key, value]) => value !== "")) return;
+  //   console.log(queryParams);
+  // }, []);
+
   const newsListQueryResult = useNewsListQuery({
-    variables: {
-      input: { sharedAt: queryParams.sharedAt },
-    },
+    variables: { input: { ...queryParams } },
     pollInterval: 1000 * 30, // milli secondなのでこの場合は30秒ごとにポーリング
   });
-  const title = `${dayjs(queryParams.sharedAt).format("M月D日（dd）")}のニュース ${
-    newsListQueryResult?.data?.newsList?.length ?? 0
-  }件`;
+  const title = `${(queryParams.sharedAt ? dayjs(queryParams.sharedAt) : today).format(
+    "M月D日（dd）",
+  )}のニュース ${newsListQueryResult?.data?.newsList?.length ?? 0}件`;
 
   return (
     <>
