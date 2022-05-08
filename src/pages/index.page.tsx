@@ -5,7 +5,7 @@ import { BreadcrumbJsonLd, NextSeo } from "next-seo";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { NewsList } from "src/components/NewsList";
-import { ROUTE_LABELS, SEARCH_LABELS } from "src/constants/labels";
+import { ROUTE_LABELS, QUERY_PARAM_LABELS } from "src/constants/labels";
 import { useNewsListQuery } from "src/graphql/schemas/generated/schema";
 import { Layout } from "src/layouts";
 import { QueryParams } from "src/types";
@@ -15,7 +15,7 @@ const today = dayjs();
 
 // TODO: pagesディレクトリをトップレベルにして、src以下はコンポーネントのみのpagesを定義する
 const IndexPage: CustomNextPage = () => {
-  const { query } = useRouter();
+  const { query, isReady } = useRouter();
   const queryParams: QueryParams = {
     sharedAt: query.sharedAt?.toString(),
     url: query.url?.toString(),
@@ -33,9 +33,19 @@ const IndexPage: CustomNextPage = () => {
     variables: { input: { ...queryParams } },
     pollInterval: 1000 * 30, // milli secondなのでこの場合は30秒ごとにポーリング
   });
-  const title = `${(queryParams.sharedAt ? dayjs(queryParams.sharedAt) : today).format(
-    "M月D日（dd）",
-  )}のニュース ${newsListQueryResult?.data?.newsList?.length ?? 0}件`;
+
+  // 値が存在するクエリパラメーターの配列
+  const paramKey = Object.entries(queryParams)
+    .map(([key, value]) => {
+      if (value) return key;
+    })
+    .filter((key): key is keyof QueryParams => key !== undefined)[0];
+  const title =
+    paramKey === "title" || paramKey === "description" || paramKey === "url"
+      ? `${QUERY_PARAM_LABELS["title"]}に "${queryParams["title"]}" を含むニュース}`
+      : `${(queryParams.sharedAt ? dayjs(queryParams.sharedAt) : today).format(
+          "M月D日（dd）",
+        )}のニュース ${newsListQueryResult?.data?.newsList?.length ?? 0}件`;
 
   return (
     <>
@@ -50,7 +60,7 @@ const IndexPage: CustomNextPage = () => {
         ]}
       />
       <Title order={1} mb="md">
-        {title}
+        {isReady && title}
       </Title>
       <NewsList newsListQueryResult={newsListQueryResult} />
     </>

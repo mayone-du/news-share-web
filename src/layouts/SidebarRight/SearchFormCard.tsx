@@ -7,17 +7,8 @@ import { useRouter } from "next/router";
 import dayjs from "dayjs";
 import { hyphenFormat } from "src/utils";
 import "dayjs/locale/ja";
-
-// TODO: searchlabels to kabutteru
-const SEARCHABLE_FIELDS: Record<
-  keyof Pick<News, "url" | "title" | "description" | "sharedAt">,
-  string
-> = {
-  url: "URL",
-  title: "タイトル",
-  description: "説明",
-  sharedAt: "日付",
-} as const;
+import { QueryParams } from "src/types";
+import { QUERY_PARAM_LABELS } from "src/constants";
 
 type FieldValues = { keyword: string };
 
@@ -27,7 +18,7 @@ export const SearchFormCard: VFC = () => {
     ? new Date(query.sharedAt?.toString())
     : new Date();
   const [searchDate, setSearchDate] = useState(defaultDate);
-  const [searchField, setSearchField] = useState<keyof typeof SEARCHABLE_FIELDS>("title");
+  const [searchField, setSearchField] = useState<keyof typeof QUERY_PARAM_LABELS>("title");
   const { onSubmit, getInputProps, clearErrors } = useForm<FieldValues>({
     initialValues: { keyword: "" },
     validate: {
@@ -41,12 +32,12 @@ export const SearchFormCard: VFC = () => {
     setSearchDate(value);
   }, []);
 
-  const handleChangeSelect = useCallback((value: keyof typeof SEARCHABLE_FIELDS) => {
+  const handleChangeSelect = useCallback((value: keyof typeof QUERY_PARAM_LABELS) => {
     setSearchField(value);
   }, []);
 
-  const removeQueryParams = (ignoreParam: keyof typeof SEARCHABLE_FIELDS) => {
-    Object.keys(SEARCHABLE_FIELDS).forEach((key) => {
+  const removeQueryParams = (ignoreParam: keyof typeof QUERY_PARAM_LABELS) => {
+    Object.keys(QUERY_PARAM_LABELS).forEach((key) => {
       if (key !== ignoreParam) delete query[key];
     });
   };
@@ -71,7 +62,7 @@ export const SearchFormCard: VFC = () => {
             value={searchField}
             onChange={handleChangeSelect}
             className="w-2/5"
-            data={Object.entries(SEARCHABLE_FIELDS).map(([key, value]) => ({
+            data={Object.entries(QUERY_PARAM_LABELS).map(([key, value]) => ({
               value: key,
               label: value,
             }))}
