@@ -42,7 +42,7 @@ const IndexPage: CustomNextPage = () => {
     .filter((key): key is keyof QueryParams => key !== undefined)[0];
   const title =
     paramKey === "title" || paramKey === "description" || paramKey === "url"
-      ? `${QUERY_PARAM_LABELS["title"]}に "${queryParams["title"]}" を含むニュース}`
+      ? `${QUERY_PARAM_LABELS[paramKey]}に "${queryParams[paramKey]}" を含むニュース`
       : `${(queryParams.sharedAt ? dayjs(queryParams.sharedAt) : today).format(
           "M月D日（dd）",
         )}のニュース ${newsListQueryResult?.data?.newsList?.length ?? 0}件`;
