@@ -87,9 +87,11 @@ export const CreateNewsModal: VFC = () => {
           mb={"sm"}
           placeholder="https://qin.news/~"
         />
-        <Button type="submit" loading={loading}>
-          {loading ? "投稿中..." : "投稿する"}
-        </Button>
+        <div className="flex justify-center w-full">
+          <Button type="submit" loading={loading}>
+            {loading ? "投稿中..." : "投稿する"}
+          </Button>
+        </div>
       </form>
     </Modal>
   );
