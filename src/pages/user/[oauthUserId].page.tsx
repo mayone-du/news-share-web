@@ -75,7 +75,6 @@ const UserDetailPage: CustomNextPage<UserQuery> = (props) => {
     }
     handleCancel();
   });
-
   if (isMyUserInfoLoading) {
     return <p>Loading...</p>;
   }
@@ -107,7 +106,7 @@ const UserDetailPage: CustomNextPage<UserQuery> = (props) => {
                   />
                 </div>
 
-                <div className="flex gap-2 items-center">
+                <div className="flex gap-2 w-1/3 justify-end items-center">
                   <Button
                     variant="outline"
                     className="block p-1 rounded border shadow"

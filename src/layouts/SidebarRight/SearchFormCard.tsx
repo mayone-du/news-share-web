@@ -1,4 +1,4 @@
-import { Button, Select, Box, Stack, TextInput, Title, ActionIcon } from "@mantine/core";
+import { Button, Select, Box, Stack, TextInput, Title, ActionIcon, Tooltip } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { News } from "src/graphql/schemas/generated/schema";
 import { useCallback, useState, VFC } from "react";
@@ -72,9 +72,11 @@ export const SearchFormCard: VFC = () => {
             />
             <Title order={5}>で検索</Title>
           </div>
-          <ActionIcon className="rounded-full" onClick={handleReset}>
-            <IoReload />
-          </ActionIcon>
+          <Tooltip label="検索条件をリセット">
+            <ActionIcon className="rounded-full" onClick={handleReset}>
+              <IoReload />
+            </ActionIcon>
+          </Tooltip>
         </div>
         {searchField === "sharedAt" ? (
           <Calendar
@@ -84,7 +86,11 @@ export const SearchFormCard: VFC = () => {
             locale="ja"
           />
         ) : (
-          <TextInput label="検索したいキーワードを入力" {...getInputProps("keyword")} />
+          <TextInput
+            label="検索したいキーワードを入力"
+            placeholder="React..."
+            {...getInputProps("keyword")}
+          />
         )}
         <Button type="submit">検索</Button>
       </Stack>
