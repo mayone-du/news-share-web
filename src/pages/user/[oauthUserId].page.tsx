@@ -116,7 +116,7 @@ const UserDetailPage: CustomNextPage<UserQuery> = (props) => {
                     />
                   </div>
 
-                  <div className="flex gap-2 w-1/3 justify-end items-center">
+                  <div className="flex gap-2 justify-end items-center w-1/3">
                     <Button
                       variant="outline"
                       className="block p-1 rounded border shadow"
