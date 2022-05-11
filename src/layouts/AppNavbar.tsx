@@ -135,7 +135,7 @@ export const AppNavbar: VFC = () => {
         </Group>
       </UnstyledButton>
 
-      {myUserInfoData?.myUserInfo && myUserInfoData.myUserInfo.role == Role.User && (
+      {myUserInfoData?.myUserInfo && myUserInfoData.myUserInfo.role !== Role.User && (
         <Modal
           opened={isOpenModal}
           onClose={handleCloseDialog}

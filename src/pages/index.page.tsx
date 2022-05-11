@@ -29,17 +29,23 @@ const IndexPage: CustomNextPage = () => {
   //   console.log(queryParams);
   // }, []);
 
-  const newsListQueryResult = useNewsListQuery({
-    variables: { input: { ...queryParams } },
-    pollInterval: 1000 * 30, // milli secondなのでこの場合は30秒ごとにポーリング
-  });
-
-  // 値が存在するクエリパラメーターの配列
+  // 値が存在するクエリパラメーター
   const paramKey = Object.entries(queryParams)
     .map(([key, value]) => {
       if (value) return key;
     })
-    .filter((key): key is keyof QueryParams => key !== undefined)[0];
+    .filter((key): key is keyof QueryParams | undefined => key !== undefined)[0];
+
+  const newsListQueryResult = useNewsListQuery({
+    variables: {
+      input: {
+        ...queryParams,
+        sharedAt: queryParams.sharedAt ? queryParams.sharedAt : today.format(hyphenFormat),
+      },
+    },
+    pollInterval: 1000 * 30, // milli secondなのでこの場合は30秒ごとにポーリング
+  });
+
   const newsCount = newsListQueryResult.data?.newsList?.length ?? 0;
   const title =
     paramKey === "title" || paramKey === "description" || paramKey === "url"

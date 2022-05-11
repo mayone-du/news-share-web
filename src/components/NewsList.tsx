@@ -72,6 +72,9 @@ export const NewsList: VFC<Props> = (props) => {
       url: (value) => {
         if (!value) return "URLを入力してください";
       },
+      title: (value) => {
+        if (!value) return "タイトルを入力してください";
+      },
     },
   });
   const [editingNewsNodeId, setEditingNewsNodeId] = useState("");
@@ -134,14 +137,17 @@ export const NewsList: VFC<Props> = (props) => {
         });
       }
     };
-  const handleUpdateNews = async (values: FieldValues) => {
+  const handleUpdateNews = onSubmit(async ({ url, title, description }) => {
     const notificationId = genId();
+    // TODO: console.log("onsubmit", values); すると何故かurlとかいがいのlikesとか__typenameまで入ってくるの調査
     showNotification({
       id: notificationId,
       message: "ニュースを更新しています...",
     });
     try {
-      await updateNews({ variables: { input: { nodeId: editingNewsNodeId, ...values } } });
+      await updateNews({
+        variables: { input: { nodeId: editingNewsNodeId, url, title, description } },
+      });
       setEditingNewsNodeId("");
       updateNotification({
         id: notificationId,
@@ -151,10 +157,10 @@ export const NewsList: VFC<Props> = (props) => {
       console.error(e);
       updateNotification({
         id: notificationId,
-        message: "ニュースを更新に失敗しました",
+        message: "ニュースの更新に失敗しました",
       });
     }
-  };
+  });
   const handlePostponeNews =
     (nodeId: string | null | undefined, handleClosePopover: VoidFunction) => async () => {
       if (!nodeId) throw InvalidIdError();
@@ -323,7 +329,7 @@ export const NewsList: VFC<Props> = (props) => {
               </Box>
             )}
 
-            {/* TODO: newsの型 最悪 as を使う */}
+            {/* TODO: newsの型 最悪 as を使う 多分fragmentとかにちゃんときればいける */}
             {/* TODO: いいねしたときのanimation */}
             <div
               className={`absolute bottom-3 left-60 text-xs text-gray-400 outline-none ${
@@ -440,7 +446,7 @@ export const NewsList: VFC<Props> = (props) => {
                 <Button variant="outline" onClick={handleClickNewsEditCancel}>
                   キャンセル
                 </Button>
-                <Button onClick={onSubmit(handleUpdateNews)} disabled={isUpdateNewsLoading}>
+                <Button onClick={handleUpdateNews} disabled={isUpdateNewsLoading}>
                   更新する
                 </Button>
               </div>
