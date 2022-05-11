@@ -53,9 +53,9 @@ const App: VFC<CustomAppProps> = memo((props) => {
           <MantineProvider withGlobalStyles withNormalizeCSS theme={{ colorScheme }}>
             <NotificationsProvider>
               <DefaultSeo
-                title={"Template"}
-                titleTemplate={"%s | サイトの名前"}
-                description="Template Repo"
+                title={"ニュースシェア"}
+                titleTemplate={"%s"}
+                description="ニュースシェア"
                 additionalMetaTags={[{ property: "", content: "" }]}
                 additionalLinkTags={[
                   {

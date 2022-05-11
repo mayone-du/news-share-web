@@ -16,6 +16,7 @@ import {
 } from "src/graphql/schemas/generated/schema";
 import { Layout } from "src/layouts";
 import { calcFromNow } from "src/utils";
+import { NextSeo } from "next-seo";
 
 // TODO: Fragmentの型定義つかうとか
 // TODO: 型をもう少し良い感じにする
@@ -80,112 +81,122 @@ const UserDetailPage: CustomNextPage<UserQuery> = (props) => {
   }
 
   return (
-    <div>
-      <div className="flex gap-10 items-start mb-8 w-full">
-        <img src={props.user?.photoUrl} alt="" className="block w-28 rounded-full aspect-square" />
-        {isMyUserPage && (
-          <div className="flex-1">
-            {isEditMode ? (
-              <div className="flex justify-between items-start w-full">
-                <div className="w-2/3">
-                  <TextInput
-                    type="text"
-                    classNames={{
-                      input: "font-bold text-2xl p-0 border-0 min-h-0 h-auto",
-                    }}
-                    {...getInputProps("displayName")}
-                  />
-                  <Divider />
-                  <Textarea
-                    minRows={3}
-                    classNames={{
-                      input: "text-gray-600 text-base p-0 border-0 min-h-0 h-auto",
-                    }}
-                    maxRows={4}
-                    {...getInputProps("selfIntroduction")}
-                  />
-                </div>
-
-                <div className="flex gap-2 w-1/3 justify-end items-center">
-                  <Button
-                    variant="outline"
-                    className="block p-1 rounded border shadow"
-                    onClick={handleCancel}
-                  >
-                    キャンセル
-                  </Button>
-                  <Button className="block p-1 rounded border shadow" onClick={handleSave}>
-                    保存する
-                  </Button>
-                </div>
-              </div>
-            ) : (
-              <div className="flex justify-between items-start mb-4 w-full">
-                {/* プロフィール情報 名前と自己紹介文 */}
-                <div className="w-2/3">
-                  <h1 className="text-2xl font-bold border-transparent border-b-[1px]">
-                    {/* 更新後のデータが有ればそれを表示し、なければSSGしてあるデータを表示 */}
-                    {/* TODO: オンデマンドISRを試してみる（更新時にリビルドさせる） */}
-                    {data?.updateMyUserInfo?.displayName
-                      ? data.updateMyUserInfo.displayName
-                      : props.user?.displayName}
-                  </h1>
-                  <p className="text-base text-gray-600 whitespace-pre">
-                    {data?.updateMyUserInfo?.selfIntroduction
-                      ? data.updateMyUserInfo.selfIntroduction
-                      : props.user?.selfIntroduction}
-                  </p>
-                </div>
-                <div className="w-1/3">
-                  <Button
-                    className="block py-1 px-2 ml-auto rounded border shadow-sm hover:shadow"
-                    onClick={handleClickEditMode}
-                  >
-                    編集する
-                  </Button>
-                </div>
-              </div>
-            )}
-          </div>
-        )}
-      </div>
-
+    <>
+      <NextSeo
+        title={`${props.user?.displayName ?? ""}`}
+        description={`${props.user?.displayName ?? ""}さんのプロフィールページ`}
+      />
       <div>
-        <h2 className="text-xl font-bold">いいねしたニュース一覧</h2>
-        <ul className="pt-4">
-          {props.user?.likes.map((like) => (
-            <li key={like.id.toString()} className="p-2 rounded border-b hover:bg-gray-50">
-              <a href={like.news.url} className="block">
-                <div className="flex justify-between items-center">
-                  <div>
-                    <div className="flex items-center mb-2">
-                      <img
-                        src={like.news.user.photoUrl}
-                        className="block mr-2 w-8 h-8 rounded-full"
-                        alt=""
-                      />
-                      <p className="font-bold">{like.news.user.displayName}</p>
-                    </div>
-                    <div className="text-lg font-bold line-clamp-1">{like.news.title}</div>
-                    <span className="text-sm text-gray-400">
-                      {calcFromNow(like.news.createdAt)}に投稿
-                    </span>
+        <div className="flex gap-10 items-start mb-8 w-full">
+          <img
+            src={props.user?.photoUrl}
+            alt=""
+            className="block w-28 rounded-full aspect-square"
+          />
+          {isMyUserPage && (
+            <div className="flex-1">
+              {isEditMode ? (
+                <div className="flex justify-between items-start w-full">
+                  <div className="w-2/3">
+                    <TextInput
+                      type="text"
+                      classNames={{
+                        input: "font-bold text-2xl p-0 border-0 min-h-0 h-auto",
+                      }}
+                      {...getInputProps("displayName")}
+                    />
+                    <Divider />
+                    <Textarea
+                      minRows={3}
+                      classNames={{
+                        input: "text-gray-600 text-base p-0 border-0 min-h-0 h-auto",
+                      }}
+                      maxRows={4}
+                      {...getInputProps("selfIntroduction")}
+                    />
                   </div>
 
-                  {like.news.imageUrl ? (
-                    <img
-                      src={like.news.imageUrl}
-                      className="block object-cover w-20 border aspect-square"
-                      alt=""
-                    />
-                  ) : null}
+                  <div className="flex gap-2 w-1/3 justify-end items-center">
+                    <Button
+                      variant="outline"
+                      className="block p-1 rounded border shadow"
+                      onClick={handleCancel}
+                    >
+                      キャンセル
+                    </Button>
+                    <Button className="block p-1 rounded border shadow" onClick={handleSave}>
+                      保存する
+                    </Button>
+                  </div>
                 </div>
-              </a>
-            </li>
-          ))}
-        </ul>
+              ) : (
+                <div className="flex justify-between items-start mb-4 w-full">
+                  {/* プロフィール情報 名前と自己紹介文 */}
+                  <div className="w-2/3">
+                    <h1 className="text-2xl font-bold border-transparent border-b-[1px]">
+                      {/* 更新後のデータが有ればそれを表示し、なければSSGしてあるデータを表示 */}
+                      {/* TODO: オンデマンドISRを試してみる（更新時にリビルドさせる） */}
+                      {data?.updateMyUserInfo?.displayName
+                        ? data.updateMyUserInfo.displayName
+                        : props.user?.displayName}
+                    </h1>
+                    <p className="text-base text-gray-600 whitespace-pre">
+                      {data?.updateMyUserInfo?.selfIntroduction
+                        ? data.updateMyUserInfo.selfIntroduction
+                        : props.user?.selfIntroduction}
+                    </p>
+                  </div>
+                  <div className="w-1/3">
+                    <Button
+                      className="block py-1 px-2 ml-auto rounded border shadow-sm hover:shadow"
+                      onClick={handleClickEditMode}
+                    >
+                      編集する
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
+        <div>
+          <h2 className="text-xl font-bold">いいねしたニュース一覧</h2>
+          <ul className="pt-4">
+            {props.user?.likes.map((like) => (
+              <li key={like.id.toString()} className="p-2 rounded border-b hover:bg-gray-50">
+                <a href={like.news.url} className="block">
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <div className="flex items-center mb-2">
+                        <img
+                          src={like.news.user.photoUrl}
+                          className="block mr-2 w-8 h-8 rounded-full"
+                          alt=""
+                        />
+                        <p className="font-bold">{like.news.user.displayName}</p>
+                      </div>
+                      <div className="text-lg font-bold line-clamp-1">{like.news.title}</div>
+                      <span className="text-sm text-gray-400">
+                        {calcFromNow(like.news.createdAt)}に投稿
+                      </span>
+                    </div>
+
+                    {like.news.imageUrl ? (
+                      <img
+                        src={like.news.imageUrl}
+                        className="block object-cover w-20 border aspect-square"
+                        alt=""
+                      />
+                    ) : null}
+                  </div>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
