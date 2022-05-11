@@ -194,7 +194,7 @@ export const NewsList: VFC<Props> = (props) => {
       if (
         news.isViewed ||
         !isStartedNewsShare(dayjs()) ||
-        myUserInfoData?.myUserInfo?.role === Role.User ||
+        myUserInfoData?.myUserInfo?.role !== Role.Admin ||
         asPath !== "/"
       )
         return; // すでに閲覧済み、ニュースシェアが始まっていない、一般ユーザー、トップページ以外の場合は何もしない
