@@ -91,12 +91,12 @@ export const NewsList: VFC<Props> = (props) => {
 
   const handleClickNewsEditMode =
     (
-      news: Pick<News, "nodeId" | "title" | "description" | "url">,
+      { nodeId, title, url, description }: Pick<News, "nodeId" | "title" | "description" | "url">,
       handleClosePopover: VoidFunction,
     ) =>
     () => {
-      setEditingNewsNodeId(news.nodeId ?? "");
-      setValues(news);
+      setEditingNewsNodeId(nodeId ?? "");
+      setValues({ url, title, description });
       handleClosePopover();
     };
   const handleClickNewsEditCancel = () => setEditingNewsNodeId("");
@@ -137,16 +137,15 @@ export const NewsList: VFC<Props> = (props) => {
         });
       }
     };
-  const handleUpdateNews = onSubmit(async ({ url, title, description }) => {
+  const handleUpdateNews = onSubmit(async (fieldValues) => {
     const notificationId = genId();
-    // TODO: console.log("onsubmit", values); すると何故かurlとかいがいのlikesとか__typenameまで入ってくるの調査
     showNotification({
       id: notificationId,
       message: "ニュースを更新しています...",
     });
     try {
       await updateNews({
-        variables: { input: { nodeId: editingNewsNodeId, url, title, description } },
+        variables: { input: { nodeId: editingNewsNodeId, ...fieldValues } },
       });
       setEditingNewsNodeId("");
       updateNotification({
