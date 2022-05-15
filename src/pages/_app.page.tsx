@@ -4,7 +4,7 @@ import "nprogress/nprogress.css";
 
 import { ApolloProvider } from "@apollo/client";
 import type { CustomAppProps } from "next/app";
-import Router from "next/router";
+import Router, { useRouter } from "next/router";
 import { SessionProvider } from "next-auth/react";
 import { DefaultSeo } from "next-seo";
 import NProgress from "nprogress";
@@ -14,6 +14,7 @@ import { initializeApollo } from "src/graphql/apollo/client";
 import { MantineProvider, ColorSchemeProvider, ColorScheme } from "@mantine/core";
 import { useHotkeys, useLocalStorage } from "@mantine/hooks";
 import { NotificationsProvider } from "@mantine/notifications";
+import { SpotlightProvider } from "@mantine/spotlight";
 
 NProgress.configure({ showSpinner: false, speed: 400, minimum: 0.25 });
 Router.events.on("routeChangeStart", () => {
@@ -33,6 +34,7 @@ const App: VFC<CustomAppProps> = memo((props) => {
     defaultValue: "light",
     getInitialValueInEffect: true,
   });
+  const { push } = useRouter();
 
   const toggleColorScheme = (value?: ColorScheme) =>
     setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
@@ -50,21 +52,26 @@ const App: VFC<CustomAppProps> = memo((props) => {
       <ApolloProvider client={apolloClient}>
         <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
           <MantineProvider withGlobalStyles withNormalizeCSS theme={{ colorScheme }}>
-            <NotificationsProvider>
-              <DefaultSeo
-                title={"ニュースシェア"}
-                titleTemplate={"%s"}
-                description="ニュースシェア"
-                additionalMetaTags={[{ property: "", content: "" }]}
-                additionalLinkTags={[
-                  {
-                    rel: "manifest",
-                    href: "/pwa/manifest.json",
-                  },
-                ]}
-              />
-              {getLayout(<props.Component {...props.pageProps} />)}
-            </NotificationsProvider>
+            <SpotlightProvider
+              actions={[{ title: "Home", description: "ホームへ戻る", onTrigger: () => push("/") }]}
+              shortcut="mod + k"
+            >
+              <NotificationsProvider>
+                <DefaultSeo
+                  title={"ニュースシェア"}
+                  titleTemplate={"%s"}
+                  description="ニュースシェア"
+                  additionalMetaTags={[{ property: "", content: "" }]}
+                  additionalLinkTags={[
+                    {
+                      rel: "manifest",
+                      href: "/pwa/manifest.json",
+                    },
+                  ]}
+                />
+                {getLayout(<props.Component {...props.pageProps} />)}
+              </NotificationsProvider>
+            </SpotlightProvider>
           </MantineProvider>
         </ColorSchemeProvider>
       </ApolloProvider>
