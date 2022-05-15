@@ -10,7 +10,6 @@ import { DefaultSeo } from "next-seo";
 import NProgress from "nprogress";
 import { memo } from "react";
 import type { VFC } from "react";
-import { Toaster } from "react-hot-toast";
 import { initializeApollo } from "src/graphql/apollo/client";
 import { MantineProvider, ColorSchemeProvider, ColorScheme } from "@mantine/core";
 import { useHotkeys, useLocalStorage } from "@mantine/hooks";
@@ -65,7 +64,6 @@ const App: VFC<CustomAppProps> = memo((props) => {
                 ]}
               />
               {getLayout(<props.Component {...props.pageProps} />)}
-              <Toaster toastOptions={{ duration: 2500 }} />
             </NotificationsProvider>
           </MantineProvider>
         </ColorSchemeProvider>

@@ -2,7 +2,6 @@ import { Button, Divider, Textarea, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import type { CustomNextPage, GetStaticPaths, GetStaticProps } from "next";
 import { useState } from "react";
-import toast from "react-hot-toast";
 import { initializeApollo } from "src/graphql/apollo/client";
 import {
   useMyUserInfoQuery,
@@ -17,6 +16,8 @@ import {
 import { Layout } from "src/layouts";
 import { calcFromNow } from "src/utils";
 import { NextSeo } from "next-seo";
+import { genId } from "src/utils/genId";
+import { showNotification, updateNotification } from "@mantine/notifications";
 
 // TODO: Fragmentの型定義つかうとか
 // TODO: 型をもう少し良い感じにする
@@ -67,12 +68,13 @@ const UserDetailPage: CustomNextPage<UserQuery> = (props) => {
   };
   const handleClickEditMode = () => setIsEditMode(true);
   const handleSave = onSubmit(async (formData) => {
-    const toastId = toast.loading("保存中...");
+    const notificationId = genId();
+    showNotification({ id: notificationId, message: "ユーザー情報を更新しています" });
     const { errors } = await updateMyUserInfo({ variables: { input: { ...formData } } });
     if (error || errors) {
-      toast.error("保存に失敗しました", { id: toastId });
+      updateNotification({ id: notificationId, message: "ユーザー情報の更新に失敗しました" });
     } else {
-      toast.success("保存しました", { id: toastId });
+      updateNotification({ id: notificationId, message: "ユーザー情報を更新しました" });
     }
     handleCancel();
   });
