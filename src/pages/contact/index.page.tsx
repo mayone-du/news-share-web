@@ -16,14 +16,14 @@ const ContactIndexPage: CustomNextPage = () => {
       title: "",
       content: "",
     },
-    validate: {
-      title: (value) => {
-        if (!value) return "タイトルを入力してください";
-      },
-      content: (value) => {
-        if (!value) return "内容を入力してください";
-      },
-    },
+    // validate: {
+    //   title: (value) => {
+    //     if (!value) return "タイトルを入力してください";
+    //   },
+    //   content: (value) => {
+    //     if (!value) return "内容を入力してください";
+    //   },
+    // },
   });
 
   const handleSubmit = onSubmit((formData) => {
