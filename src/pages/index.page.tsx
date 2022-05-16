@@ -49,7 +49,9 @@ const IndexPage: CustomNextPage = () => {
   const newsCount = newsListQueryResult.data?.newsList?.length ?? 0;
   const title =
     paramKey === "title" || paramKey === "description" || paramKey === "url"
-      ? `${QUERY_PARAM_LABELS[paramKey]}に "${queryParams[paramKey]}" を含むニュース ${newsCount}件`
+      ? `${QUERY_PARAM_LABELS[paramKey]}に "${queryParams[paramKey]}" を含むニュース ${
+          newsListQueryResult.loading ? "" : newsCount + "件"
+        }`
       : `${(queryParams.sharedAt ? dayjs(queryParams.sharedAt) : today).format(
           "M月D日（dd）",
         )}のニュース ${newsCount}件`;
