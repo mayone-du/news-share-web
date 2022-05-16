@@ -67,7 +67,6 @@ export const NewsList: VFC<Props> = (props) => {
       title: "",
       description: "",
     },
-
     validate: {
       url: (value) => {
         if (!value) return "URLを入力してください";
