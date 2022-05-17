@@ -93,7 +93,7 @@ export const AppNavbar: VFC = () => {
   };
 
   return (
-    <Navbar width={{ base: 300 }} height={500} p="xs">
+    <Navbar width={{ base: 60, md: 300 }} height={500} p="xs">
       <NextLink href="/" passHref>
         <UnstyledButton component="a" className="rounded transition-colors hover:bg-gray-200">
           <Group>
