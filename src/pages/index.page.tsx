@@ -40,7 +40,12 @@ const IndexPage: CustomNextPage = () => {
     variables: {
       input: {
         ...queryParams,
-        sharedAt: queryParams.sharedAt ? queryParams.sharedAt : today.format(hyphenFormat),
+        sharedAt:
+          paramKey === "sharedAt"
+            ? queryParams.sharedAt
+            : paramKey === undefined
+            ? today.format(hyphenFormat)
+            : undefined,
       },
     },
     pollInterval: 1000 * 30, // milli secondなのでこの場合は30秒ごとにポーリング
