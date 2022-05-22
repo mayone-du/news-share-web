@@ -6,7 +6,6 @@ import {
   useMyUserInfoQuery,
   useUpdateNewsMutation,
   useToggleLikeMutation,
-  UpdateNewsMutationVariables,
 } from "src/graphql/schemas/generated/schema";
 import type { NewsListQueryResult } from "src/graphql/schemas/generated/schema";
 import { calcFromNow, hyphenFormat, isStartedNewsShare } from "src/utils";
@@ -61,7 +60,7 @@ export const NewsList: VFC<Props> = (props) => {
   const [updateNews, { loading: isUpdateNewsLoading }] = useUpdateNewsMutation();
   const [deleteNews, { loading: isDeleteNewsLoading }] = useDeleteNewsMutation();
   const [toggleLike, { loading: isToggleLikeLoading }] = useToggleLikeMutation();
-  const { onSubmit, reset, getInputProps, setValues } = useForm<FieldValues>({
+  const { onSubmit, getInputProps, setValues } = useForm<FieldValues>({
     initialValues: {
       url: "",
       title: "",
@@ -226,16 +225,16 @@ export const NewsList: VFC<Props> = (props) => {
     return (
       <ul className="flex flex-col gap-4">
         <li className="py-3 px-8 w-full rounded border">
-          <div className="mb-4 w-3/4 h-6 bg-gray-100 animate-pulse"></div>
-          <div className="mb-1 w-full h-4 bg-gray-100 animate-pluse"></div>
-          <div className="mb-4 w-full h-4 bg-gray-100 animate-pluse"></div>
+          <div className="mb-4 w-3/4 h-6 bg-gray-100 animate-pulse dark:bg-dark-6"></div>
+          <div className="mb-1 w-full h-4 bg-gray-100 animate-pluse dark:bg-dark-6"></div>
+          <div className="mb-4 w-full h-4 bg-gray-100 animate-pluse dark:bg-dark-6"></div>
           <div className="flex items-center mb-4">
-            <div className="mr-2 w-5 h-5 bg-gray-100 rounded-full animate-pulse"></div>
-            <div className="w-1/3 h-3 bg-gray-100 animate-pluse"></div>
+            <div className="mr-2 w-5 h-5 bg-gray-100 rounded-full animate-pulse dark:bg-dark-6"></div>
+            <div className="w-1/3 h-3 bg-gray-100 animate-pluse dark:bg-dark-6"></div>
           </div>
           <div className="flex items-center">
-            <div className="mr-1 w-6 h-6 bg-gray-100 rounded-full animate-pulse"></div>
-            <div className="w-20 h-4 bg-gray-100 animate-pulse"></div>
+            <div className="mr-1 w-6 h-6 bg-gray-100 rounded-full animate-pulse dark:bg-dark-6"></div>
+            <div className="w-20 h-4 bg-gray-100 animate-pulse dark:bg-dark-6"></div>
           </div>
         </li>
       </ul>
@@ -253,7 +252,7 @@ export const NewsList: VFC<Props> = (props) => {
         return (
           <li
             key={news.nodeId}
-            className={`relative mb-4 rounded border bg-white ${
+            className={`relative mb-4 rounded border dark:border-dark-5 bg-white dark:bg-dark-7 ${
               isEditingNews(news) ? "ring-2 ring-blue-200" : ""
             }`}
           >
@@ -267,7 +266,7 @@ export const NewsList: VFC<Props> = (props) => {
                   placement="end"
                   control={
                     <UnstyledButton
-                      className={`rounded-full p-1 hover:bg-gray-200 border border-transparent hover:border-gray-50 text-gray-600 ${
+                      className={`rounded-full p-1 hover:bg-gray-200 border border-transparent hover:border-gray-50 text-gray-600 dark:hover:bg-dark-5 dark:text-dark-0 ${
                         isEditingNews(news) && "hidden"
                       }`}
                     >
@@ -277,7 +276,6 @@ export const NewsList: VFC<Props> = (props) => {
                 >
                   {isTodaySharedAt(news.sharedAt) && (
                     <Menu.Item
-                      className="hover:bg-gray-100"
                       icon={<BsCalendar />}
                       onClick={handlePostponeNews(news.nodeId, close)}
                       disabled={isUpdateNewsLoading || isDeleteNewsLoading}
@@ -287,7 +285,6 @@ export const NewsList: VFC<Props> = (props) => {
                   )}
                   {news.isViewed ? (
                     <Menu.Item
-                      className="hover:bg-gray-100"
                       icon={<IoMdReturnLeft />}
                       onClick={handleToggleViewedNews(news)}
                       disabled={isUpdateNewsLoading || isDeleteNewsLoading}
@@ -296,7 +293,6 @@ export const NewsList: VFC<Props> = (props) => {
                     </Menu.Item>
                   ) : (
                     <Menu.Item
-                      className="hover:bg-gray-100"
                       icon={<BsCheck2 />}
                       onClick={handleToggleViewedNews(news)}
                       disabled={isUpdateNewsLoading || isDeleteNewsLoading}
@@ -306,7 +302,6 @@ export const NewsList: VFC<Props> = (props) => {
                   )}
 
                   <Menu.Item
-                    className="hover:bg-gray-100"
                     icon={<HiOutlinePencil />}
                     onClick={handleClickNewsEditMode(news, close)}
                     disabled={isUpdateNewsLoading || isDeleteNewsLoading}
@@ -316,7 +311,6 @@ export const NewsList: VFC<Props> = (props) => {
                   <Divider />
                   <Menu.Item
                     color="red"
-                    className="hover:bg-red-100"
                     icon={<RiDeleteBinLine />}
                     onClick={handleDeleteNews(news.nodeId, close)}
                     disabled={isUpdateNewsLoading || isDeleteNewsLoading}
@@ -327,7 +321,7 @@ export const NewsList: VFC<Props> = (props) => {
               </Box>
             )}
 
-            {/* TODO: newsの型 最悪 as を使う 多分fragmentとかにちゃんときればいける */}
+            {/* TODO: newsの型 最悪 as を使う 多分fragmentとかにちゃんときればいける。各ハンドラの型引数もなおす */}
             {/* TODO: いいねしたときのanimation */}
             <div
               className={`absolute bottom-3 left-60 text-xs text-gray-400 outline-none ${
@@ -353,8 +347,8 @@ export const NewsList: VFC<Props> = (props) => {
             {/* コンテンツ */}
             <a
               href={news.url}
-              className={`block py-3 px-8 rounded hover:bg-gray-50 ${
-                isEditingNews(news) ? "hover:bg-white cursor-default" : ""
+              className={`block py-3 px-8 rounded hover:bg-gray-50 dark:hover:bg-dark-6 ${
+                isEditingNews(news) ? "hover:bg-white dark:hover:bg-dark-7 cursor-default" : ""
               }`}
               target="_blank"
               rel="noopener noreferrer"

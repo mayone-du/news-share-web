@@ -58,7 +58,7 @@ export const SearchFormCard: VFC = () => {
   return (
     <form onSubmit={handleSubmit}>
       <Stack spacing={"sm"}>
-        <div className="flex items-center justify-between">
+        <div className="flex justify-between items-center">
           <div className="flex gap-1 items-center">
             <Select
               value={searchField}

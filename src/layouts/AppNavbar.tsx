@@ -95,7 +95,10 @@ export const AppNavbar: VFC = () => {
   return (
     <Navbar width={{ base: 60, md: 300 }} height={500} p="xs">
       <NextLink href="/" passHref>
-        <UnstyledButton component="a" className="rounded transition-colors hover:bg-gray-200">
+        <UnstyledButton
+          component="a"
+          className="rounded transition-colors hover:bg-gray-200 dark:hover:bg-dark-5"
+        >
           <Group>
             <Avatar size={32} className="m-1">
               <AiOutlineHome size={20} />
@@ -108,7 +111,7 @@ export const AppNavbar: VFC = () => {
       </NextLink>
 
       <UnstyledButton
-        className="rounded transition-colors hover:bg-gray-200"
+        className="rounded transition-colors hover:bg-gray-200 dark:hover:bg-dark-5"
         onClick={handleOpenCreateNewsModal}
       >
         <Group>
@@ -122,7 +125,7 @@ export const AppNavbar: VFC = () => {
       </UnstyledButton>
 
       <UnstyledButton
-        className="rounded transition-colors hover:bg-gray-200"
+        className="rounded transition-colors hover:bg-gray-200 dark:hover:bg-dark-5"
         onClick={handleOpenDialog}
       >
         <Group>
@@ -141,17 +144,20 @@ export const AppNavbar: VFC = () => {
           onClose={handleCloseDialog}
           centered
           title={
-            <Title order={3} className="text-xl font-bold text-center text-gray-900">
+            <Title
+              order={3}
+              className="text-xl font-bold text-center text-gray-900 dark:text-dark-0"
+            >
               今日のニュースシェアを終了する
             </Title>
           }
         >
-          <div className="overflow-hidden px-4 pb-4 m-auto w-80 bg-white rounded-lg transition-all transform sm:w-96">
-            <ul className="flex flex-col gap-1 px-4 mt-4 list-disc text-gray-600">
+          <div className="overflow-hidden px-4 pb-4 m-auto w-80 bg-white rounded-lg transition-all transform sm:w-96 dark:bg-dark-7">
+            <ul className="flex flex-col gap-1 px-4 mt-4 list-disc text-gray-600 dark:text-dark-0">
               <li>既にシェアしたニュースをSlackへ送信</li>
               <li>シェアしていないニュースを明日へ延期</li>
             </ul>
-            <p className="mt-2 text-sm text-gray-500">以上の2つを行います</p>
+            <p className="mt-2 text-sm text-gray-500 dark:text-dark-1">以上の2つを行います</p>
 
             {slackNotificationData?.slackNotification?.isSent && (
               <p className="mt-6 text-sm text-red-500">
