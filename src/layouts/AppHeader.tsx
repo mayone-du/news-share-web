@@ -1,8 +1,6 @@
 import { BiSun, BiMoon } from "react-icons/bi";
-import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
 import { useCallback, useState } from "react";
-import { STATIC_ROUTES } from "src/constants/routes";
 import { useAuthModal } from "src/hooks/useAuthModal";
 import type { VFC } from "react";
 import { Role, useMyUserInfoQuery } from "src/graphql/schemas/generated/schema";
@@ -23,7 +21,7 @@ import NextLink from "next/link";
 
 export const AppHeader: VFC = () => {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
-  const handleToggleColorScheme = () => toggleColorScheme();
+  const handleToggleColorScheme = useCallback(() => toggleColorScheme(), [colorScheme]);
   const isDark = colorScheme === "dark";
 
   const { data: session, status } = useSession();

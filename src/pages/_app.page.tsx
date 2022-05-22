@@ -8,7 +8,7 @@ import Router, { useRouter } from "next/router";
 import { SessionProvider } from "next-auth/react";
 import { DefaultSeo } from "next-seo";
 import NProgress from "nprogress";
-import { memo } from "react";
+import { memo, useCallback } from "react";
 import type { VFC } from "react";
 import { initializeApollo } from "src/graphql/apollo/client";
 import { MantineProvider, ColorSchemeProvider, ColorScheme } from "@mantine/core";
@@ -27,6 +27,8 @@ Router.events.on("routeChangeError", () => {
   return NProgress.done();
 });
 
+const htmlElement = typeof window === "object" ? document.documentElement : null;
+
 const App: VFC<CustomAppProps> = memo((props) => {
   const apolloClient = initializeApollo();
   const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
@@ -36,8 +38,14 @@ const App: VFC<CustomAppProps> = memo((props) => {
   });
   const { push } = useRouter();
 
-  const toggleColorScheme = (value?: ColorScheme) =>
-    setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
+  const toggleColorScheme = useCallback(() => {
+    setColorScheme((prev) => {
+      const newValue: ColorScheme = prev === "dark" ? "light" : "dark";
+      htmlElement?.classList.remove(prev);
+      htmlElement?.classList.add(newValue);
+      return newValue;
+    });
+  }, [colorScheme]);
 
   useHotkeys([["mod+J", () => toggleColorScheme()]]);
 
