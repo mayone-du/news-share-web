@@ -8,7 +8,7 @@ import Router, { useRouter } from "next/router";
 import { SessionProvider } from "next-auth/react";
 import { DefaultSeo } from "next-seo";
 import NProgress from "nprogress";
-import { memo, useCallback } from "react";
+import { memo, useCallback, useEffect } from "react";
 import type { VFC } from "react";
 import { initializeApollo } from "src/graphql/apollo/client";
 import { MantineProvider, ColorSchemeProvider, ColorScheme } from "@mantine/core";
@@ -46,6 +46,10 @@ const App: VFC<CustomAppProps> = memo((props) => {
       return newValue;
     });
   }, [colorScheme]);
+
+  useEffect(() => {
+    htmlElement?.classList.add(colorScheme);
+  }, []);
 
   useHotkeys([["mod+J", () => toggleColorScheme()]]);
 
