@@ -1,6 +1,6 @@
 import { BiSun, BiMoon } from "react-icons/bi";
 import { signOut, useSession } from "next-auth/react";
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 import { useAuthModal } from "src/hooks/useAuthModal";
 import type { VFC } from "react";
 import { Role, useMyUserInfoQuery } from "src/graphql/schemas/generated/schema";
@@ -61,11 +61,11 @@ export const AppHeader: VFC = () => {
             {myUserInfoData.myUserInfo.role === Role.Developer && "💻"}
             {myUserInfoData.myUserInfo.displayName}
           </Menu.Label>
-          <NextLink href={`user/${myUserInfoData.myUserInfo.oauthUserId}`} passHref>
+          <NextLink href={`/user/${myUserInfoData.myUserInfo.oauthUserId}`} passHref>
             <Menu.Item
               component="a"
               icon={<MdAccountCircle size={16} />}
-              className="hover:bg-gray-100"
+              className="hover:bg-gray-100 dark:hover:bg-dark-5"
             >
               マイページ
             </Menu.Item>
@@ -74,7 +74,7 @@ export const AppHeader: VFC = () => {
           <Menu.Item
             onClick={handleSignOut}
             icon={<FiLogOut size={16} />}
-            className="hover:bg-gray-100"
+            className="hover:bg-gray-100 dark:hover:bg-dark-5"
           >
             ログアウト
           </Menu.Item>

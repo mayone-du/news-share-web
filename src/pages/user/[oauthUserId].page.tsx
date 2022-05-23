@@ -142,7 +142,7 @@ const UserDetailPage: CustomNextPage<UserQuery> = (props) => {
                         ? data.updateMyUserInfo.displayName
                         : props.user?.displayName}
                     </h1>
-                    <p className="text-base text-gray-600 whitespace-pre">
+                    <p className="text-base text-gray-600 dark:text-dark-1 whitespace-pre">
                       {data?.updateMyUserInfo?.selfIntroduction
                         ? data.updateMyUserInfo.selfIntroduction
                         : props.user?.selfIntroduction}
@@ -166,7 +166,10 @@ const UserDetailPage: CustomNextPage<UserQuery> = (props) => {
           <h2 className="text-xl font-bold">いいねしたニュース一覧</h2>
           <ul className="pt-4">
             {props.user?.likes.map((like) => (
-              <li key={like.id.toString()} className="p-2 rounded border-b hover:bg-gray-50">
+              <li
+                key={like.id.toString()}
+                className="p-2 border-b dark:border-dark-5 hover:bg-gray-50 dark:hover:bg-dark-5"
+              >
                 <a href={like.news.url} className="block">
                   <div className="flex justify-between items-center">
                     <div>
