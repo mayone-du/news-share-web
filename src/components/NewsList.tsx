@@ -224,7 +224,7 @@ export const NewsList: VFC<Props> = (props) => {
   if (loading)
     return (
       <ul className="flex flex-col gap-4">
-        <li className="py-3 px-8 w-full rounded border">
+        <li className="py-3 px-8 w-full rounded border dark:border-dark-5">
           <div className="mb-4 w-3/4 h-6 bg-gray-100 animate-pulse dark:bg-dark-6"></div>
           <div className="mb-1 w-full h-4 bg-gray-100 animate-pluse dark:bg-dark-6"></div>
           <div className="mb-4 w-full h-4 bg-gray-100 animate-pluse dark:bg-dark-6"></div>

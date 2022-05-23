@@ -27,8 +27,6 @@ Router.events.on("routeChangeError", () => {
   return NProgress.done();
 });
 
-const htmlElement = typeof window === "object" ? document.documentElement : null;
-
 const App: VFC<CustomAppProps> = memo((props) => {
   const apolloClient = initializeApollo();
   const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
@@ -41,15 +39,15 @@ const App: VFC<CustomAppProps> = memo((props) => {
   const toggleColorScheme = useCallback(() => {
     setColorScheme((prev) => {
       const newValue: ColorScheme = prev === "dark" ? "light" : "dark";
-      htmlElement?.classList.remove(prev);
-      htmlElement?.classList.add(newValue);
       return newValue;
     });
   }, [colorScheme]);
 
   useEffect(() => {
-    htmlElement?.classList.add(colorScheme);
-  }, []);
+    const prev: ColorScheme = colorScheme === "dark" ? "light" : "dark";
+    document.documentElement.classList.remove(prev);
+    document.documentElement.classList.add(colorScheme);
+  }, [colorScheme]);
 
   useHotkeys([["mod+J", () => toggleColorScheme()]]);
 
