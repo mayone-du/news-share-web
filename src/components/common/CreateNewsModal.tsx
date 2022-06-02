@@ -1,5 +1,5 @@
 import type { Reference } from "@apollo/client";
-import { Modal, Title, LoadingOverlay, TextInput, Button, Tooltip, Box } from "@mantine/core";
+import { Modal, Title, TextInput, Button } from "@mantine/core";
 import { useReactiveVar } from "@apollo/client";
 import { VFC } from "react";
 import { isOpenCreateNewsModalVar } from "src/global/state";
